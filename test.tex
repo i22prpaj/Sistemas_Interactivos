@@ -1,0 +1,200 @@
+\documentclass[12pt,oneside]{book}
+\usepackage[justification=raggedright,singlelinecheck=false]{caption}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{etoolbox}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\graphicspath{{imagenes/}{Imagenes/}{outputs/}}
+\makeatletter
+\patchcmd{\@makechapterhead}{\vspace*{50\p@}}{\vspace*{0\p@}}{}{}
+\patchcmd{\@makeschapterhead}{\vspace*{50\p@}}{\vspace*{0\p@}}{}{}
+\makeatother
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+\fancyhead[C]{\textcolor{gray}{\small Práctica 4 - Protipado - Sistemas Interactivos - EPSC}}
+\renewcommand{\headrulewidth}{0pt}
+\addtolength{\footskip}{8pt}
+\fancyfoot[C]{\hspace*{-1.6cm}\textcolor{gray}{Juan Luis Prieto Panadero y Alejandro Luque Núñez}}
+\fancyfoot[R]{\textcolor{gray}{Pagina \thepage\ de \pageref{LastPage}}}
+\fancypagestyle{plain}{%
+    \fancyhf{}
+    \fancyhead[C]{\textcolor{gray}{\small Práctica 4 - Prototipado - Escuela Politécnica Superior de Córdoba}}
+    \renewcommand{\headrulewidth}{0pt}
+    \fancyfoot[C]{\hspace*{-1.6cm}\textcolor{gray}{Juan Luis Prieto Panadero y Alejandro Luque Núñez}}
+    \fancyfoot[R]{\textcolor{gray}{Pagina \thepage\ de \pageref{LastPage}}}
+}
+
+\newcommand{\wireframecontexto}[3]{%
+    \begin{figure}[H]
+        \raggedright
+        \begin{minipage}[t]{0.25\linewidth}
+            \vspace{0pt}
+            \includegraphics[width=\linewidth]{#1}
+        \end{minipage}\hfill
+        \begin{minipage}[t]{0.70\linewidth}
+            \vspace{0pt}
+            \textbf{#2}\\[2pt]
+            #3
+        \end{minipage}
+    \end{figure}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{0.5cm}
+\noindent
+\begin{minipage}[c]{0.45\textwidth}
+    \raggedright
+    \includegraphics[height=2.2cm]{logo_uco.png}
+\end{minipage}
+\begin{minipage}[c]{0.45\textwidth}
+    \raggedleft
+    \includegraphics[height=2.2cm]{logotipo-EPSC.png}
+\end{minipage}
+
+\vspace{0.9cm}
+\rule{0.9\textwidth}{0.4pt}
+
+\vspace{0.9cm}
+{\LARGE\bfseries Práctica 4 - Prototipado\par}
+\vspace{0.25cm}
+{\Large\bfseries Sistemas Interactivos\par}
+
+\vspace{0.9cm}
+\rule{0.9\textwidth}{0.4pt}
+
+\vspace{0.9cm}
+{\large\bfseries Escuela Politécnica Superior de Córdoba\par}
+\vspace{0.25cm}
+{\large\bfseries Universidad de Córdoba\par}
+\vspace{0.25cm}
+{\large\bfseries Grado de Ingeniería Informática\par}
+
+\vfill
+{\large\bfseries Autores:\par}
+\vspace{0.2cm}
+{\normalsize Juan Luis Prieto Panadero\par}
+{\normalsize Alejandro Luque Núñez\par}
+
+\vspace*{0.5cm}
+\end{titlepage}
+
+\clearpage
+\setcounter{page}{1}
+
+\tableofcontents
+\clearpage
+
+\counterwithout{section}{chapter}
+
+\section{Introducción al problema}
+En la presente sección se definen los objetivos y el alcance de la interfaz diseñada:
+
+\begin{itemize}
+    \item \textbf{¿Qué problema tenemos?} Los estudiantes carecen de información realista sobre la dinámica diaria de las clases (asistencia, dificultad real, metodología) más allá de la guía docente oficial.
+    \item \textbf{¿Para qué fin será la interfaz?}  Crear una comunidad anónima para evaluar profesores y asignaturas, optimizando la toma de decisiones sobre la matrícula y la asistencia.
+    \item \textbf{¿Para qué plataforma será?} Aplicación móvil (Smartphone), adecuada para consultas rápidas en el entorno universitario.
+    \item \textbf{¿Hacia qué público está dirigida?} Estudiantes universitarios y moderadores encargados del mantenimiento de la comunidad.
+    \item \textbf{Cuestiones de diseño importantes:} Garantía visual de anonimato, uso de etiquetas (\textit{tags}) para lectura rápida y sistemas de alerta de lenguaje no permitido.
+    \item \textbf{Requisitos mínimos:} Buscador, sistema de valoración mixto y panel de moderación para reportes.
+\end{itemize}
+
+\section{Antecedentes}
+\begin{itemize}
+    \item \textbf{Soluciones existentes:} Grupos de WhatsApp/Telegram, encuestas de calidad institucionales y plataformas como \textit{Rate My Professors}.
+    \item \textbf{Desventajas a solventar:} Falta de estructura en la información, acceso restringido a resultados de encuestas oficiales y falta de adaptación al sistema de créditos europeo o moderación local.
+\end{itemize}
+
+\section{Diseño centrado en el usuario}
+
+\subsection{Usuario tipo (persona)}
+\textbf{Perfil 1: Estudiante (Elena Ruiz)}
+\begin{itemize}
+    \item \textbf{Edad:} 20 años. 
+    \item \textbf{Perfil:} Estudiante de 3º grado. 
+    \item \textbf{Objetivo:} Decidir matrícula y optimizar tiempo de estudio. 
+    \item \textbf{Necesidades:} Información anónima y veraz sobre la asistencia obligatoria. 
+\end{itemize}
+
+\textbf{Perfil 2: Moderador (Javier Gómez)}
+\begin{itemize}
+    \item \textbf{Edad:} 23 años.
+    \item \textbf{Perfil:} Estudiante de Máster / Delegación.
+    \item \textbf{Objetivo:} Mantener un entorno libre de difamación e insultos.
+\end{itemize}
+
+\subsection{Escenarios de uso} 
+\begin{enumerate}
+    \item \textbf{Decisión de matrícula:} Elena compara dos optativas basándose en la dificultad reportada por otros compañeros antes de cerrar su inscripción. 
+    \item \textbf{Gestión de asistencia:} Elena consulta si un profesor suele pasar lista antes de decidir si quedarse estudiando en la biblioteca. 
+    \item \textbf{Moderación:} Javier revisa una reseña marcada por el filtro automático de palabras prohibidas y decide si eliminarla o aprobarla.
+\end{enumerate}
+
+\subsection{Wireframes} 
+Se definen tres bocetos principales centrados en la estructura y navegación:
+\begin{itemize}
+    \item \textbf{Pantalla de Inicio:} Buscador y destacados.
+    \item \textbf{Ficha de Profesor:} Valoración, etiquetas y muro de comentarios con opción de reporte.
+    \item \textbf{Panel de Moderación:} Lista de comentarios en revisión con acciones de aprobación/borrado.
+\end{itemize}
+
+\newpage
+
+\href{https://www.figma.com/design/BfC4b74wlpLkhjCZ4KSV9J/UCOpiniones?node-id=3312-3&t=43l5RDpH6bo7hQIr-1}{Ver el prototipo en Figma}
+
+
+
+\wireframecontexto{inicio_sesión_.png}{Inicio de Sesión}{Pantalla de acceso donde el usuario introduce sus credenciales para entrar en la aplicación. \\ \\
+En nuestro prototipo contemplamos 4 casos: \\
+1) Inicio de sesión fallido. \\
+2) Inicio de sesión correcto. \\
+3) Inicio de sesión de moderador. \\ 
+4) Registro \\ \\
+
+Comprobamos si el nombre de usuario y contraseña son válidos, si no lo son nos llevaría a la página de Acceso Denegado. \\
+Si son correctos comprobamos si es un usuario común o si tiene permisos de moderador.
+}
+
+
+\wireframecontexto{registro.png}{Registro}{Formulario para crear una cuenta nueva con los datos básicos del usuario.}
+
+\wireframecontexto{pagina_error.png}{Acceso Denegado}{Vista de error mostrada cuando las credenciales son incorrectas o no hay permisos suficientes.}
+
+\wireframecontexto{reportar_error.png}{Reportar Error}{Pantalla para enviar incidencias detectadas durante el uso de la plataforma.}
+
+\wireframecontexto{reporte_enviado.png}{Reporte Exitoso}{Confirmación visual de que el reporte se ha enviado correctamente al sistema.}
+
+\wireframecontexto{Pagina_Principal.png}{Página Principal}{Pantalla inicial tras iniciar sesión, con accesos a búsqueda y secciones destacadas. Se muestran las asignaturas destacadas de la carrera seleccionada.}
+
+\wireframecontexto{Configuracion.png}{Configuración}{Opciones de personalización general del perfil y preferencias de uso.}
+
+\wireframecontexto{Configuracion_Ingles.png}{Configuración en Inglés}{Versión de la configuración con el idioma de la interfaz en inglés.}
+
+\wireframecontexto{Configuracion_Moderador.png}{Configuración de Moderador}{Se muestra el panel de configuración con una opción adicional para cuentas con rol de moderación.}
+
+\wireframecontexto{Panel_Moderacion.png}{Panel de Moderación}{Listado de reportes y comentarios pendientes de revisión con acciones directas.}
+
+\wireframecontexto{detalles_reporte.png}{Detalles del Reporte}{Vista detallada de un reporte concreto antes de decidir su resolución. Muestra información específica sobre dicho reporte. }
+
+\wireframecontexto{asignaturas.png}{Asignatura}{Ficha de una asignatura con información relevante y valoraciones de estudiantes. Se muestran los profesores que están vinculados a esta asignatura, permitiendo acceder al perfil de cada profesor.}
+
+\wireframecontexto{Perfil_Profesor.png}{Perfil de Profesor}{Resumen del docente con datos académicos y opiniones de la comunidad. Aquí se puede encontrar información general como su horario de tutorías, despacho y correo, las asignaturas con las que está vinculado y algunas de sus características generales como docente según las valoraciones de sus alumnos.}
+
+\wireframecontexto{puntuar_profesor.png}{Valorar Profesor}{Interfaz para publicar una valoración sobre la experiencia docente. En ella tenemos un desplegable para escoger la asignatura sobre la que queremos evaluar al profesor, un sistema de estrellas para su valoración general, una checklist con características generales y un campo de texto para que los usuarios expongan experiencias concretas.}
+
+\wireframecontexto{valoración_enviada.png}{Valoración Enviada}{Mensaje de confirmación tras registrar correctamente la valoración del usuario.}
+
+\end{document}
