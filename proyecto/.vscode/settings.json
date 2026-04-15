@@ -1,7 +1,6 @@
 {
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
-    "java.jdt.ls.java.home": "/usr/local/sdkman/candidates/java/21.0.9-ms",
     "java.project.referencedLibraries": [
         "lib/**/*.jar"
     ]
