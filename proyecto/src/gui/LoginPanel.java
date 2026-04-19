@@ -28,9 +28,9 @@ public class LoginPanel extends JPanel {
         JLabel logoLabel = new JLabel();
         try {
             // Asegúrate de tener la imagen en la carpeta correspondiente
-            ImageIcon logoIcon = new ImageIcon(getClass().getResource("/resources/logo_UCO.png"));
+            ImageIcon logoIcon = new ImageIcon(getClass().getResource("/resources/uco_logo.png"));
             // Redimensionar si es necesario (opcional)
-            Image img = logoIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            Image img = logoIcon.getImage();//.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
             logoLabel.setIcon(new ImageIcon(img));
         } catch (Exception e) {
             logoLabel.setText("[ Imagen Logo UCO ]"); // Fallback si no encuentra la imagen
