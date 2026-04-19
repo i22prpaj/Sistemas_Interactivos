@@ -27,13 +27,25 @@ public class LoginPanel extends JPanel {
         // 2. Logo UCO
         JLabel logoLabel = new JLabel();
         try {
-            // Asegúrate de tener la imagen en la carpeta correspondiente
+            // Cargar la imagen y redimensionar manteniendo proporción
             ImageIcon logoIcon = new ImageIcon(getClass().getResource("/resources/uco_logo.png"));
-            // Redimensionar si es necesario (opcional)
-            Image img = logoIcon.getImage();//.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-            logoLabel.setIcon(new ImageIcon(img));
+            Image originalImage = logoIcon.getImage();
+            
+            // Obtener dimensiones originales
+            int originalWidth = originalImage.getWidth(null);
+            int originalHeight = originalImage.getHeight(null);
+            
+            // Escalar manteniendo proporción (más pequeño)
+            int maxWidth = 110;
+            double ratio = (double) originalHeight / originalWidth;
+            int newWidth = maxWidth;
+            int newHeight = (int) (maxWidth * ratio);
+            
+            Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+            logoLabel.setIcon(new ImageIcon(scaledImage));
+            logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         } catch (Exception e) {
-            logoLabel.setText("[ Imagen Logo UCO ]"); // Fallback si no encuentra la imagen
+            logoLabel.setText("[ Imagen Logo UCO ]");
             logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         }
         gbc.gridy = 0;
