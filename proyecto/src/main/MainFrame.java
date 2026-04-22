@@ -4,12 +4,21 @@ import gui.LoginErrorPanel; // Importamos tu panel de login
 import gui.LoginPanel; // Importamos tu panel de error
 import java.awt.*; // Importamos tu panel de error
 import javax.swing.*; // Importamos tu panel de error
+import java.util.Locale;           
+import java.util.ResourceBundle;   
 
 public class MainFrame extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
+    private ResourceBundle bundle;
 
     public MainFrame() {
+        // 1. Establecer el idioma por defecto (Español de España)
+        Locale.setDefault(new Locale("es", "ES"));
+        
+        // 2. Cargar el Bundle. Busca "Textos_es.properties" en la carpeta "resources"
+        bundle = ResourceBundle.getBundle("resources.Textos", Locale.getDefault());
+
         setTitle("UCO-Reviews - Interfaz");
         setSize(350, 650); // Tamaño vertical tipo móvil
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,5 +59,10 @@ public class MainFrame extends JFrame {
             MainFrame frame = new MainFrame();
             frame.setVisible(true);
         });
+    }
+
+    // Método para que los paneles accedan al diccionario de textos
+    public ResourceBundle getBundle() {
+        return bundle;
     }
 }
