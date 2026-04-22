@@ -77,12 +77,11 @@ public class LoginPanel extends JPanel {
         JLabel lblPregunta = new JLabel(textos.getString("login.pregunta"));
         JButton btnRegistro = new JButton(textos.getString("login.registro"));
 
+        JPanel panelRegistro = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
         panelRegistro.setOpaque(false); // Para que se vea el fondo verde
         
-        JLabel lblPregunta = new JLabel("¿Aún no tienes acceso?");
         lblPregunta.setFont(new Font("Arial", Font.PLAIN, 12));
         
-        JButton btnRegistro = new JButton("Registro");
         btnRegistro.setForeground(Color.BLUE);
         btnRegistro.setBorderPainted(false);
         btnRegistro.setContentAreaFilled(false);
@@ -130,7 +129,7 @@ public class LoginPanel extends JPanel {
             } else {
                 // Caso 3: Credenciales inválidas
                 System.out.println("Error de credenciales");
-                mainFrame.showView("ERROR");
+                mainFrame.showView("LOGIN_ERROR"); // Vista de error (que crearemos luego)
             }
         });
     }
