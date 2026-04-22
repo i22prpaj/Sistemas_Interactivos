@@ -1,8 +1,9 @@
 package main;
 
-import gui.LoginPanel; // Importamos tu panel de login
-import javax.swing.*;
-import java.awt.*;
+import gui.LoginErrorPanel; // Importamos tu panel de login
+import gui.LoginPanel; // Importamos tu panel de error
+import java.awt.*; // Importamos tu panel de error
+import javax.swing.*; // Importamos tu panel de error
 
 public class MainFrame extends JFrame {
     private CardLayout cardLayout;
@@ -26,6 +27,7 @@ public class MainFrame extends JFrame {
         // Aquí iremos añadiendo las demás según las vayamos creando:
         // mainPanel.add(new RegistroPanel(this), "REGISTRO");
         // mainPanel.add(new ErrorPanel(this), "ERROR");
+        mainPanel.add(new LoginErrorPanel(this), "LOGIN_ERROR");
 
         add(mainPanel);
     }
