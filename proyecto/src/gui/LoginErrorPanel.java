@@ -3,6 +3,7 @@ package gui;
 import main.MainFrame;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ResourceBundle; // Importación necesaria para los bundles
 
 public class LoginErrorPanel extends JPanel {
 
@@ -10,6 +11,9 @@ public class LoginErrorPanel extends JPanel {
 
     public LoginErrorPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        
+        // Obtenemos el diccionario de textos actual desde el MainFrame
+        ResourceBundle textos = mainFrame.getBundle();
         
         // Usamos BorderLayout para poder enviar el botón de volver al "Sur" (abajo)
         setLayout(new BorderLayout());
@@ -38,25 +42,21 @@ public class LoginErrorPanel extends JPanel {
         gbc.gridy = 0;
         centerPanel.add(iconLabel, gbc);
 
-        // 2. Título "¡Acceso Denegado!"
-        JLabel lblTitulo = new JLabel("¡Acceso Denegado!", SwingConstants.CENTER);
+        // 2. Título (Internacionalizado)
+        JLabel lblTitulo = new JLabel(textos.getString("error.titulo"), SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
         lblTitulo.setForeground(Color.RED);
         gbc.gridy = 1;
         centerPanel.add(lblTitulo, gbc);
 
-        // 3. Mensaje Explicativo
-        // Usamos HTML dentro del JLabel para poder hacer los saltos de línea (br) y centrar el texto
-        String mensajeHtml = "<html><div style='text-align: center; font-family: Arial; font-size: 14px;'>"
-                + "El correo electrónico o la<br>contraseña introducidos no son<br>"
-                + "correctos. Por favor, inténtelo<br>de nuevo o contacte con el<br>"
-                + "administrador si el problema<br>persiste.</div></html>";
-        JLabel lblMensaje = new JLabel(mensajeHtml, SwingConstants.CENTER);
+        // 3. Mensaje Explicativo (Internacionalizado)
+        // El texto se recupera del bundle, el cual ya contiene el formato HTML para los saltos de línea
+        JLabel lblMensaje = new JLabel(textos.getString("error.mensaje"), SwingConstants.CENTER);
         gbc.gridy = 2;
         centerPanel.add(lblMensaje, gbc);
 
-        // 4. Botón "Reportar un problema"
-        JButton btnReportar = new JButton("Reportar un problema");
+        // 4. Botón "Reportar un problema" (Internacionalizado)
+        JButton btnReportar = new JButton(textos.getString("error.reportar"));
         btnReportar.setForeground(new Color(0, 150, 255)); // Azul claro
         btnReportar.setFont(new Font("Arial", Font.PLAIN, 14));
         btnReportar.setBorderPainted(false); // Quitar borde
@@ -72,14 +72,13 @@ public class LoginErrorPanel extends JPanel {
 
 
         // --- PANEL INFERIOR (Botón de retroceso) ---
-        // Usamos FlowLayout alineado a la derecha
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         bottomPanel.setOpaque(false);
 
-        // Creamos el botón circular de la flecha
-        JButton btnVolver = new JButton("⬅"); // Usamos carácter Unicode de flecha
+        // Botón circular de la flecha
+        JButton btnVolver = new JButton("⬅"); 
         btnVolver.setFont(new Font("Arial", Font.BOLD, 18));
-        btnVolver.setBackground(new Color(160, 255, 90)); // Un verde un pelín más oscuro para resaltar
+        btnVolver.setBackground(new Color(160, 255, 90)); 
         btnVolver.setForeground(Color.BLACK);
         btnVolver.setFocusPainted(false);
         btnVolver.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
@@ -91,12 +90,11 @@ public class LoginErrorPanel extends JPanel {
         // --- LÓGICA DE NAVEGACIÓN ---
 
         btnVolver.addActionListener(e -> {
-            // Volver a la pantalla de login
             mainFrame.showView("LOGIN");
         });
 
         btnReportar.addActionListener(e -> {
-            // mainFrame.showView("REPORTE"); // Lo descomentaremos cuando se cree el panel de reporte
+            // mainFrame.showView("REPORTE");
             System.out.println("Navegando a la pantalla de reporte de errores...");
         });
     }

@@ -15,6 +15,7 @@ public class LoginPanel extends JPanel {
 
     public LoginPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        ResourceBundle textos = mainFrame.getBundle();
         
         // 1. Configuración del fondo (Verde lima según tu diseño)
         setBackground(new Color(175, 255, 100)); 
@@ -52,25 +53,29 @@ public class LoginPanel extends JPanel {
         add(logoLabel, gbc);
 
         // 3. Título
-        JLabel titulo = new JLabel("Introduzca credenciales de acceso", SwingConstants.CENTER);
+        JLabel titulo = new JLabel(textos.getString("login.titulo"), SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridy = 1;
         add(titulo, gbc);
 
         // 4. Campo de Correo (con "placeholder" simulado)
-        JTextField txtCorreo = new JTextField("Correo");
+        String placeholderCorreo = textos.getString("login.correo");
+        JTextField txtCorreo = new JTextField(placeholderCorreo);
         configurarCampoTexto(txtCorreo, "Correo");
         gbc.gridy = 2;
         add(txtCorreo, gbc);
 
         // 5. Campo de Contraseña (JPasswordField para ocultar caracteres)
-        JPasswordField txtPassword = new JPasswordField("Contraseña");
-        configurarCampoTexto(txtPassword, "Contraseña");
+        String placeholderPass = textos.getString("login.password");
+        JPasswordField txtPassword = new JPasswordField(placeholderPass);
+        configurarCampoTexto(txtPassword, placeholderPass);        
         gbc.gridy = 3;
         add(txtPassword, gbc);
 
         // 6. Sección de "¿Aún no tienes acceso? Registro"
-        JPanel panelRegistro = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+        JLabel lblPregunta = new JLabel(textos.getString("login.pregunta"));
+        JButton btnRegistro = new JButton(textos.getString("login.registro"));
+
         panelRegistro.setOpaque(false); // Para que se vea el fondo verde
         
         JLabel lblPregunta = new JLabel("¿Aún no tienes acceso?");
@@ -89,7 +94,7 @@ public class LoginPanel extends JPanel {
         add(panelRegistro, gbc);
 
         // 7. Botón de Iniciar Sesión (Color granate/magenta)
-        JButton btnIniciar = new JButton("Iniciar Sesión");
+        JButton btnIniciar = new JButton(textos.getString("login.boton"));
         btnIniciar.setBackground(new Color(194, 24, 91)); // Color rosa/granate de tu diseño
         btnIniciar.setForeground(Color.WHITE);
         btnIniciar.setFont(new Font("Arial", Font.BOLD, 14));

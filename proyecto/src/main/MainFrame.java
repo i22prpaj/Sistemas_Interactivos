@@ -17,7 +17,7 @@ public class MainFrame extends JFrame {
         Locale.setDefault(new Locale("es", "ES"));
         
         // 2. Cargar el Bundle. Busca "Textos_es.properties" en la carpeta "resources"
-        bundle = ResourceBundle.getBundle("resources.Textos", Locale.getDefault());
+        bundle = ResourceBundle.getBundle("bundle.Bundle", Locale.getDefault());
 
         setTitle("UCO-Reviews - Interfaz");
         setSize(350, 650); // Tamaño vertical tipo móvil
