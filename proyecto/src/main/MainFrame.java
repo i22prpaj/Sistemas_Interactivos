@@ -15,7 +15,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         // 1. Establecer el idioma por defecto (Español de España)
-        Locale.setDefault(new Locale("es", "ES"));
+        Locale.setDefault(Locale.of("es", "ES"));
         
         // 2. Cargar el Bundle. Busca "Textos_es.properties" en la carpeta "resources"
         bundle = ResourceBundle.getBundle("bundle.Bundle", Locale.getDefault());
@@ -35,10 +35,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new LoginPanel(this), "LOGIN");
         
         // Aquí iremos añadiendo las demás según las vayamos creando:
-        // mainPanel.add(new RegistroPanel(this), "REGISTRO");
-        // mainPanel.add(new ErrorPanel(this), "ERROR");
         mainPanel.add(new LoginErrorPanel(this), "LOGIN_ERROR");
-
         mainPanel.add(new RegistroPanel(this), "REGISTRO");
 
         add(mainPanel);
