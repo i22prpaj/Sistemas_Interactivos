@@ -2,10 +2,11 @@ package main;
 
 import gui.LoginErrorPanel; // Importamos tu panel de login
 import gui.LoginPanel; // Importamos tu panel de error
+import gui.RegistroPanel; // Importamos tu panel de error
 import java.awt.*; // Importamos tu panel de error
-import javax.swing.*; // Importamos tu panel de error
-import java.util.Locale;           
-import java.util.ResourceBundle;   
+import java.util.Locale; // Importamos tu panel de error
+import java.util.ResourceBundle; // Importamos tu panel de error
+import javax.swing.*;   
 
 public class MainFrame extends JFrame {
     private CardLayout cardLayout;
@@ -37,6 +38,8 @@ public class MainFrame extends JFrame {
         // mainPanel.add(new RegistroPanel(this), "REGISTRO");
         // mainPanel.add(new ErrorPanel(this), "ERROR");
         mainPanel.add(new LoginErrorPanel(this), "LOGIN_ERROR");
+
+        mainPanel.add(new RegistroPanel(this), "REGISTRO");
 
         add(mainPanel);
     }

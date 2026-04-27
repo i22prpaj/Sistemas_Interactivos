@@ -1,14 +1,12 @@
 package gui;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-import main.MainFrame;
-
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import main.MainFrame;
 
 public class LoginPanel extends JPanel {
 
