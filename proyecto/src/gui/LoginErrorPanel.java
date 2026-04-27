@@ -1,9 +1,9 @@
 package gui;
 
-import main.MainFrame;
-import javax.swing.*;
 import java.awt.*;
 import java.util.ResourceBundle;
+import javax.swing.*;
+import main.MainFrame;
 
 public class LoginErrorPanel extends JPanel {
 
@@ -87,8 +87,7 @@ public class LoginErrorPanel extends JPanel {
         });
 
         btnReportar.addActionListener(e -> {
-            // mainFrame.showView("REPORTE");
-            System.out.println("Navegando a la pantalla de reporte...");
+            mainFrame.showView("REPORTE");
         });
     }
 }

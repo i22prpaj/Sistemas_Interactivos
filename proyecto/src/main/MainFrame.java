@@ -3,6 +3,8 @@ package main;
 import gui.LoginErrorPanel; // Importamos tu panel de login
 import gui.LoginPanel; // Importamos tu panel de error
 import gui.RegistroPanel; // Importamos tu panel de error
+import gui.ReporteEnviadoPanel;
+import gui.ReportePanel;
 import java.awt.*; // Importamos tu panel de error
 import java.util.Locale; // Importamos tu panel de error
 import java.util.ResourceBundle; // Importamos tu panel de error
@@ -37,6 +39,8 @@ public class MainFrame extends JFrame {
         // Aquí iremos añadiendo las demás según las vayamos creando:
         mainPanel.add(new LoginErrorPanel(this), "LOGIN_ERROR");
         mainPanel.add(new RegistroPanel(this), "REGISTRO");
+        mainPanel.add(new ReportePanel(this), "REPORTE");
+        mainPanel.add(new ReporteEnviadoPanel(this), "REPORTE_ENVIADO");
 
         add(mainPanel);
     }
