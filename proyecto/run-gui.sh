@@ -11,6 +11,13 @@ RETRY_DELAY=2
 
 mkdir -p "$RUNTIME_DIR"
 
+# Copiar recursos al classpath antes de arrancar Java.
+sync_resources() {
+  mkdir -p "$ROOT_DIR/bin/resources" "$ROOT_DIR/bin/bundle"
+  cp -R "$ROOT_DIR/proyecto/src/resources/." "$ROOT_DIR/bin/resources/" 2>/dev/null || true
+  cp -R "$ROOT_DIR/proyecto/src/bundle/." "$ROOT_DIR/bin/bundle/" 2>/dev/null || true
+}
+
 # Función: limpiar todos los procesos pendientes
 cleanup_processes() {
   echo "[Cleanup] Deteniendo procesos previos..."
@@ -41,6 +48,7 @@ wait_port_free() {
 
 # Limpiar e inicializar
 cleanup_processes
+sync_resources
 wait_port_free "$VNC_PORT" || true
 wait_port_free "$NOVNC_PORT" || true
 sleep 1

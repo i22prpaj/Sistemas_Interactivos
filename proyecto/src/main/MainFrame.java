@@ -17,9 +17,9 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         // 1. Establecer el idioma por defecto (Español de España)
-        Locale.setDefault(Locale.of("es", "ES"));
+        Locale.setDefault(new Locale("es", "ES"));
         
-        // 2. Cargar el Bundle. Busca "Textos_es.properties" en la carpeta "resources"
+        // 2. Cargar el Bundle. Busca "Bundle_es.properties" en la carpeta "bundle"
         bundle = ResourceBundle.getBundle("bundle.Bundle", Locale.getDefault());
 
         setTitle("UCO-Reviews - Interfaz");
@@ -36,7 +36,6 @@ public class MainFrame extends JFrame {
         // Le damos un "nombre clave" (ej. "LOGIN") para llamarla luego
         mainPanel.add(new LoginPanel(this), "LOGIN");
         
-        // Aquí iremos añadiendo las demás según las vayamos creando:
         mainPanel.add(new LoginErrorPanel(this), "LOGIN_ERROR");
         mainPanel.add(new RegistroPanel(this), "REGISTRO");
         mainPanel.add(new ReportePanel(this), "REPORTE");
