@@ -1,0 +1,6 @@
+noVNC local
+
+http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=scale
+
+Abrir en VS Code: usa el comando 'Open Link' o 'vscode.open' sobre esta URL.
+Abrir en navegador externo: pega la URL en tu navegador.
