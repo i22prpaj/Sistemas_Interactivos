@@ -1,10 +1,12 @@
 package main;
 
-import gui.LoginErrorPanel; // Importamos tu panel de login
 import gui.LoginPanel; // Importamos tu panel de error
-import gui.RegistroPanel; // Importamos tu panel de error
-import gui.ReporteEnviadoPanel;
+import gui.LoginErrorPanel; // Importamos tu panel de login
 import gui.ReportePanel;
+import gui.ReporteEnviadoPanel;
+import gui.RegistroPanel; // Importamos tu panel de error
+import gui.MainPanel;
+import gui.ConfiguracionPanel;
 import java.awt.*; // Importamos tu panel de error
 import java.util.Locale; // Importamos tu panel de error
 import java.util.ResourceBundle; // Importamos tu panel de error
@@ -33,13 +35,14 @@ public class MainFrame extends JFrame {
         mainPanel = new JPanel(cardLayout);
 
         // Añadimos las pantallas al contenedor. 
-        // Le damos un "nombre clave" (ej. "LOGIN") para llamarla luego
+        // Le damos un "nombre clave" (ej. "INICIO") para llamarla luego
         mainPanel.add(new LoginPanel(this), "LOGIN");
-        
         mainPanel.add(new LoginErrorPanel(this), "LOGIN_ERROR");
         mainPanel.add(new RegistroPanel(this), "REGISTRO");
         mainPanel.add(new ReportePanel(this), "REPORTE");
         mainPanel.add(new ReporteEnviadoPanel(this), "REPORTE_ENVIADO");
+        mainPanel.add(new MainPanel(this), "MAIN_ESTUDIANTE");
+        mainPanel.add(new ConfiguracionPanel(this), "CONFIGURACION");
 
         add(mainPanel);
     }

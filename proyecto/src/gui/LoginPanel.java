@@ -10,6 +10,7 @@ import main.MainFrame;
 
 public class LoginPanel extends JPanel {
 
+    private static final boolean DEV_MODE = true;
     private MainFrame mainFrame; // Referencia al contenedor principal para cambiar de pantalla
 
     public LoginPanel(MainFrame mainFrame) {
@@ -59,8 +60,9 @@ public class LoginPanel extends JPanel {
 
         // 4. Campo de Correo (con "placeholder" simulado)
         String placeholderCorreo = textos.getString("login.correo");
-        JTextField txtCorreo = new JTextField(placeholderCorreo);
-        configurarCampoTexto(txtCorreo, "Correo");
+        JTextField txtCorreo = new JTextField();
+        txtCorreo.setToolTipText(placeholderCorreo);
+        configurarCampoTexto(txtCorreo, placeholderCorreo);
         gbc.gridy = 2;
         add(txtCorreo, gbc);
 
@@ -102,6 +104,36 @@ public class LoginPanel extends JPanel {
         gbc.gridy = 5;
         gbc.insets = new Insets(20, 40, 10, 40); // Más margen lateral para que no sea tan ancho
         add(btnIniciar, gbc);
+
+        if (DEV_MODE) {
+            JPanel devPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 0));
+            devPanel.setOpaque(false);
+
+            JLabel devLabel = new JLabel("Modo dev:");
+            devLabel.setFont(new Font("Arial", Font.PLAIN, 11));
+
+            JButton btnDevPrincipal = new JButton("Principal");
+            JButton btnDevRegistro = new JButton("Registro");
+            JButton btnDevError = new JButton("Error");
+
+            for (JButton button : new JButton[]{btnDevPrincipal, btnDevRegistro, btnDevError}) {
+                button.setFont(new Font("Arial", Font.PLAIN, 10));
+                button.setFocusPainted(false);
+            }
+
+            btnDevPrincipal.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
+            btnDevRegistro.addActionListener(e -> mainFrame.showView("REGISTRO"));
+            btnDevError.addActionListener(e -> mainFrame.showView("LOGIN_ERROR"));
+
+            devPanel.add(devLabel);
+            devPanel.add(btnDevPrincipal);
+            devPanel.add(btnDevRegistro);
+            devPanel.add(btnDevError);
+
+            gbc.gridy = 6;
+            gbc.insets = new Insets(6, 18, 6, 18);
+            add(devPanel, gbc);
+        }
 
         // --- ACCIONES Y NAVEGACIÓN ---
 
