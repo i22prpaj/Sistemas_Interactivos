@@ -7,11 +7,15 @@ import gui.ConfiguracionPanel.TogglePill;
 import gui.ConfiguracionPanel.ToggleSwitch;
 import main.MainFrame;
 import java.awt.*;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ConfiguracionPanel extends JPanel {
 
+    private final MainFrame mainFrame;
+
     public ConfiguracionPanel(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
         // Usamos BorderLayout para separar el contenido del footer
         setLayout(new BorderLayout());
         setBackground(new Color(212, 250, 187)); // Color verde más claro como la foto
@@ -65,7 +69,14 @@ public class ConfiguracionPanel extends JPanel {
         contentPanel.add(createLabel(bundle.getString("config.clear_cache"), startX, 450, true));
 
         // ===== LOGOUT (Cerrar Sesión) =====
-        contentPanel.add(createLabelCentered(bundle.getString("config.logout"), startX, 520, new Color(180, 40, 70)));
+        JLabel logoutLabel = createLabelCentered(bundle.getString("config.logout"), startX, 520, new Color(180, 40, 70));
+        logoutLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                mainFrame.showView("LOGIN");
+            }
+        });
+        contentPanel.add(logoutLabel);
 
         add(contentPanel, BorderLayout.CENTER);
 
@@ -82,7 +93,7 @@ public class ConfiguracionPanel extends JPanel {
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 20));
         rightPanel.setOpaque(false);
         RoundButton backBtn = new RoundButton(bundle.getString("config.back"), 60, 40); // Usando flecha unicode
-        backBtn.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
+        backBtn.addActionListener(e -> mainFrame.goBack());
         rightPanel.add(backBtn);
 
         footerPanel.add(centerPanel, BorderLayout.CENTER);
@@ -111,12 +122,19 @@ public class ConfiguracionPanel extends JPanel {
     // ================== CLASES INTERNAS (Sin cambios mayores, solo ajustes de tamaño) ==================
     
     class TogglePill extends JComponent {
-        boolean left = true;
+        boolean left;
         public TogglePill(int x, int y) {
+            left = Locale.getDefault().getLanguage().equals("es");
             setBounds(x, y, 160, 45);
             addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent e) {
-                    left = !left; repaint();
+                    left = !left;
+                    repaint();
+
+                    Locale selectedLocale = left ? new Locale("es", "ES") : Locale.ENGLISH;
+                    Timer timer = new Timer(130, ev -> mainFrame.changeLanguage(selectedLocale, "CONFIGURACION"));
+                    timer.setRepeats(false);
+                    timer.start();
                 }
             });
         }
