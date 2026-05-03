@@ -113,7 +113,7 @@ public class ProfesorDetalle extends JPanel {
         btnPuntuar.setBackground(BLANCO_BOTON);
         btnPuntuar.setPreferredSize(new Dimension(140, 38));
         btnPuntuar.setFont(new Font("SansSerif", Font.BOLD, 14));
-        // Aquí añadirías el ActionListener para mostrar la ventana de votación
+        btnPuntuar.addActionListener(e -> mainFrame.showView("VALORACION"));
 
         gbc.gridy = 5;
         gbc.weighty = 1.0;
