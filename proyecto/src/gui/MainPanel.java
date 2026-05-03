@@ -4,190 +4,194 @@ import main.MainFrame;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ResourceBundle;
 
 public class MainPanel extends JPanel {
 
     private MainFrame mainFrame;
+    private final Color VERDE_FONDO = new Color(180,255,104);
+    private final Color VERDE_BOTON = new Color(212,255,189); // Verde clarito solicitado
+    private final Color GRIS_BUSCADOR = new Color(235, 230, 240);
+    private final Color BLANCO_TRANSLUCIDO = new Color(255, 255, 255, 150);
 
     public MainPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         ResourceBundle textos = mainFrame.getBundle();
 
-        setBackground(new Color(175, 255, 100));
+        setBackground(VERDE_FONDO);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(8, 12, 8, 12);
+        gbc.insets = new Insets(5, 15, 5, 15);
 
-        // Header: logo + title + settings icon
-        JPanel header = new JPanel(new BorderLayout());
+        // --- 1. HEADER ---
+        JPanel header = new JPanel(new BorderLayout(8, 0));
         header.setOpaque(false);
-        try {
-            ImageIcon logoIcon = new ImageIcon(getClass().getResource("/resources/logo-ing-informtica.png"));
-            Image img = logoIcon.getImage().getScaledInstance(36, 36, Image.SCALE_SMOOTH);
-            JLabel logo = new JLabel(new ImageIcon(img));
-            logo.setBorder(new EmptyBorder(6, 6, 6, 6));
-            header.add(logo, BorderLayout.WEST);
-        } catch (Exception e) {
-            header.add(new JLabel("UCO"), BorderLayout.WEST);
-        }
 
+        ImageIcon logoIcon = loadScaledIcon(35, 35, "/resources/logo-ing-informtica.png");
+        header.add(new JLabel(logoIcon != null ? logoIcon : new ImageIcon()), BorderLayout.WEST);
+
+        // Título ajustado para evitar puntos suspensivos
         JLabel title = new JLabel(textos.getString("grado.informatica"));
-        title.setFont(new Font("Arial", Font.BOLD, 14));
+        title.setFont(new Font("SansSerif", Font.BOLD, 13)); 
         header.add(title, BorderLayout.CENTER);
 
-        // notification button
-        JButton notif = new JButton();
-        notif.setFocusPainted(false);
-        notif.setContentAreaFilled(false);
-        notif.setBorderPainted(false);
-        notif.setOpaque(false);
-        notif.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        try {
-            ImageIcon notifIcon = new ImageIcon(getClass().getResource("/resources/notif.PNG"));
-            Image scaledNotif = notifIcon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-            notif.setIcon(new ImageIcon(scaledNotif));
-        } catch (Exception e) {
-            notif.setText("🔔");
-        }
-        notif.setPreferredSize(new Dimension(34, 34));
-        notif.setBorder(new EmptyBorder(6, 6, 6, 6));
+        // Notificaciones -> Acción: CONFIGURACION
+        JButton notif = crearBotonIcono("/resources/notif.png", "/resources/notif.PNG", "🔔", 22);
         notif.addActionListener(e -> mainFrame.showView("CONFIGURACION"));
         header.add(notif, BorderLayout.EAST);
 
         gbc.gridy = 0;
         add(header, gbc);
 
-        // Search box with reserved space on the right for settings
-        JPanel searchRow = new JPanel(new BorderLayout(10, 0));
+        // --- 2. BUSCADOR Y SETTINGS ---
+        JPanel searchRow = new JPanel(new BorderLayout(10, 0)); 
         searchRow.setOpaque(false);
 
-        JTextField search = new JTextField();
-        search.setPreferredSize(new Dimension(280, 36));
-        search.setMaximumSize(new Dimension(280, 36));
-        search.setBackground(Color.WHITE);
-        search.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(220, 220, 220)),
-            new EmptyBorder(6, 10, 6, 10)));
-        search.setText("Buscar");
-        searchRow.add(search, BorderLayout.WEST);
+        JTextField search = new JTextField("Buscar") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(GRIS_BUSCADOR);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+                super.paintComponent(g);
+                g2.dispose();
+            }
+        };
+        search.setOpaque(false);
+        search.setBorder(new EmptyBorder(0, 15, 0, 5));
+        search.setPreferredSize(new Dimension(150, 35)); 
+        searchRow.add(search, BorderLayout.CENTER);
 
-        JButton searchSettings = new JButton();
-        searchSettings.setFocusPainted(false);
-        searchSettings.setContentAreaFilled(false);
-        searchSettings.setBorderPainted(false);
-        searchSettings.setOpaque(false);
-        searchSettings.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        try {
-            ImageIcon settingsIcon = new ImageIcon(getClass().getResource("/resources/settings.PNG"));
-            Image scaledSettings = settingsIcon.getImage().getScaledInstance(22, 25, Image.SCALE_SMOOTH);
-            searchSettings.setIcon(new ImageIcon(scaledSettings));
-        } catch (Exception e) {
-            searchSettings.setText("⚙");
-        }
-        searchSettings.setPreferredSize(new Dimension(34, 34));
-        searchSettings.addActionListener(e -> mainFrame.showView("CONFIGURACION"));
-        searchRow.add(searchSettings, BorderLayout.EAST);
+        // Settings -> Acción: CONFIGURACION
+        JButton settings = crearBotonIcono("/resources/settings.png", "/resources/settings.PNG", "⚙", 24);
+        settings.addActionListener(e -> mainFrame.showView("CONFIGURACION"));
+        searchRow.add(settings, BorderLayout.EAST);
 
         gbc.gridy = 1;
+        gbc.insets = new Insets(10, 15, 10, 15);
         add(searchRow, gbc);
 
-        // Label: Asignaturas por curso
+        // --- 3. ETIQUETA ASIGNATURAS ---
+        JLabel lbl = new JLabel(textos.getString("subjects.label"));
+        lbl.setFont(new Font("SansSerif", Font.BOLD, 13));
         gbc.gridy = 2;
-        JLabel lbl = new JLabel("Asignaturas por curso:");
-        lbl.setFont(new Font("Arial", Font.PLAIN, 12));
+        gbc.insets = new Insets(10, 20, 5, 15); // Más margen izquierdo (20)
         add(lbl, gbc);
 
-        // Tabs for years (simple panel)
-        JPanel tabs = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
-        tabs.setOpaque(false);
+        // --- 4. TABS (Estilo imagen_187ca0.png) ---
+        JPanel tabsContainer = new JPanel(new GridLayout(1, 5)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(BLANCO_TRANSLUCIDO);
+                g.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+                super.paintComponent(g);
+            }
+        };
+        tabsContainer.setOpaque(false);
+        tabsContainer.setPreferredSize(new Dimension(280, 40));
+
         String[] años = {"Todo", "1º", "2º", "3º", "4º"};
-        for (String a : años) {
-            JButton b = new JButton(a);
+        for (int i = 0; i < años.length; i++) {
+            JButton b = new JButton(años[i]);
             b.setFocusPainted(false);
-            b.setBackground(new Color(240, 240, 240));
-            b.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
-            tabs.add(b);
+            b.setContentAreaFilled(false);
+            b.setBorderPainted(false);
+            b.setFont(new Font("SansSerif", i == 0 ? Font.BOLD : Font.PLAIN, 12));
+            b.setForeground(i == 0 ? new Color(100, 100, 255) : Color.DARK_GRAY);
+            
+            if (i == 0) {
+                b.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(100, 100, 255)));
+            }
+            // Aquí puedes añadir ActionListeners para filtrar la JList en el futuro
+            tabsContainer.add(b);
         }
         gbc.gridy = 3;
-        add(tabs, gbc);
+        gbc.insets = new Insets(5, 15, 5, 15);
+        add(tabsContainer, gbc);
 
-        // List of subjects
-        String[] subjects = {"Cálculo", "Economía", "Legislación", "Estadística", "POO", "Álgebra Lineal"};
+        // --- 5. LISTA ---
+        String[] subjects = {
+            textos.getString("subjects.calculo"),
+            textos.getString("subjects.economia"),
+            textos.getString("subjects.legislacion"),
+            textos.getString("subjects.estadistica"),
+            textos.getString("subjects.poo"),
+            textos.getString("subjects.algebra_lineal")
+        };
         JList<String> list = new JList<>(subjects);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setVisibleRowCount(6);
-        list.setFixedCellHeight(36);
-        list.setBackground(new Color(240, 255, 220));
-        list.setBorder(new EmptyBorder(4, 8, 4, 8));
+        list.setCellRenderer(new MobileListRenderer());
+        list.setBackground(VERDE_FONDO);
+        list.setFixedCellHeight(50);
 
-        // Double-click opens REPORTE
-        list.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    mainFrame.showView("REPORTE");
+        // Acción mejorada
+        list.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+                String seleccionado = list.getSelectedValue();
+
+                if (textos.getString("subjects.algebra_lineal").equals(seleccionado)) {
+                    // Te lleva al nuevo panel que has creado
+                    mainFrame.showView("ASIGNATURAS"); 
                 }
             }
         });
 
         JScrollPane scroll = new JScrollPane(list);
-        scroll.setPreferredSize(new Dimension(300, 220));
+        scroll.setBorder(null);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+
         gbc.gridy = 4;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         add(scroll, gbc);
 
-        // Bottom navigation
-        JPanel bottom = new JPanel(new GridBagLayout());
+        // --- 6. NAVEGACIÓN INFERIOR ---
+        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         bottom.setOpaque(false);
 
-        GridBagConstraints footerGbc = new GridBagConstraints();
-        footerGbc.gridy = 0;
-        footerGbc.fill = GridBagConstraints.HORIZONTAL;
-        footerGbc.insets = new Insets(0, 0, 0, 0);
-
-        footerGbc.gridx = 0;
-        footerGbc.weightx = 1.0;
-        JPanel leftSpacer = new JPanel();
-        leftSpacer.setOpaque(false);
-        bottom.add(leftSpacer, footerGbc);
-
-        footerGbc.gridx = 1;
-        footerGbc.weightx = 0.0;
-        BotonRedondeado inicio = new BotonRedondeado("Inicio");
-        inicio.setBackground(new Color(255, 255, 255));
-        inicio.setForeground(new Color(70, 70, 70));
-        inicio.setFocusPainted(false);
-        inicio.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
-        inicio.setMargin(new Insets(0, 0, 0, 0));
-        inicio.setPreferredSize(new Dimension(88, 30));
+        // Inicio -> Acción: MAIN_ESTUDIANTE
+        BotonRedondeado inicio = new BotonRedondeado(textos.getString("config.home"));
+        inicio.setBackground(VERDE_BOTON); // Fondo verde clarito
+        inicio.setPreferredSize(new Dimension(110, 36));
         inicio.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
-        bottom.add(inicio, footerGbc);
 
-        footerGbc.gridx = 2;
-        footerGbc.weightx = 1.0;
-        JPanel rightFooter = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 6));
-        rightFooter.setOpaque(false);
-        JButton back = new JButton("←");
-        back.setBackground(new Color(255, 255, 255));
-        back.setFocusPainted(false);
-        back.setOpaque(true);
-        back.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(230, 230, 230), 1, true),
-            new EmptyBorder(8, 18, 8, 18)));
-        back.setPreferredSize(new Dimension(54, 34));
-        back.addActionListener(e -> mainFrame.showView("LOGIN"));
-        rightFooter.add(back);
-        bottom.add(rightFooter, footerGbc);
+        // Atrás -> Acción: goBack
+        BotonRedondeado back = new BotonRedondeado(" ← ");
+        back.setBackground(VERDE_BOTON); // Fondo verde clarito
+        back.setPreferredSize(new Dimension(65, 36));
+        back.addActionListener(e -> mainFrame.goBack());
+
+        bottom.add(inicio);
+        bottom.add(back);
 
         gbc.gridy = 5;
         gbc.weighty = 0.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         add(bottom, gbc);
+    }
+
+    private JButton crearBotonIcono(String p1, String p2, String bck, int s) {
+        JButton btn = new JButton();
+        ImageIcon icon = loadScaledIcon(s, s, p1, p2);
+        if (icon != null) btn.setIcon(icon); else btn.setText(bck);
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
+
+    private ImageIcon loadScaledIcon(int w, int h, String... paths) {
+        for (String p : paths) {
+            try {
+                java.net.URL url = getClass().getResource(p);
+                if (url != null) return new ImageIcon(new ImageIcon(url).getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+            } catch (Exception ignored) {}
+        }
+        return null;
     }
 }

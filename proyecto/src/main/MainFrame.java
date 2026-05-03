@@ -7,16 +7,21 @@ import gui.ReporteEnviadoPanel;
 import gui.RegistroPanel; // Importamos tu panel de error
 import gui.FelicitacionMadre;
 import gui.MainPanel;
+import gui.Asignaturas;
 import gui.ConfiguracionPanel;
 import java.awt.*; // Importamos tu panel de error
 import java.util.Locale; // Importamos tu panel de error
 import java.util.ResourceBundle; // Importamos tu panel de error
+import java.util.Deque;
+import java.util.ArrayDeque;
 import javax.swing.*;   
 
 public class MainFrame extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private ResourceBundle bundle;
+    private Deque<String> history = new ArrayDeque<>();
+    private String currentView = null;
 
     public MainFrame() {
         // 1. Establecer el idioma por defecto (Español de España)
@@ -35,6 +40,14 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
+        buildViews();
+
+        add(mainPanel);
+    }
+
+    private void buildViews() {
+        mainPanel.removeAll();
+
         // Añadimos las pantallas al contenedor. 
         // Le damos un "nombre clave" (ej. "INICIO") para llamarla luego
         mainPanel.add(new LoginPanel(this), "LOGIN");
@@ -42,16 +55,34 @@ public class MainFrame extends JFrame {
         mainPanel.add(new RegistroPanel(this), "REGISTRO");
         mainPanel.add(new ReportePanel(this), "REPORTE");
         mainPanel.add(new ReporteEnviadoPanel(this), "REPORTE_ENVIADO");
-            mainPanel.add(new MainPanel(this), "MAIN_ESTUDIANTE");
-            mainPanel.add(new FelicitacionMadre(this), "FELICITACION_MADRE");
+        mainPanel.add(new MainPanel(this), "MAIN_ESTUDIANTE");
         mainPanel.add(new ConfiguracionPanel(this), "CONFIGURACION");
+        mainPanel.add(new FelicitacionMadre(this), "FELICITACION_MADRE");
+        mainPanel.add(new Asignaturas(this), "ASIGNATURAS");
 
-        add(mainPanel);
+        mainPanel.revalidate();
+        mainPanel.repaint();
+        // Mostrar la vista inicial sin añadir entrada al historial
+        showView("LOGIN", false);
     }
 
     // Método que usan los paneles para pedirle al MainFrame que cambie de vista
     public void showView(String viewName) {
+        showView(viewName, true);
+    }
+
+    public void showView(String viewName, boolean addToHistory) {
+        if (addToHistory && currentView != null && !currentView.equals(viewName)) {
+            history.push(currentView);
+        }
         cardLayout.show(mainPanel, viewName);
+        currentView = viewName;
+    }
+
+    public void goBack() {
+        if (history.isEmpty()) return;
+        String previous = history.pop();
+        showView(previous, false);
     }
 
     public static void main(String[] args) {
@@ -72,5 +103,13 @@ public class MainFrame extends JFrame {
     // Método para que los paneles accedan al diccionario de textos
     public ResourceBundle getBundle() {
         return bundle;
+    }
+
+    public void changeLanguage(Locale locale, String viewToShow) {
+        Locale.setDefault(locale);
+        bundle = ResourceBundle.getBundle("bundle.Bundle", locale);
+        buildViews();
+        // Mostrar la vista solicitada sin añadir al historial (cambio de idioma no debe crear entrada)
+        showView(viewToShow, false);
     }
 }
