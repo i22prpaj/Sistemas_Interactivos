@@ -7,6 +7,7 @@ import gui.ReporteEnviadoPanel;
 import gui.RegistroPanel; // Importamos tu panel de error
 import gui.FelicitacionMadre;
 import gui.MainPanel;
+import gui.ProfesorDetalle;
 import gui.Asignaturas;
 import gui.ConfiguracionPanel;
 import java.awt.*; // Importamos tu panel de error
@@ -57,8 +58,9 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ReporteEnviadoPanel(this), "REPORTE_ENVIADO");
         mainPanel.add(new MainPanel(this), "MAIN_ESTUDIANTE");
         mainPanel.add(new ConfiguracionPanel(this), "CONFIGURACION");
-        mainPanel.add(new FelicitacionMadre(this), "FELICITACION_MADRE");
         mainPanel.add(new Asignaturas(this), "ASIGNATURAS");
+        mainPanel.add(new ProfesorDetalle(this), "PROFESOR_DETALLE");
+        mainPanel.add(new FelicitacionMadre(this), "FELICITACION_MADRE");
 
         mainPanel.revalidate();
         mainPanel.repaint();

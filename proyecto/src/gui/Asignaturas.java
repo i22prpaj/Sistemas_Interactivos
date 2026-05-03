@@ -25,20 +25,29 @@ public class Asignaturas extends JPanel {
 
         // --- 1. TÍTULO DE LA ASIGNATURA ---
         // En la imagen aparece centrado y arriba (debajo de la "isla" del móvil)
-        JLabel title = new JLabel("Álgebra Lineal", SwingConstants.CENTER);
+        JLabel title = new JLabel(textos.getString("asignaturas.titulo"), SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 22));
         gbc.gridy = 0;
         gbc.insets = new Insets(40, 20, 20, 20); // Más margen superior para la "isla"
         add(title, gbc);
 
         // --- 2. ETIQUETA "PROFESORES" Y LISTA (panel izquierdo alineado) ---
-        String[] profes = {"Antonio López Jiménez", "Rosa Maria Muñoz Millan"};
+        String[] profes = {textos.getString("profesor.nombre"), textos.getString("profesor.nombre_2")};
         JList<String> list = new JList<>(profes);
         // Usamos un renderizador similar al de asignaturas pero con icono de persona
         list.setCellRenderer(new ProfesorListRenderer());
         list.setBackground(VERDE_FONDO);
         list.setFixedCellHeight(55);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                String seleccionado = list.getSelectedValue();
+                if (textos.getString("profesor.nombre").equals(seleccionado)) {
+                    mainFrame.showView("PROFESOR_DETALLE");
+                }
+            }
+        });
 
         JScrollPane scroll = new JScrollPane(list);
         scroll.setBorder(null);
@@ -51,7 +60,7 @@ public class Asignaturas extends JPanel {
         leftPanel.setOpaque(false);
         leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
-        JLabel lblProf = new JLabel("Profesores:");
+        JLabel lblProf = new JLabel(textos.getString("asignaturas.profesores"));
         lblProf.setFont(new Font("SansSerif", Font.BOLD, 16));
         lblProf.setAlignmentX(Component.LEFT_ALIGNMENT);
         lblProf.setBorder(new EmptyBorder(0, 2, 8, 0));
