@@ -40,6 +40,10 @@ cd /workspaces/Sistemas_Interactivos/proyecto
 Luego abre en el navegador:
 
 ```text
+✓ GUI levantada en noVNC:
+https://ubiquitous-succotash-jjwjppvjjgg2pp74-6080.app.github.dev/vnc.html?autoconnect=true&resize=scale
+
+→ Local:
 http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=scale
 ```
 
