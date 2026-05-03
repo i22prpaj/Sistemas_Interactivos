@@ -150,6 +150,8 @@ public class ValoracionPanel extends JPanel {
         btnEnviar.setBackground(AZUL_OSCURO);
         btnEnviar.setForeground(Color.WHITE);
         btnEnviar.setPreferredSize(new Dimension(105, 38));
+        // Al pulsar enviar mostramos la pantalla de confirmación
+        btnEnviar.addActionListener(e -> mainFrame.showView("VALORACION_ENVIADA"));
         
         JPanel btnWrap = new JPanel();
         btnWrap.setOpaque(false);

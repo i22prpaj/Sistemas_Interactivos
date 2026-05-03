@@ -4,6 +4,7 @@ import gui.LoginPanel; // Importamos tu panel de error
 import gui.LoginErrorPanel; // Importamos tu panel de login
 import gui.ReportePanel;
 import gui.ValoracionPanel;
+import gui.ValoracionEnviada;
 import gui.ReporteEnviadoPanel;
 import gui.RegistroPanel; // Importamos tu panel de error
 import gui.MainPanel;
@@ -61,6 +62,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new Asignaturas(this), "ASIGNATURAS");
         mainPanel.add(new ProfesorDetalle(this), "PROFESOR_DETALLE");
         mainPanel.add(new ValoracionPanel(this), "VALORACION");
+        mainPanel.add(new ValoracionEnviada(this), "VALORACION_ENVIADA");
 
         mainPanel.revalidate();
         mainPanel.repaint();
