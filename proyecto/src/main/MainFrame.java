@@ -5,6 +5,7 @@ import gui.LoginErrorPanel; // Importamos tu panel de login
 import gui.ReportePanel;
 import gui.ReporteEnviadoPanel;
 import gui.RegistroPanel; // Importamos tu panel de error
+import gui.FelicitacionMadre;
 import gui.MainPanel;
 import gui.ConfiguracionPanel;
 import java.awt.*; // Importamos tu panel de error
@@ -41,7 +42,8 @@ public class MainFrame extends JFrame {
         mainPanel.add(new RegistroPanel(this), "REGISTRO");
         mainPanel.add(new ReportePanel(this), "REPORTE");
         mainPanel.add(new ReporteEnviadoPanel(this), "REPORTE_ENVIADO");
-        mainPanel.add(new MainPanel(this), "MAIN_ESTUDIANTE");
+            mainPanel.add(new MainPanel(this), "MAIN_ESTUDIANTE");
+            mainPanel.add(new FelicitacionMadre(this), "FELICITACION_MADRE");
         mainPanel.add(new ConfiguracionPanel(this), "CONFIGURACION");
 
         add(mainPanel);

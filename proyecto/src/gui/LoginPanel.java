@@ -113,22 +113,19 @@ public class LoginPanel extends JPanel {
             devLabel.setFont(new Font("Arial", Font.PLAIN, 11));
 
             JButton btnDevPrincipal = new JButton("Principal");
-            JButton btnDevRegistro = new JButton("Registro");
-            JButton btnDevError = new JButton("Error");
+            JButton btnDevMadre = new JButton("Madre"); // Botón extra para la tarjeta de felicitación
 
-            for (JButton button : new JButton[]{btnDevPrincipal, btnDevRegistro, btnDevError}) {
+            for (JButton button : new JButton[]{btnDevPrincipal, btnDevMadre}) {
                 button.setFont(new Font("Arial", Font.PLAIN, 10));
                 button.setFocusPainted(false);
             }
 
             btnDevPrincipal.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
-            btnDevRegistro.addActionListener(e -> mainFrame.showView("REGISTRO"));
-            btnDevError.addActionListener(e -> mainFrame.showView("LOGIN_ERROR"));
+            btnDevMadre.addActionListener(e -> mainFrame.showView("FELICITACION_MADRE"));
 
             devPanel.add(devLabel);
             devPanel.add(btnDevPrincipal);
-            devPanel.add(btnDevRegistro);
-            devPanel.add(btnDevError);
+            devPanel.add(btnDevMadre);
 
             gbc.gridy = 6;
             gbc.insets = new Insets(6, 18, 6, 18);

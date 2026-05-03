@@ -65,7 +65,7 @@ VNC_PID=$!
 sleep 1
 
 echo "[Init] Levantando websockify/noVNC en puerto $NOVNC_PORT..."
-nohup websockify --web=/usr/share/novnc "$NOVNC_PORT" "localhost:${VNC_PORT}" > "$RUNTIME_DIR/novnc.log" 2>&1 &
+nohup websockify --web=/usr/share/novnc "$NOVNC_PORT" "127.0.0.1:${VNC_PORT}" > "$RUNTIME_DIR/novnc.log" 2>&1 &
 NOVNC_PID=$!
 sleep 1
 
@@ -86,8 +86,16 @@ done
 
 echo ""
 echo "═════════════════════════════════════════════════════════════"
-echo "✓ GUI levantada en noVNC:"
-echo "  → http://127.0.0.1:${NOVNC_PORT}/vnc.html?autoconnect=true&resize=scale"
+LOCAL_NOVNC_URL="http://127.0.0.1:${NOVNC_PORT}/vnc.html?autoconnect=true&resize=scale"
+if [[ "${CODESPACES:-}" == "true" && -n "${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-}" ]]; then
+  PUBLIC_NOVNC_URL="https://${CODESPACE_NAME}-${NOVNC_PORT}.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}/vnc.html?autoconnect=true&resize=scale"
+  echo "✓ GUI levantada en noVNC:"
+  echo "  → ${PUBLIC_NOVNC_URL}"
+  echo "  → Local: ${LOCAL_NOVNC_URL}"
+else
+  echo "✓ GUI levantada en noVNC:"
+  echo "  → ${LOCAL_NOVNC_URL}"
+fi
 echo ""
 echo "Logs en: $RUNTIME_DIR"
 echo "  - Xvfb:      $RUNTIME_DIR/xvfb.log"
