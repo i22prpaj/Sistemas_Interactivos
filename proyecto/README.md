@@ -39,13 +39,13 @@ cd /workspaces/Sistemas_Interactivos/proyecto
 
 Luego abre en el navegador:
 
-```text
+
 ✓ GUI levantada en noVNC:
 <a href="https://ubiquitous-succotash-jjwjppvjjgg2pp74-6080.app.github.dev/vnc.html?autoconnect=true&resize=scale">Abrir noVNC (remoto)</a>
 
 → Local:
 <a href="http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=scale">Abrir noVNC (local)</a>
-```
+
 
 ## Detener servicios graficos
 
