@@ -19,7 +19,13 @@ public class LoginPanel extends JPanel {
         
         // 1. Configuración del fondo (Verde lima según tu diseño)
         setBackground(new Color(175, 255, 100)); 
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
+        
+        // Panel contenedor con GridBagLayout
+        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setBackground(new Color(175, 255, 100));
+        contentPanel.setBorder(new EmptyBorder(10, 50, 10, 50)); // Márgenes a los lados
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10); // Márgenes entre elementos
         gbc.gridx = 0;
@@ -50,13 +56,13 @@ public class LoginPanel extends JPanel {
             logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         }
         gbc.gridy = 0;
-        add(logoLabel, gbc);
+        contentPanel.add(logoLabel, gbc);
 
         // 3. Título
         JLabel titulo = new JLabel(textos.getString("login.titulo"), SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridy = 1;
-        add(titulo, gbc);
+        contentPanel.add(titulo, gbc);
 
         // 4. Campo de Correo (con "placeholder" simulado)
         String placeholderCorreo = textos.getString("login.correo");
@@ -64,14 +70,14 @@ public class LoginPanel extends JPanel {
         txtCorreo.setToolTipText(placeholderCorreo);
         configurarCampoTexto(txtCorreo, placeholderCorreo);
         gbc.gridy = 2;
-        add(txtCorreo, gbc);
+        contentPanel.add(wrapCentered(txtCorreo, 35), gbc);
 
         // 5. Campo de Contraseña (JPasswordField para ocultar caracteres)
         String placeholderPass = textos.getString("login.password");
         JPasswordField txtPassword = new JPasswordField(placeholderPass);
         configurarCampoTexto(txtPassword, placeholderPass);        
         gbc.gridy = 3;
-        add(txtPassword, gbc);
+        contentPanel.add(wrapCentered(txtPassword, 35), gbc);
 
         // 6. Sección de "¿Aún no tienes acceso? Registro"
         JLabel lblPregunta = new JLabel(textos.getString("login.pregunta"));
@@ -91,7 +97,7 @@ public class LoginPanel extends JPanel {
         panelRegistro.add(lblPregunta);
         panelRegistro.add(btnRegistro);
         gbc.gridy = 4;
-        add(panelRegistro, gbc);
+        contentPanel.add(panelRegistro, gbc);
 
         // 7. Botón de Iniciar Sesión (Color granate/magenta)
         JButton btnIniciar = new JButton(textos.getString("login.boton"));
@@ -102,8 +108,8 @@ public class LoginPanel extends JPanel {
         btnIniciar.setBorder(new EmptyBorder(10, 10, 10, 10)); // Botón más grande
         btnIniciar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         gbc.gridy = 5;
-        gbc.insets = new Insets(20, 40, 10, 40); // Más margen lateral para que no sea tan ancho
-        add(btnIniciar, gbc);
+        gbc.insets = new Insets(20, 10, 10, 10); // Margen externo mínimo; el padding lo pone el wrapper
+        contentPanel.add(wrapCentered(btnIniciar, 50), gbc);
 
         if (DEV_MODE) {
             JPanel devPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 0));
@@ -124,8 +130,10 @@ public class LoginPanel extends JPanel {
 
             gbc.gridy = 6;
             gbc.insets = new Insets(6, 18, 6, 18);
-            add(devPanel, gbc);
+            contentPanel.add(devPanel, gbc);
         }
+        
+        add(contentPanel, BorderLayout.CENTER);
 
         // --- ACCIONES Y NAVEGACIÓN ---
 
@@ -158,7 +166,7 @@ public class LoginPanel extends JPanel {
 
     // Método auxiliar para simular el comportamiento de "Placeholder" y dar estilo a los campos
     private void configurarCampoTexto(JTextField campo, String textoPorDefecto) {
-        campo.setPreferredSize(new Dimension(250, 40));
+        campo.setPreferredSize(new Dimension(220, 40));
         campo.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY), 
                 new EmptyBorder(5, 10, 5, 10) // Padding interno
@@ -190,5 +198,13 @@ public class LoginPanel extends JPanel {
         if (campo instanceof JPasswordField && campo.getText().equals(textoPorDefecto)) {
             ((JPasswordField) campo).setEchoChar((char) 0); 
         }
+    }
+
+    private JPanel wrapCentered(JComponent component, int horizontalPadding) {
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        wrapper.setOpaque(false);
+        wrapper.setBorder(new EmptyBorder(0, horizontalPadding, 0, horizontalPadding));
+        wrapper.add(component);
+        return wrapper;
     }
 }
