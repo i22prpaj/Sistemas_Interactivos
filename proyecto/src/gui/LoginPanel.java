@@ -113,11 +113,14 @@ public class LoginPanel extends JPanel {
             devLabel.setFont(new Font("Arial", Font.PLAIN, 11));
 
             JButton btnDevPrincipal = new JButton("Principal");
+            JButton btnDevConfigModerador = new JButton("ConfigModerador");
             
             btnDevPrincipal.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
+            btnDevConfigModerador.addActionListener(e -> mainFrame.showView("CONFIG_MODERADOR"));
             
             devPanel.add(devLabel);
             devPanel.add(btnDevPrincipal);
+            devPanel.add(btnDevConfigModerador);
 
             gbc.gridy = 6;
             gbc.insets = new Insets(6, 18, 6, 18);

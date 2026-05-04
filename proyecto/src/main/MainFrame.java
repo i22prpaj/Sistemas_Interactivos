@@ -1,19 +1,25 @@
 package main;
 
-import gui.LoginPanel; // Importamos tu panel de error
-import gui.LoginErrorPanel; // Importamos tu panel de login
+import gui.LoginPanel;
+import gui.LoginErrorPanel;
+import gui.RegistroPanel;
+
 import gui.ReportePanel;
+import gui.ReporteEnviadoPanel;
+
+import gui.MainPanel;
+import gui.ConfiguracionPanel;
+import gui.ConfigModerador;
+
+import gui.Asignaturas;
+
+import gui.ProfesorDetalle;
 import gui.ValoracionPanel;
 import gui.ValoracionEnviada;
-import gui.ReporteEnviadoPanel;
-import gui.RegistroPanel; // Importamos tu panel de error
-import gui.MainPanel;
-import gui.ProfesorDetalle;
-import gui.Asignaturas;
-import gui.ConfiguracionPanel;
-import java.awt.*; // Importamos tu panel de error
-import java.util.Locale; // Importamos tu panel de error
-import java.util.ResourceBundle; // Importamos tu panel de error
+
+import java.awt.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Deque;
 import java.util.ArrayDeque;
 import javax.swing.*;   
@@ -63,6 +69,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ProfesorDetalle(this), "PROFESOR_DETALLE");
         mainPanel.add(new ValoracionPanel(this), "VALORACION");
         mainPanel.add(new ValoracionEnviada(this), "VALORACION_ENVIADA");
+        mainPanel.add(new ConfigModerador(this), "CONFIG_MODERADOR");
 
         mainPanel.revalidate();
         mainPanel.repaint();
