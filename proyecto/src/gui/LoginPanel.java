@@ -169,7 +169,7 @@ public class LoginPanel extends JPanel {
         campo.setPreferredSize(new Dimension(220, 40));
         campo.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY), 
-                new EmptyBorder(5, 10, 5, 10) // Padding interno
+                new EmptyBorder(5, 10, 10, 10) // Padding interno
         ));
         
         // Simular Placeholder: Se borra al hacer clic, vuelve si está vacío
