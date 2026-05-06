@@ -224,6 +224,12 @@ public class ModerationPanel extends JPanel {
             btnVer.setBorder(BorderFactory.createLineBorder(PURPLE_TEXT, 1));
             btnVer.setContentAreaFilled(false);
             btnVer.setPreferredSize(new Dimension(150, 35));
+            // Navegar a la vista de detalle del reporte
+            btnVer.addActionListener(e -> {
+                if (mainFrame != null) {
+                    mainFrame.showView("REPORT_DETAIL");
+                }
+            });
 
             JButton btnCheck = createIconButton("✓", GREEN_ACCENT);
             JButton btnCross = createIconButton("✕", RED_ACCENT);

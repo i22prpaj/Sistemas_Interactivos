@@ -72,6 +72,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ValoracionPanel(this), "VALORACION");
         mainPanel.add(new ValoracionEnviada(this), "VALORACION_ENVIADA");
         mainPanel.add(new ModerationPanel(this), "MODERATION_PANEL");
+        mainPanel.add(new gui.ReportDetailPanel(this), "REPORT_DETAIL");
        
         mainPanel.revalidate();
         mainPanel.repaint();
