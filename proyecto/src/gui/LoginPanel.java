@@ -151,10 +151,12 @@ public class LoginPanel extends JPanel {
                 // Caso 2: Cuenta de moderador
                 // Aquí en un futuro le pasaríamos un parámetro al MainFrame indicando el rol
                 System.out.println("Acceso concedido: Moderador");
-                mainFrame.showView("MAIN_MODERADOR"); 
+                mainFrame.setUserRole("MODERADOR");
+                mainFrame.showView("MAIN_ESTUDIANTE");
             } else if (correo.equals("elena.ruiz@uco.es") && password.equals("1234")) {
                 // Caso 1: Cuenta general
                 System.out.println("Acceso concedido: Estudiante");
+                mainFrame.setUserRole("ESTUDIANTE");
                 mainFrame.showView("MAIN_ESTUDIANTE");
             } else {
                 // Caso 3: Credenciales inválidas

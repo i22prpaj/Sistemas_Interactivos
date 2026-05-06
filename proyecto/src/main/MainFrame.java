@@ -30,6 +30,7 @@ public class MainFrame extends JFrame {
     private ResourceBundle bundle;
     private Deque<String> history = new ArrayDeque<>();
     private String currentView = null;
+    private String userRole = "GUEST"; // Roles: GUEST, ESTUDIANTE, MODERADOR
 
     public MainFrame() {
         // 1. Establecer el idioma por defecto (Español de España)
@@ -114,6 +115,19 @@ public class MainFrame extends JFrame {
     // Método para que los paneles accedan al diccionario de textos
     public ResourceBundle getBundle() {
         return bundle;
+    }
+
+    // User role helpers
+    public void setUserRole(String role) {
+        this.userRole = role == null ? "GUEST" : role;
+        // Recreate the main student panel so it can reflect role-specific options
+        try {
+            mainPanel.add(new gui.MainPanel(this), "MAIN_ESTUDIANTE");
+        } catch (Exception ignored) {}
+    }
+
+    public boolean isModerator() {
+        return "MODERADOR".equalsIgnoreCase(this.userRole);
     }
 
     public void changeLanguage(Locale locale, String viewToShow) {
