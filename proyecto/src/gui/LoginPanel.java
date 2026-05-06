@@ -122,7 +122,8 @@ public class LoginPanel extends JPanel {
             JButton btnDevConfigModerador = new JButton("ConfigModerador");
             
             btnDevPrincipal.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
-            btnDevConfigModerador.addActionListener(e -> mainFrame.showView("CONFIG_MODERADOR"));
+            // Lleva a la pantalla de Configuración general donde aparece la opción de moderación
+            btnDevConfigModerador.addActionListener(e -> mainFrame.showView("CONFIGURACION"));
             
             devPanel.add(devLabel);
             devPanel.add(btnDevPrincipal);

@@ -9,7 +9,6 @@ import gui.ReporteEnviadoPanel;
 
 import gui.MainPanel;
 import gui.ConfiguracionPanel;
-import gui.ConfigModerador;
 
 import gui.Asignaturas;
 
@@ -70,7 +69,6 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ProfesorDetalle(this), "PROFESOR_DETALLE");
         mainPanel.add(new ValoracionPanel(this), "VALORACION");
         mainPanel.add(new ValoracionEnviada(this), "VALORACION_ENVIADA");
-        mainPanel.add(new ConfigModerador(this), "CONFIG_MODERADOR");
 
         mainPanel.revalidate();
         mainPanel.repaint();

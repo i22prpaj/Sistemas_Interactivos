@@ -29,7 +29,7 @@ public class ConfiguracionPanel extends JPanel {
         // ===== TITULO =====
         JLabel title = new JLabel(bundle.getString("config.title"));
         title.setFont(new Font("Arial", Font.BOLD, 28));
-        title.setBounds(25, 30, 300, 40);
+        title.setBounds(25, 20, 300, 40);
         contentPanel.add(title);
 
         ImageIcon rawUserIcon = null;
@@ -51,25 +51,31 @@ public class ConfiguracionPanel extends JPanel {
 
         JSeparator sep = new JSeparator();
         sep.setForeground(Color.BLACK);
-        sep.setBounds(20, 80, 340, 2);
+        sep.setBounds(20, 70, 340, 2);
         contentPanel.add(sep);
 
         // ===== SECCIONES =====
-        int startX = 40;
-        contentPanel.add(createLabel(bundle.getString("config.account_settings"), startX, 130, true));
+        int startX = 25;
+        contentPanel.add(createLabel(bundle.getString("config.account_settings"), startX, 110, true));
         
-        contentPanel.add(createLabel(bundle.getString("config.language"), startX, 200, true));
-        contentPanel.add(new TogglePill(190, 195));
+        contentPanel.add(createLabel(bundle.getString("config.language"), startX, 175, true));
+        contentPanel.add(new TogglePill(190, 170));
 
-        contentPanel.add(createLabel(bundle.getString("config.notifications"), startX, 290, true));
+        contentPanel.add(createLabel(bundle.getString("config.notifications"), startX, 255, true));
         // dejar un pequeño margen entre el switch y el borde derecho
-        contentPanel.add(new ToggleSwitch(280, 285));
+        contentPanel.add(new ToggleSwitch(280, 250));
 
-        contentPanel.add(createLabel(bundle.getString("config.change_password"), startX, 370, true));
-        contentPanel.add(createLabel(bundle.getString("config.clear_cache"), startX, 450, true));
+        contentPanel.add(createLabel(bundle.getString("config.change_password"), startX, 330, true));
+        contentPanel.add(createLabel(bundle.getString("config.clear_cache"), startX, 405, true));
+
+        // ===== PANEL DE MODERACIÓN (solo visible para moderadores) =====
+        if (mainFrame.isModerator()) {
+            contentPanel.add(createLabel("Panel de Moderación", startX, 510, true));
+        }
+
 
         // ===== LOGOUT (Cerrar Sesión) =====
-        JLabel logoutLabel = createLabelCentered(bundle.getString("config.logout"), startX, 520, new Color(180, 40, 70));
+        JLabel logoutLabel = createLabelCentered(bundle.getString("config.logout"), startX, 540, new Color(180, 40, 70));
         logoutLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {

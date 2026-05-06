@@ -40,16 +40,7 @@ public class MainPanel extends JPanel {
         // Notificaciones -> Acción: CONFIGURACION
         JButton notif = crearBotonIcono("/resources/notif.png", "/resources/notif.PNG", "🔔", 22);
         notif.addActionListener(e -> mainFrame.showView("CONFIGURACION"));
-        // Panel a la derecha para botones (notificaciones + panel moderación si aplica)
-        JPanel rightHeader = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
-        rightHeader.setOpaque(false);
-        rightHeader.add(notif);
-        if (mainFrame.isModerator()) {
-            JButton modBtn = crearBotonIcono(null, null, "✦M", 18);
-            modBtn.addActionListener(e -> mainFrame.showView("CONFIG_MODERADOR"));
-            rightHeader.add(modBtn);
-        }
-        header.add(rightHeader, BorderLayout.EAST);
+        header.add(notif, BorderLayout.EAST);
 
         gbc.gridy = 0;
         add(header, gbc);
