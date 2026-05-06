@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ResourceBundle;
+import model.MobileListRenderer;
+import model.BotonRedondeado;
 
 public class MainPanel extends JPanel {
 

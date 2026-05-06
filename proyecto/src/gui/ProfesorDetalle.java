@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ResourceBundle;
+import model.BotonRedondeado;
+import model.JPanelRedondeado;
 
 public class ProfesorDetalle extends JPanel {
 

@@ -119,15 +119,18 @@ public class LoginPanel extends JPanel {
             devLabel.setFont(new Font("Arial", Font.PLAIN, 11));
 
             JButton btnDevPrincipal = new JButton("Principal");
-            JButton btnDevConfigModerador = new JButton("ConfigModerador");
+            JButton btnDevPrincipalModerador = new JButton("Moderador");
             
             btnDevPrincipal.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
-            // Lleva a la pantalla de Configuración general donde aparece la opción de moderación
-            btnDevConfigModerador.addActionListener(e -> mainFrame.showView("CONFIGURACION"));
+            // Acceso directo al MainPanel con rol moderador
+            btnDevPrincipalModerador.addActionListener(e -> {
+                mainFrame.setUserRole("MODERADOR");
+                mainFrame.showView("MAIN_ESTUDIANTE");
+            });
             
             devPanel.add(devLabel);
             devPanel.add(btnDevPrincipal);
-            devPanel.add(btnDevConfigModerador);
+            devPanel.add(btnDevPrincipalModerador);
 
             gbc.gridy = 6;
             gbc.insets = new Insets(6, 18, 6, 18);

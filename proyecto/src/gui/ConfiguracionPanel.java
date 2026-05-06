@@ -70,7 +70,26 @@ public class ConfiguracionPanel extends JPanel {
 
         // ===== PANEL DE MODERACIÓN (solo visible para moderadores) =====
         if (mainFrame.isModerator()) {
-            contentPanel.add(createLabel("Panel de Moderación", startX, 470, true));
+            JLabel modPanel = createClickableLabel("Panel de Moderación", startX, 470);
+
+            modPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    mainFrame.showView("MODERATION_PANEL"); // cambia al nombre real de tu vista
+                }
+            
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    modPanel.setForeground(new Color(70, 90, 200)); // hover azul
+                }
+            
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    modPanel.setForeground(Color.BLACK);
+                }
+            });
+
+            contentPanel.add(modPanel);
         }
 
 
@@ -200,4 +219,29 @@ public class ConfiguracionPanel extends JPanel {
             g2.drawString(getText(), tx, ty);
         }
     }
+
+    private JLabel createClickableLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.BOLD, 18));
+        label.setBounds(x, y, 300, 25);
+
+        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        label.setForeground(new Color(40, 40, 40));
+
+        // Hover effect
+        label.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                label.setForeground(new Color(80, 120, 255)); // azulito
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                label.setForeground(new Color(40, 40, 40));
+            }
+        });
+
+        return label;
+    }
+
 }

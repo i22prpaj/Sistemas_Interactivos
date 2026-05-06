@@ -1,4 +1,4 @@
-package gui;
+package model;
 
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;

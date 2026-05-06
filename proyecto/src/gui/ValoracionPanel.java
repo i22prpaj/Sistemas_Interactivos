@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ResourceBundle;
+import model.BotonRedondeado;
+import model.JPanelRedondeado;
 
 public class ValoracionPanel extends JPanel {
 

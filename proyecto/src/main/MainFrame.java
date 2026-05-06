@@ -16,6 +16,8 @@ import gui.ProfesorDetalle;
 import gui.ValoracionPanel;
 import gui.ValoracionEnviada;
 
+import gui.ModerationPanel;
+
 import java.awt.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -69,7 +71,8 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ProfesorDetalle(this), "PROFESOR_DETALLE");
         mainPanel.add(new ValoracionPanel(this), "VALORACION");
         mainPanel.add(new ValoracionEnviada(this), "VALORACION_ENVIADA");
-
+        mainPanel.add(new ModerationPanel(this), "MODERATION_PANEL");
+       
         mainPanel.revalidate();
         mainPanel.repaint();
         // Mostrar la vista inicial sin añadir entrada al historial
