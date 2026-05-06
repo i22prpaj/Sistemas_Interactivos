@@ -141,9 +141,21 @@ public class ModerationPanel extends JPanel {
         inicio.setPreferredSize(new Dimension(100, 40));
         inicio.setBackground(new Color(225, 255, 190));
 
+        inicio.addActionListener(e -> {
+            if (mainFrame != null) {
+                mainFrame.showView("MAIN_ESTUDIANTE");
+            }
+        });
+
         BotonRedondeado back = new BotonRedondeado(" ← ");
         back.setPreferredSize(new Dimension(60, 40));
         back.setBackground(new Color(225, 255, 190));
+
+        back.addActionListener(e -> {
+            if (mainFrame != null) {
+                mainFrame.goBack();
+            }
+        });
 
         p.add(inicio);
         p.add(back);
