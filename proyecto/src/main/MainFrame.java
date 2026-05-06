@@ -118,10 +118,8 @@ public class MainFrame extends JFrame {
     // User role helpers
     public void setUserRole(String role) {
         this.userRole = role == null ? "GUEST" : role;
-        // Recreate the main student panel so it can reflect role-specific options
-        try {
-            mainPanel.add(new gui.MainPanel(this), "MAIN_ESTUDIANTE");
-        } catch (Exception ignored) {}
+        // Recreate all views so role-dependent panels are built with the new state
+        buildViews();
     }
 
     public boolean isModerator() {

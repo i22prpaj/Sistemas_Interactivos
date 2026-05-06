@@ -70,12 +70,12 @@ public class ConfiguracionPanel extends JPanel {
 
         // ===== PANEL DE MODERACIÓN (solo visible para moderadores) =====
         if (mainFrame.isModerator()) {
-            contentPanel.add(createLabel("Panel de Moderación", startX, 510, true));
+            contentPanel.add(createLabel("Panel de Moderación", startX, 470, true));
         }
 
 
         // ===== LOGOUT (Cerrar Sesión) =====
-        JLabel logoutLabel = createLabelCentered(bundle.getString("config.logout"), startX, 540, new Color(180, 40, 70));
+        JLabel logoutLabel = createLabelCentered(bundle.getString("config.logout"), startX, 550, new Color(180, 40, 70));
         logoutLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
