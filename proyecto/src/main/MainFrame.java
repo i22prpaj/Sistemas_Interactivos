@@ -1,28 +1,22 @@
 package main;
 
-import gui.LoginPanel;
-import gui.LoginErrorPanel;
-import gui.RegistroPanel;
-
-import gui.ReportePanel;
-import gui.ReporteEnviadoPanel;
-
-import gui.MainPanel;
-import gui.ConfiguracionPanel;
-
 import gui.Asignaturas;
-
-import gui.ProfesorDetalle;
-import gui.ValoracionPanel;
-import gui.ValoracionEnviada;
-
+import gui.ConfiguracionPanel;
+import gui.LoginErrorPanel;
+import gui.LoginPanel;
+import gui.MainPanel;
 import gui.ModerationPanel;
-
+import gui.ProfesorDetalle;
+import gui.RegistroPanel;
+import gui.ReporteEnviadoPanel;
+import gui.ReportePanel;
+import gui.ValoracionEnviada;
+import gui.ValoracionPanel;
 import java.awt.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Deque;
-import java.util.ArrayDeque;
 import javax.swing.*;   
 
 public class MainFrame extends JFrame {
@@ -51,6 +45,7 @@ public class MainFrame extends JFrame {
         mainPanel = new JPanel(cardLayout);
 
         buildViews();
+        showView("LOGIN", false); // Muestra el login SOLO la primera vez que se abre la app
 
         add(mainPanel);
     }
@@ -76,8 +71,7 @@ public class MainFrame extends JFrame {
        
         mainPanel.revalidate();
         mainPanel.repaint();
-        // Mostrar la vista inicial sin añadir entrada al historial
-        showView("LOGIN", false);
+
     }
 
     // Método que usan los paneles para pedirle al MainFrame que cambie de vista

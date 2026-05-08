@@ -1,13 +1,11 @@
 package gui;
 
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import main.MainFrame;
 import model.BotonRedondeado;
 import model.JPanelRedondeado;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 
 public class ModerationPanel extends JPanel {
 
@@ -29,8 +27,8 @@ public class ModerationPanel extends JPanel {
         setBackground(BG);
         setLayout(new BorderLayout());
 
-        // Usamos un JScrollPane invisible para permitir scroll si hay muchos reportes
-        JPanel container = new JPanel();
+        // USAMOS NUESTRO PANEL ESPECIAL QUE NO SE DESBORDA HORIZONTALMENTE
+        ScrollablePanel container = new ScrollablePanel();
         container.setOpaque(false);
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setBorder(new EmptyBorder(40, 25, 20, 25));
@@ -50,9 +48,32 @@ public class ModerationPanel extends JPanel {
         // 4. Lista de tarjetas
         container.add(createCardList());
         
-        // 5. Botones inferiores fijos
-        add(container, BorderLayout.CENTER);
+        // --- SCROLL INVISIBLE ESTILO MÓVIL ---
+        JScrollPane scrollPane = new JScrollPane(container);
+        scrollPane.setBorder(null);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER); // Barra invisible
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Scroll suave y rápido
+
+        // Añadimos el Scroll al centro y la navegación fija al sur
+        add(scrollPane, BorderLayout.CENTER);
         add(createBottomNav(), BorderLayout.SOUTH);
+    }
+
+    // --- EL TRUCO PARA EVITAR EL DESBORDAMIENTO HORIZONTAL ---
+    class ScrollablePanel extends JPanel implements Scrollable {
+        @Override
+        public Dimension getPreferredScrollableViewportSize() { return super.getPreferredSize(); }
+        @Override
+        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) { return 16; }
+        @Override
+        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) { return 16; }
+        @Override
+        public boolean getScrollableTracksViewportWidth() { return true; } // ¡ESTO EVITA QUE CRESCA HACIA LA DERECHA!
+        @Override
+        public boolean getScrollableTracksViewportHeight() { return false; }
     }
 
     private JPanel createTopBar() {
@@ -101,7 +122,6 @@ public class ModerationPanel extends JPanel {
         b.setContentAreaFilled(false);
         
         if (active) {
-            // Efecto de píldora blanca interna para el activo
             b.setOpaque(true);
             b.setBackground(Color.WHITE);
             b.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
@@ -134,45 +154,55 @@ public class ModerationPanel extends JPanel {
     }
 
     private JPanel createBottomNav() {
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 20));
-        p.setOpaque(false);
+        // Usamos el Grid exacto de 3 columnas para centrado perfecto como arreglamos en Configuración
+        JPanel footerPanel = new JPanel(new GridLayout(1, 3)); 
+        footerPanel.setOpaque(false);
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 20));
 
+        // Columna 1 (Izquierda): Vacía
+        JPanel leftPanel = new JPanel();
+        leftPanel.setOpaque(false);
+
+        // Columna 2 (Centro): Botón Inicio
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        centerPanel.setOpaque(false);
         BotonRedondeado inicio = new BotonRedondeado("Inicio");
-        inicio.setPreferredSize(new Dimension(100, 40));
+        inicio.setPreferredSize(new Dimension(100, 40)); 
         inicio.setBackground(new Color(225, 255, 190));
-
         inicio.addActionListener(e -> {
-            if (mainFrame != null) {
-                mainFrame.showView("MAIN_ESTUDIANTE");
-            }
+            if (mainFrame != null) mainFrame.showView("MAIN_ESTUDIANTE");
         });
+        centerPanel.add(inicio);
 
+        // Columna 3 (Derecha): Botón Atrás
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        rightPanel.setOpaque(false);
         BotonRedondeado back = new BotonRedondeado(" ← ");
         back.setPreferredSize(new Dimension(60, 40));
         back.setBackground(new Color(225, 255, 190));
-
         back.addActionListener(e -> {
-            if (mainFrame != null) {
-                mainFrame.goBack();
-            }
+            if (mainFrame != null) mainFrame.goBack();
         });
+        rightPanel.add(back);
 
-        p.add(inicio);
-        p.add(back);
-        return p;
+        footerPanel.add(leftPanel);
+        footerPanel.add(centerPanel);
+        footerPanel.add(rightPanel);
+
+        return footerPanel;
     }
 
-    // --- SUBCOMPONENTES CLAVADOS ---
+    // --- SUBCOMPONENTES ---
 
     class StatBubble extends JPanelRedondeado {
         StatBubble(String num, String text) {
-            super(35);
+            super(35); 
             setBackground(PILL_BG);
             setLayout(new GridLayout(2, 1));
             setBorder(new EmptyBorder(10, 5, 10, 5));
             
             JLabel lNum = new JLabel(num, SwingConstants.CENTER);
-            lNum.setFont(new Font("SansSerif", Font.BOLD, 18));
+            lNum.setFont(new Font("SansSerif", Font.BOLD, 18)); 
             
             JLabel lText = new JLabel(text, SwingConstants.CENTER);
             lText.setFont(new Font("SansSerif", Font.PLAIN, 12));
@@ -188,8 +218,8 @@ public class ModerationPanel extends JPanel {
             setBackground(CARD_WHITE);
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 8, 0, 0, tagColor), // El borde de color lateral
-                new EmptyBorder(15, 15, 15, 15)
+                BorderFactory.createMatteBorder(0, 8, 0, 0, tagColor),
+                new EmptyBorder(15, 15, 15, 15) 
             ));
 
             // Contenido Texto
@@ -204,7 +234,7 @@ public class ModerationPanel extends JPanel {
             lblTag.setBackground(new Color(tagColor.getRed(), tagColor.getGreen(), tagColor.getBlue(), 30));
 
             JLabel lblBody = new JLabel("<html><b>" + body + "</b></html>");
-            lblBody.setFont(new Font("SansSerif", Font.PLAIN, 14));
+            lblBody.setFont(new Font("SansSerif", Font.PLAIN, 14)); 
 
             JLabel lblMeta = new JLabel("📚 " + prof + " • " + time);
             lblMeta.setForeground(Color.GRAY);
@@ -227,7 +257,7 @@ public class ModerationPanel extends JPanel {
             }
 
             // Botones Acción
-            JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+            JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10)); 
             actions.setOpaque(false);
 
             JButton btnVer = new JButton("Ver detalles ↗");
@@ -235,33 +265,53 @@ public class ModerationPanel extends JPanel {
             btnVer.setFont(new Font("SansSerif", Font.BOLD, 13));
             btnVer.setBorder(BorderFactory.createLineBorder(PURPLE_TEXT, 1));
             btnVer.setContentAreaFilled(false);
-            btnVer.setPreferredSize(new Dimension(150, 35));
-            // Navegar a la vista de detalle del reporte
+            btnVer.setPreferredSize(new Dimension(150, 35)); 
+            
             btnVer.addActionListener(e -> {
                 if (mainFrame != null) {
                     mainFrame.showView("REPORT_DETAIL");
                 }
             });
 
+            // Creamos los botones
             JButton btnCheck = createIconButton("✓", GREEN_ACCENT);
             JButton btnCross = createIconButton("✕", RED_ACCENT);
 
             actions.add(btnVer);
-            actions.add(btnCheck);
+            // ¡Orden invertido aquí! Primero la X (cross), luego el ✓ (check)
             actions.add(btnCross);
+            actions.add(btnCheck);
 
             add(info, BorderLayout.CENTER);
             add(actions, BorderLayout.SOUTH);
         }
 
         private JButton createIconButton(String icon, Color bg) {
-            JButton b = new JButton(icon);
-            b.setPreferredSize(new Dimension(45, 35));
-            b.setBackground(bg);
+            JButton b = new JButton(icon) {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    Graphics2D g2 = (Graphics2D) g.create();
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    // Forzamos a dibujar nuestro propio color de fondo
+                    g2.setColor(bg);
+                    g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                    
+                    super.paintComponent(g);
+                    g2.dispose();
+                }
+            };
+            
+            b.setPreferredSize(new Dimension(38, 32)); 
             b.setForeground(Color.WHITE);
-            b.setFont(new Font("SansSerif", Font.BOLD, 16));
+            b.setFont(new Font("SansSerif", Font.BOLD, 15));
+            
+            // LA CLAVE MAGICA: Quitamos los márgenes internos para que el símbolo quepa perfectamente
+            b.setMargin(new Insets(0, 0, 0, 0));
+            
+            b.setContentAreaFilled(false); 
             b.setBorderPainted(false);
             b.setFocusPainted(false);
+            
             return b;
         }
     }

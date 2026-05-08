@@ -1,14 +1,13 @@
 package gui;
 
-import javax.swing.*;
-
 import gui.ConfiguracionPanel.RoundButton;
 import gui.ConfiguracionPanel.TogglePill;
 import gui.ConfiguracionPanel.ToggleSwitch;
-import main.MainFrame;
 import java.awt.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javax.swing.*;
+import main.MainFrame;
 
 public class ConfiguracionPanel extends JPanel {
 
@@ -22,13 +21,13 @@ public class ConfiguracionPanel extends JPanel {
 
         ResourceBundle bundle = mainFrame.getBundle();
 
-        // 1. PANEL CENTRAL (Contenido con layout null)
+        // 1. PANEL CENTRAL (Contenido con layout null para posicionamiento absoluto)
         JPanel contentPanel = new JPanel(null);
         contentPanel.setOpaque(false);
         
         // ===== TITULO =====
         JLabel title = new JLabel(bundle.getString("config.title"));
-        title.setFont(new Font("Arial", Font.BOLD, 28));
+        title.setFont(new Font("Arial", Font.BOLD, 24)); // Reducido un poco para tamaño móvil
         title.setBounds(25, 20, 300, 40);
         contentPanel.add(title);
 
@@ -40,13 +39,13 @@ public class ConfiguracionPanel extends JPanel {
         }
         JLabel user;
         if (rawUserIcon != null) {
-            Image img = rawUserIcon.getImage().getScaledInstance(40, 30, Image.SCALE_SMOOTH);
+            Image img = rawUserIcon.getImage().getScaledInstance(35, 26, Image.SCALE_SMOOTH); // Ligeramente más pequeño
             user = new JLabel(new ImageIcon(img));
         } else {
             user = new JLabel(bundle.getString("config.user"));
-            user.setFont(new Font("Serif", Font.PLAIN, 30));
+            user.setFont(new Font("Serif", Font.PLAIN, 26));
         }
-        user.setBounds(310, 30, 40, 40);
+        user.setBounds(310, 25, 40, 40);
         contentPanel.add(user);
 
         JSeparator sep = new JSeparator();
@@ -54,23 +53,31 @@ public class ConfiguracionPanel extends JPanel {
         sep.setBounds(20, 70, 340, 2);
         contentPanel.add(sep);
 
-        // ===== SECCIONES =====
+        // ===== SECCIONES (Generadas dinámicamente para garantizar equidistancia) =====
         int startX = 25;
-        contentPanel.add(createLabel(bundle.getString("config.account_settings"), startX, 110, true));
+        int currentY = 100; // Punto de inicio
+        int spacing = 60;   // Distancia EXACTA entre cada elemento
+
+        contentPanel.add(createLabel(bundle.getString("config.account_settings"), startX, currentY, true));
+        currentY += spacing;
         
-        contentPanel.add(createLabel(bundle.getString("config.language"), startX, 175, true));
-        contentPanel.add(new TogglePill(190, 170));
+        contentPanel.add(createLabel(bundle.getString("config.language"), startX, currentY, true));
+        contentPanel.add(new TogglePill(190, currentY - 8)); // Ajustado al centro del texto
+        currentY += spacing;
 
-        contentPanel.add(createLabel(bundle.getString("config.notifications"), startX, 255, true));
-        // dejar un pequeño margen entre el switch y el borde derecho
-        contentPanel.add(new ToggleSwitch(280, 250));
+        contentPanel.add(createLabel(bundle.getString("config.notifications"), startX, currentY, true));
+        contentPanel.add(new ToggleSwitch(280, currentY - 2)); // Ajustado al centro del texto
+        currentY += spacing;
 
-        contentPanel.add(createLabel(bundle.getString("config.change_password"), startX, 330, true));
-        contentPanel.add(createLabel(bundle.getString("config.clear_cache"), startX, 405, true));
+        contentPanel.add(createLabel(bundle.getString("config.change_password"), startX, currentY, true));
+        currentY += spacing;
+
+        contentPanel.add(createLabel(bundle.getString("config.clear_cache"), startX, currentY, true));
+        currentY += spacing;
 
         // ===== PANEL DE MODERACIÓN (solo visible para moderadores) =====
         if (mainFrame.isModerator()) {
-            JLabel modPanel = createClickableLabel("Panel de Moderación", startX, 470);
+            JLabel modPanel = createClickableLabel(bundle.getString("config.moderation_tools"), startX, currentY);
 
             modPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
@@ -90,11 +97,11 @@ public class ConfiguracionPanel extends JPanel {
             });
 
             contentPanel.add(modPanel);
+            currentY += spacing; // Sumamos espacio si existe
         }
 
-
         // ===== LOGOUT (Cerrar Sesión) =====
-        JLabel logoutLabel = createLabelCentered(bundle.getString("config.logout"), startX, 550, new Color(180, 40, 70));
+        JLabel logoutLabel = createLabelCentered(bundle.getString("config.logout"), startX, currentY, new Color(180, 40, 70));
         logoutLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -102,34 +109,58 @@ public class ConfiguracionPanel extends JPanel {
             }
         });
         contentPanel.add(logoutLabel);
+        
+        // Sumamos margen final para que no se corte justo al ras del texto
+        currentY += 40; 
 
-        add(contentPanel, BorderLayout.CENTER);
+        // IMPORTANTE: Establecer el tamaño preferido del contenido interno para que el Scroll funcione
+        contentPanel.setPreferredSize(new Dimension(350, currentY));
 
-        // 2. PANEL FOOTER (Botones abajo)
-        JPanel footerPanel = new JPanel(new BorderLayout());
+        // ===== SCROLL "INVISIBLE" ESTILO MÓVIL =====
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Quitamos borde oscuro
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        // Ocultamos la barra tosca, pero mantenemos la capacidad de hacer scroll (rueda ratón o táctil)
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Hace que el scroll sea rápido y suave
+
+        add(scrollPane, BorderLayout.CENTER);
+
+        // 2. PANEL FOOTER (Botones abajo) con posicionamiento matemáticamente exacto
+        JPanel footerPanel = new JPanel(new GridLayout(1, 3)); // Divide en 3 columnas iguales
         footerPanel.setOpaque(false);
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 20)); // Margen global del footer
 
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
+        // Columna 1 (Izquierda): Panel vacío para equilibrar el peso
+        JPanel leftPanel = new JPanel();
+        leftPanel.setOpaque(false);
+
+        // Columna 2 (Centro): Botón Inicio
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         centerPanel.setOpaque(false);
         RoundButton homeBtn = new RoundButton(bundle.getString("config.home"), 100, 40);
         homeBtn.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
         centerPanel.add(homeBtn);
 
-        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 20));
+        // Columna 3 (Derecha): Botón Atrás
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         rightPanel.setOpaque(false);
         RoundButton backBtn = new RoundButton(bundle.getString("config.back"), 60, 40); // Usando flecha unicode
         backBtn.addActionListener(e -> mainFrame.goBack());
         rightPanel.add(backBtn);
 
-        footerPanel.add(centerPanel, BorderLayout.CENTER);
-        footerPanel.add(rightPanel, BorderLayout.EAST);
+        footerPanel.add(leftPanel);
+        footerPanel.add(centerPanel);
+        footerPanel.add(rightPanel);
 
         add(footerPanel, BorderLayout.SOUTH);
     }
 
     private JLabel createLabel(String text, int x, int y, boolean bold) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", bold ? Font.BOLD : Font.PLAIN, 18));
+        label.setFont(new Font("Arial", bold ? Font.BOLD : Font.PLAIN, 16)); // Reducido de 18 a 16
         // aumentar ancho para evitar truncamientos
         label.setBounds(x, y, 300, 25);
         return label;
@@ -137,10 +168,34 @@ public class ConfiguracionPanel extends JPanel {
 
     private JLabel createLabelCentered(String text, int x, int y, Color color) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 18));
+        label.setFont(new Font("Arial", Font.BOLD, 16)); // Reducido de 18 a 16
         label.setForeground(color);
         // ocupar todo el ancho del panel
         label.setBounds(x, y, 300, 25);
+        return label;
+    }
+
+    private JLabel createClickableLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.BOLD, 16)); // Reducido de 18 a 16
+        label.setBounds(x, y, 300, 25);
+
+        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        label.setForeground(new Color(40, 40, 40));
+
+        // Hover effect
+        label.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                label.setForeground(new Color(80, 120, 255)); // azulito
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                label.setForeground(new Color(40, 40, 40));
+            }
+        });
+
         return label;
     }
 
@@ -219,29 +274,4 @@ public class ConfiguracionPanel extends JPanel {
             g2.drawString(getText(), tx, ty);
         }
     }
-
-    private JLabel createClickableLabel(String text, int x, int y) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 18));
-        label.setBounds(x, y, 300, 25);
-
-        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        label.setForeground(new Color(40, 40, 40));
-
-        // Hover effect
-        label.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                label.setForeground(new Color(80, 120, 255)); // azulito
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                label.setForeground(new Color(40, 40, 40));
-            }
-        });
-
-        return label;
-    }
-
 }

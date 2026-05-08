@@ -1,8 +1,8 @@
 package model;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 
 public class MobileListRenderer extends DefaultListCellRenderer {
     
@@ -27,6 +27,10 @@ public class MobileListRenderer extends DefaultListCellRenderer {
         JLabel text = new JLabel(value.toString());
         text.setFont(new Font("SansSerif", isSelected ? Font.BOLD : Font.PLAIN, 15));
         text.setForeground(new Color(50, 50, 50));
+        
+        // --- EL SECRETO PARA LOS PUNTOS SUSPENSIVOS ---
+        // Forzamos un ancho máximo para que no empuje la pantalla hacia la derecha
+        text.setPreferredSize(new Dimension(170, 30));
 
         // Flecha Derecha
         JLabel arrow = new JLabel("›");
