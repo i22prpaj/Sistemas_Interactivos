@@ -1,11 +1,10 @@
 package gui;
 
-import main.MainFrame;
+import java.awt.*;
+import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
-import java.util.ResourceBundle;
+import main.MainFrame;
 import model.BotonRedondeado;
 import model.JPanelRedondeado;
 
@@ -15,7 +14,6 @@ public class ProfesorDetalle extends JPanel {
     private final Color VERDE_FONDO = new Color(180, 255, 104);
     private final Color GRIS_TARJETA = new Color(220, 220, 220);
     private final Color BLANCO_BOTON = Color.WHITE;
-    private final Color VERDE_TEXTO_VAL = new Color(50, 205, 50); // Verde intenso para "4.4/5"
 
     public ProfesorDetalle(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -24,14 +22,13 @@ public class ProfesorDetalle extends JPanel {
         setBackground(VERDE_FONDO);
         setLayout(new BorderLayout());
 
-        JPanel contentPanel = new JPanel(new GridBagLayout());
+        // USAMOS NUESTRO PANEL ESPECIAL PARA EVITAR DESBORDAMIENTOS HORIZONTALES
+        ScrollablePanel contentPanel = new ScrollablePanel(new GridBagLayout());
         contentPanel.setOpaque(false);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        // Insets laterales generales para que no toque los bordes del móvil
-        gbc.insets = new Insets(10, 25, 10, 25); 
 
         // --- 1. HEADER (Foto + Nombre + Departamento) ---
         JPanel header = new JPanel(new GridBagLayout());
@@ -60,54 +57,56 @@ public class ProfesorDetalle extends JPanel {
         header.add(textHeader, hGbc);
 
         gbc.gridy = 0;
-        // Subimos el bloque para acercar el nombre al margen superior
-        gbc.insets = new Insets(44, 25, 15, 25);
+        // Márgenes optimizados para alineación perfecta de la columna
+        gbc.insets = new Insets(20, 15, 15, 15);
         contentPanel.add(header, gbc);
 
-        // --- 2. VALORACIÓN (Cápsula Blanca) ---
+        // --- 2. VALORACIÓN (Cápsula Blanca con Estrellas) ---
         JPanelRedondeado valCard = new JPanelRedondeado(25);
         valCard.setBackground(BLANCO_BOTON);
-        valCard.setLayout(new FlowLayout(FlowLayout.LEFT, 12, 8));
+        valCard.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 8));
 
         JLabel val = new JLabel("<html>" + textos.getString("profesor.valoracion") + ": <b><font color='#32CD32'>4.4</font>/5</b></html>");
-        val.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        val.setFont(new Font("SansSerif", Font.PLAIN, 13));
         val.setOpaque(false);
+        
+        JLabel stars = new JLabel("★★★★☆"); 
+        stars.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        stars.setForeground(new Color(255, 193, 7)); // Color dorado
+
         valCard.add(val);
+        valCard.add(stars); 
         
         gbc.gridy = 1;
-        gbc.insets = new Insets(5, 60, 5, 60); // Insets laterales para que parezca una cápsula
+        gbc.fill = GridBagConstraints.NONE; // Evita que la cápsula se estire
+        gbc.insets = new Insets(0, 0, 15, 0);
         contentPanel.add(valCard, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Restauramos para las siguientes tarjetas
 
-        // --- 3. DATOS DE CONTACTO (Tarjeta Gris) ---
-        // Componente personalizado para esquinas redondeadas
+        // --- 3. DATOS DE CONTACTO (Tarjeta Gris con Iconos) ---
         JPanelRedondeado datos = new JPanelRedondeado(15);
         datos.setBackground(GRIS_TARJETA);
-        datos.setLayout(new BoxLayout(datos, BoxLayout.Y_AXIS));
-        datos.setBorder(new EmptyBorder(15, 14, 15, 14));
+        // ¡LA MAGIA AQUÍ! Un GridLayout garantiza matemáticamente el mismo espacio entre todas las filas
+        datos.setLayout(new GridLayout(4, 1, 0, 12));
+        datos.setBorder(new EmptyBorder(15, 15, 15, 15));
 
-        String info = "<html>" + textos.getString("profesor.despacho") + ": " + textos.getString("profesor.despacho_valor") + "<br>"
-               + textos.getString("profesor.correo") + ": " + textos.getString("profesor.correo_valor") + "<br>"
-               + textos.getString("profesor.telefono") + ": " + textos.getString("profesor.telefono_valor") + "<br>"
-               + textos.getString("profesor.tutorias") + ": " + textos.getString("profesor.tutorias_valor") + "</html>";
-        
-        JLabel lblInfo = new JLabel(info);
-        lblInfo.setFont(new Font("SansSerif", Font.PLAIN, 11));
-        lblInfo.setForeground(Color.DARK_GRAY);
-        datos.add(lblInfo);
+        // Símbolos tipográficos clásicos que no se renderizan como "emojis gigantes"
+        datos.add(createContactRow("⌂", textos.getString("profesor.despacho") + ": " + textos.getString("profesor.despacho_valor")));
+        datos.add(createContactRow("✉", textos.getString("profesor.correo") + ": " + textos.getString("profesor.correo_valor")));
+        datos.add(createContactRow("✆", textos.getString("profesor.telefono") + ": " + textos.getString("profesor.telefono_valor")));
+        datos.add(createContactRow("◷", textos.getString("profesor.tutorias") + ": " + textos.getString("profesor.tutorias_valor")));
 
         gbc.gridy = 2;
-        gbc.insets = new Insets(10, 4, 15, 4);
+        gbc.insets = new Insets(0, 15, 15, 15);
         contentPanel.add(datos, gbc);
 
         // --- 4. ASIGNATURAS IMPARTIDAS (Tarjeta Gris con Título) ---
         gbc.gridy = 3;
-        gbc.insets = new Insets(10, 4, 15, 4);
         contentPanel.add(crearTarjetaGrisConTitulo(textos.getString("profesor.asignaturas_impartidas"), 
             new String[]{textos.getString("profesor.asig_algebra"), textos.getString("profesor.asig_calculo"), textos.getString("profesor.asig_fundamentos")}), gbc);
 
         // --- 5. CONSIDERACIONES (Tarjeta Gris con Título e Iconos) ---
         gbc.gridy = 4;
-        gbc.insets = new Insets(10, 4, 15, 4);
         contentPanel.add(crearTarjetaGrisConsideraciones(textos.getString("profesor.consideraciones"), textos), gbc);
 
         // --- 6. BOTÓN PUNTUAR (Cápsula Blanca con Sombra) ---
@@ -120,61 +119,102 @@ public class ProfesorDetalle extends JPanel {
         gbc.gridy = 5;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(25, 0, 15, 0); // Separación y centrado
+        gbc.insets = new Insets(10, 0, 30, 0); 
         contentPanel.add(btnPuntuar, gbc);
 
-        // --- 7. NAVEGACIÓN INFERIOR (Inicio + Atrás) ---
-        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 10));
-        bottom.setOpaque(false);
-
-        BotonRedondeado inicio = new BotonRedondeado(textos.getString("config.home"));
-        inicio.setBackground(new Color(230, 255, 210)); // Verde clarito
-        inicio.setPreferredSize(new Dimension(100, 36));
-        inicio.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
-
-        BotonRedondeado back = new BotonRedondeado(" ← ");
-        back.setBackground(new Color(230, 255, 210)); // Verde clarito
-        back.setPreferredSize(new Dimension(65, 36));
-        back.addActionListener(e -> mainFrame.goBack());
-
-        bottom.add(inicio);
-        bottom.add(back);
-
+        // --- SCROLL INVISIBLE ESTILO MÓVIL ---
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        
         add(scrollPane, BorderLayout.CENTER);
 
-        add(bottom, BorderLayout.SOUTH);
+        // --- 7. NAVEGACIÓN INFERIOR ---
+        JPanel footerPanel = new JPanel(new GridLayout(1, 3)); 
+        footerPanel.setOpaque(false);
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 20));
+
+        JPanel leftPanel = new JPanel();
+        leftPanel.setOpaque(false);
+
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        centerPanel.setOpaque(false);
+        BotonRedondeado inicio = new BotonRedondeado(textos.getString("config.home"));
+        inicio.setBackground(new Color(230, 255, 210)); 
+        inicio.setPreferredSize(new Dimension(100, 36));
+        inicio.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
+        centerPanel.add(inicio);
+
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        rightPanel.setOpaque(false);
+        BotonRedondeado back = new BotonRedondeado(" ← ");
+        back.setBackground(new Color(230, 255, 210));
+        back.setPreferredSize(new Dimension(65, 36));
+        back.addActionListener(e -> mainFrame.goBack());
+        rightPanel.add(back);
+
+        footerPanel.add(leftPanel);
+        footerPanel.add(centerPanel);
+        footerPanel.add(rightPanel);
+
+        add(footerPanel, BorderLayout.SOUTH);
     }
 
-    // --- MÉTODOS DE UTILIDAD PARA CREAR TARJETAS ---
+    // --- CLASE AUXILIAR PARA EL SCROLL MÓVIL ---
+    class ScrollablePanel extends JPanel implements Scrollable {
+        public ScrollablePanel(LayoutManager layout) { super(layout); }
+        @Override public Dimension getPreferredScrollableViewportSize() { return super.getPreferredSize(); }
+        @Override public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) { return 16; }
+        @Override public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) { return 16; }
+        @Override public boolean getScrollableTracksViewportWidth() { return true; } 
+        @Override public boolean getScrollableTracksViewportHeight() { return false; }
+    }
+
+    // --- MÉTODOS DE UTILIDAD ---
+
+    private JPanel createContactRow(String icon, String text) {
+        JPanel row = new JPanel(new BorderLayout(10, 0));
+        row.setOpaque(false);
+        
+        JLabel iconLabel = new JLabel(icon, SwingConstants.CENTER);
+        iconLabel.setFont(new Font("SansSerif", Font.PLAIN, 18)); // Ligeramente más grande para que destaque
+        iconLabel.setPreferredSize(new Dimension(25, 25)); // Caja fija para alineación perfecta
+        
+        JLabel textLabel = new JLabel("<html>" + text + "</html>"); 
+        textLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        textLabel.setForeground(Color.DARK_GRAY);
+        
+        row.add(iconLabel, BorderLayout.WEST);
+        row.add(textLabel, BorderLayout.CENTER);
+        
+        return row;
+    }
 
     private JPanel crearTarjetaGrisConTitulo(String titulo, String[] items) {
         JPanelRedondeado tarjeta = new JPanelRedondeado(15);
         tarjeta.setBackground(GRIS_TARJETA);
         tarjeta.setLayout(new BorderLayout());
         
-        // Título de la tarjeta (con línea divisoria)
         JLabel lblTitulo = new JLabel(titulo);
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 14));
         lblTitulo.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK), // Línea negra abajo
-            new EmptyBorder(10, 20, 10, 20)
+            BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK), 
+            new EmptyBorder(10, 15, 10, 15)
         ));
         tarjeta.add(lblTitulo, BorderLayout.NORTH);
 
-        // Lista de items
         JPanel content = new JPanel();
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBorder(new EmptyBorder(10, 20, 15, 20));
+        content.setBorder(new EmptyBorder(10, 15, 15, 15));
 
         for (String item : items) {
             JLabel lblItem = new JLabel(item);
-            lblItem.setFont(new Font("SansSerif", Font.PLAIN, 12));
+            lblItem.setFont(new Font("SansSerif", Font.PLAIN, 13));
             lblItem.setBorder(new EmptyBorder(5, 0, 5, 0));
             content.add(lblItem);
         }
@@ -192,14 +232,14 @@ public class ProfesorDetalle extends JPanel {
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 14));
         lblTitulo.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK),
-            new EmptyBorder(10, 20, 10, 20)
+            new EmptyBorder(10, 15, 10, 15)
         ));
         tarjeta.add(lblTitulo, BorderLayout.NORTH);
 
         JPanel content = new JPanel();
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBorder(new EmptyBorder(10, 20, 15, 20));
+        content.setBorder(new EmptyBorder(10, 15, 15, 15));
 
         String[] items = {
             textos.getString("profesor.considera_pasa_lista"),
@@ -207,7 +247,7 @@ public class ProfesorDetalle extends JPanel {
             textos.getString("profesor.considera_revisa_practicas"),
             textos.getString("profesor.considera_hace_parciales")
         };
-        ImageIcon check = loadScaledIcon(18, 18, "/resources/check.png"); // Un PNG de un círculo verde con check
+        ImageIcon check = loadScaledIcon(18, 18, "/resources/check.png"); 
 
         for (String item : items) {
             JPanel row = new JPanel(new BorderLayout());
