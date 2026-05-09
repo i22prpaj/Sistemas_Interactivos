@@ -1,12 +1,12 @@
 package gui;
 
-import main.MainFrame;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ResourceBundle;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import main.MainFrame;
 
 public class RegistroPanel extends JPanel {
 
@@ -104,7 +104,7 @@ public class RegistroPanel extends JPanel {
         btnRegistrar.addActionListener(e -> {
             if(checkTerminos.isSelected()) {
                 System.out.println("Registro completado. Navegando a pantalla principal...");
-                // mainFrame.showView("PRINCIPAL"); 
+                mainFrame.showView("MAIN_ESTUDIANTE"); 
             } else {
                 JOptionPane.showMessageDialog(this, "Debe aceptar los términos");
             }
