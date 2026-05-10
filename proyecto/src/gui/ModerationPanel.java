@@ -22,10 +22,12 @@ public class ModerationPanel extends JPanel {
 
     private final MainFrame mainFrame;
     private final java.util.ResourceBundle bundle;
+    private final boolean runningInCodespaces;
 
     public ModerationPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.bundle = mainFrame != null ? mainFrame.getBundle() : java.util.ResourceBundle.getBundle("bundle.Bundle", java.util.Locale.getDefault());
+        this.runningInCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
         setBackground(BG);
         setLayout(new BorderLayout());
 
@@ -56,8 +58,14 @@ public class ModerationPanel extends JPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER); // Barra invisible
+        scrollPane.setVerticalScrollBarPolicy(
+            runningInCodespaces ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED : JScrollPane.VERTICAL_SCROLLBAR_NEVER
+        );
+        scrollPane.setWheelScrollingEnabled(true);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Scroll suave y rápido
+        if (runningInCodespaces) {
+            scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+        }
 
         // Añadimos el Scroll al centro y la navegación fija al sur
         add(scrollPane, BorderLayout.CENTER);
