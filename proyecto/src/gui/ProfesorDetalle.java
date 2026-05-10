@@ -14,9 +14,11 @@ public class ProfesorDetalle extends JPanel {
     private final Color VERDE_FONDO = new Color(180, 255, 104);
     private final Color GRIS_TARJETA = new Color(220, 220, 220);
     private final Color BLANCO_BOTON = Color.WHITE;
+    private final boolean runningInCodespaces;
 
     public ProfesorDetalle(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        this.runningInCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
         ResourceBundle textos = mainFrame.getBundle();
 
         setBackground(VERDE_FONDO);
@@ -127,9 +129,14 @@ public class ProfesorDetalle extends JPanel {
         scrollPane.setBorder(null);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(
+            runningInCodespaces ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED : JScrollPane.VERTICAL_SCROLLBAR_NEVER
+        );
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        if (runningInCodespaces) {
+            scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+        }
         
         add(scrollPane, BorderLayout.CENTER);
 

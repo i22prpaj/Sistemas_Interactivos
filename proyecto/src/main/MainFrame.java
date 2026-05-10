@@ -26,16 +26,19 @@ public class MainFrame extends JFrame {
     private Deque<String> history = new ArrayDeque<>();
     private String currentView = null;
     private String userRole = "GUEST"; // Roles: GUEST, ESTUDIANTE, MODERADOR
+    private final boolean runningInCodespaces;
 
     public MainFrame() {
         // 1. Establecer el idioma por defecto (Español de España)
         Locale.setDefault(new Locale("es", "ES"));
+
+        runningInCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
         
         // 2. Cargar el Bundle. Busca "Bundle_es.properties" en la carpeta "bundle"
         bundle = ResourceBundle.getBundle("bundle.Bundle", Locale.getDefault());
 
         setTitle("UCO-Reviews - Interfaz");
-        setSize(450, 650); // Tamaño vertical tipo móvil
+        setSize(runningInCodespaces ? 350 : 450, 650); // Más ancho en local
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centrar en la pantalla
         setResizable(false); // Evitar que se deforme
