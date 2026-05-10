@@ -35,7 +35,7 @@ public class MainFrame extends JFrame {
         bundle = ResourceBundle.getBundle("bundle.Bundle", Locale.getDefault());
 
         setTitle("UCO-Reviews - Interfaz");
-        setSize(350, 650); // Tamaño vertical tipo móvil
+        setSize(450, 650); // Tamaño vertical tipo móvil
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centrar en la pantalla
         setResizable(false); // Evitar que se deforme
