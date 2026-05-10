@@ -59,6 +59,11 @@ public class ReportDetailPanel extends JPanel {
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
         
+        boolean isCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
+        scroll.setVerticalScrollBarPolicy(isCodespaces ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+        
         add(scroll, BorderLayout.CENTER);
     }
 
