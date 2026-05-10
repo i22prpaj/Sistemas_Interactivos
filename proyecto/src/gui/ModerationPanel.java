@@ -21,9 +21,11 @@ public class ModerationPanel extends JPanel {
     private static final Color WARNING_TEXT = new Color(133, 100, 4);
 
     private final MainFrame mainFrame;
+    private final java.util.ResourceBundle bundle;
 
     public ModerationPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        this.bundle = mainFrame != null ? mainFrame.getBundle() : java.util.ResourceBundle.getBundle("bundle.Bundle", java.util.Locale.getDefault());
         setBackground(BG);
         setLayout(new BorderLayout());
 
@@ -81,8 +83,8 @@ public class ModerationPanel extends JPanel {
         p.setOpaque(false);
         p.setMaximumSize(new Dimension(500, 40));
 
-        JLabel title = new JLabel("Panel de Moderación");
-        title.setFont(new Font("SansSerif", Font.BOLD, 24));
+        JLabel title = new JLabel(bundle.getString("moderation.title"));
+        title.setFont(new Font("SansSerif", Font.BOLD, 20));
         title.setForeground(new Color(20, 20, 20));
 
         p.add(title, BorderLayout.WEST);
@@ -95,9 +97,9 @@ public class ModerationPanel extends JPanel {
         row.setOpaque(false);
         row.setMaximumSize(new Dimension(500, 80));
 
-        row.add(new StatBubble("3", "Pendientes"));
-        row.add(new StatBubble("5", "Hoy"));
-        row.add(new StatBubble("2", "Urgentes"));
+        row.add(new StatBubble("3", bundle.getString("moderation.pendientes")));
+        row.add(new StatBubble("5", bundle.getString("moderation.hoy")));
+        row.add(new StatBubble("2", bundle.getString("moderation.urgentes")));
         return row;
     }
 
@@ -107,9 +109,9 @@ public class ModerationPanel extends JPanel {
         wrapper.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         wrapper.setMaximumSize(new Dimension(380, 50));
 
-        wrapper.add(createTabButton("🟡 Pendientes", true));
-        wrapper.add(createTabButton("✅ Aprobados", false));
-        wrapper.add(createTabButton("🗑 Eliminados", false));
+        wrapper.add(createTabButton(bundle.getString("moderation.tab.pending"), true));
+        wrapper.add(createTabButton(bundle.getString("moderation.tab.approved"), false));
+        wrapper.add(createTabButton(bundle.getString("moderation.tab.deleted"), false));
 
         return wrapper;
     }
@@ -135,22 +137,25 @@ public class ModerationPanel extends JPanel {
         list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
 
         // Tarjeta 1
-        list.add(new ReportCard(
-            "Lenguaje ofensivo", 
-            "\"Este profesor es un [***] y no sabe explicar nada. Todos los que...\"",
-            "Antonio López Jiménez", "Hace 2h", true, RED_ACCENT
-        ));
+        list.add(createReportCard("moderation.card1", true, RED_ACCENT));
         
         list.add(Box.createVerticalStrut(20));
 
         // Tarjeta 2
-        list.add(new ReportCard(
-            "Difamación", 
-            "\"Suspende a todos sus alumnos por capricho. El año pasado reprobó...\"",
-            "María García Ruiz", "Hace 5h", false, new Color(250, 190, 100)
-        ));
+        list.add(createReportCard("moderation.card2", false, new Color(250, 190, 100)));
 
         return list;
+    }
+
+    private JComponent createReportCard(String keyPrefix, boolean warn, Color tagColor) {
+        return new ReportCard(
+            bundle.getString(keyPrefix + ".tag"),
+            bundle.getString(keyPrefix + ".body"),
+            bundle.getString(keyPrefix + ".prof"),
+            bundle.getString(keyPrefix + ".time"),
+            warn,
+            tagColor
+        );
     }
 
     private JPanel createBottomNav() {
@@ -166,7 +171,7 @@ public class ModerationPanel extends JPanel {
         // Columna 2 (Centro): Botón Inicio
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         centerPanel.setOpaque(false);
-        BotonRedondeado inicio = new BotonRedondeado("Inicio");
+        BotonRedondeado inicio = new BotonRedondeado(bundle.getString("moderation.btn_home"));
         inicio.setPreferredSize(new Dimension(100, 40)); 
         inicio.setBackground(new Color(225, 255, 190));
         inicio.addActionListener(e -> {
@@ -247,7 +252,7 @@ public class ModerationPanel extends JPanel {
             info.add(lblMeta);
 
             if(warn) {
-                JLabel lblWarn = new JLabel("<html>⚠️ <b>Filtro automático:</b> detectadas 3 palabras prohibidas</html>");
+                JLabel lblWarn = new JLabel(bundle.getString("moderation.warn.auto_filter"));
                 lblWarn.setOpaque(true);
                 lblWarn.setBackground(WARNING_YELLOW);
                 lblWarn.setForeground(WARNING_TEXT);
@@ -260,7 +265,7 @@ public class ModerationPanel extends JPanel {
             JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10)); 
             actions.setOpaque(false);
 
-            JButton btnVer = new JButton("Ver detalles ↗");
+            JButton btnVer = new JButton(bundle.getString("moderation.view_details"));
             btnVer.setForeground(PURPLE_TEXT);
             btnVer.setFont(new Font("SansSerif", Font.BOLD, 13));
             btnVer.setBorder(BorderFactory.createLineBorder(PURPLE_TEXT, 1));
@@ -278,9 +283,8 @@ public class ModerationPanel extends JPanel {
             JButton btnCross = createIconButton("✕", RED_ACCENT);
 
             actions.add(btnVer);
-            // ¡Orden invertido aquí! Primero la X (cross), luego el ✓ (check)
-            actions.add(btnCross);
             actions.add(btnCheck);
+            actions.add(btnCross);
 
             add(info, BorderLayout.CENTER);
             add(actions, BorderLayout.SOUTH);
@@ -318,13 +322,34 @@ public class ModerationPanel extends JPanel {
 
     class NotificationIcon extends JComponent {
         int val;
-        NotificationIcon(int v) { this.val = v; setPreferredSize(new Dimension(40, 40)); }
+        private ImageIcon notifIcon;
+        
+        NotificationIcon(int v) { 
+            this.val = v; 
+            setPreferredSize(new Dimension(40, 40));
+            try {
+                notifIcon = new ImageIcon(getClass().getResource("/resources/notif.PNG"));
+            } catch (Exception ex) {
+                notifIcon = null;
+            }
+        }
+        
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setFont(new Font("SansSerif", Font.PLAIN, 20));
-            g2.drawString("🔔", 5, 25);
+            
+            // Dibujar la imagen si está disponible
+            if (notifIcon != null) {
+                Image img = notifIcon.getImage();
+                g2.drawImage(img, 2, 2, 28, 28, this);
+            } else {
+                // Fallback: dibujar emoji si no encuentra la imagen
+                g2.setFont(new Font("SansSerif", Font.PLAIN, 20));
+                g2.drawString("🔔", 5, 25);
+            }
+            
+            // Badge con el número
             g2.setColor(RED_ACCENT);
             g2.fillOval(20, 5, 18, 18);
             g2.setColor(Color.WHITE);

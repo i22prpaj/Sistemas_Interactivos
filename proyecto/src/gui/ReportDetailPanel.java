@@ -24,9 +24,11 @@ public class ReportDetailPanel extends JPanel {
     private static final Color WARNING_TEXT = new Color(145, 100, 10);
 
     private final MainFrame mainFrame;
+    private final java.util.ResourceBundle bundle;
 
     public ReportDetailPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        this.bundle = mainFrame != null ? mainFrame.getBundle() : java.util.ResourceBundle.getBundle("bundle.Bundle", java.util.Locale.getDefault());
 
         setLayout(new BorderLayout());
         setBackground(BG);
@@ -64,14 +66,14 @@ public class ReportDetailPanel extends JPanel {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         p.setOpaque(false);
 
-        JButton back = new JButton(" ← ");
+        JButton back = new JButton(bundle.getString("config.back"));
         back.setFont(new Font("SansSerif", Font.BOLD, 20));
         back.setBorderPainted(false);
         back.setContentAreaFilled(false);
         back.setCursor(new Cursor(Cursor.HAND_CURSOR));
         back.addActionListener(e -> mainFrame.goBack());
 
-        JLabel title = new JLabel("Detalle del reporte");
+        JLabel title = new JLabel(bundle.getString("reportdetail.title"));
         title.setFont(new Font("SansSerif", Font.BOLD, 22));
         title.setForeground(TEXT_DARK);
 
@@ -84,7 +86,7 @@ public class ReportDetailPanel extends JPanel {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         p.setOpaque(false);
 
-        JLabel tag = new JLabel(" 🚫 Lenguaje ofensivo ");
+        JLabel tag = new JLabel(" 🚫 " + bundle.getString("moderation.pendientes") + " ");
         tag.setOpaque(true);
         tag.setBackground(new Color(255, 230, 230));
         tag.setForeground(RED_ACCENT);
@@ -99,10 +101,10 @@ public class ReportDetailPanel extends JPanel {
         JPanelRedondeado card = buildBaseCard(25);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
-        card.add(createMutedLabel("Profesor reportado"));
+        card.add(createMutedLabel(bundle.getString("reportdetail.professor_reported")));
         card.add(Box.createVerticalStrut(5));
-        card.add(createBoldLabel("Antonio López Jiménez", 18));
-        card.add(createMutedLabel("Álgebra Lineal • 2º Grado Informática"));
+        card.add(createBoldLabel(bundle.getString("reportdetail.professor_name"), 18));
+        card.add(createMutedLabel(bundle.getString("profesor.asig_algebra") + " • 2º Grado Informática"));
 
         return card;
     }
@@ -121,21 +123,20 @@ public class ReportDetailPanel extends JPanel {
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        content.add(createMutedLabel("Comentario completo"));
+        content.add(createMutedLabel(bundle.getString("reportdetail.comment_full")));
         content.add(Box.createVerticalStrut(10));
 
         // Texto con el resaltado de palabras prohibidas [***]
         String msg = "<html><body style='width: 250px; font-family: SansSerif; font-size: 11pt;'>" +
-                "\"Este profesor es un <span style='color: #eb4d4b; font-weight: bold;'>[***]</span> y no sabe explicar nada. " +
-                "Todos los que van a clase pierden el tiempo. <span style='color: #eb4d4b; font-weight: bold;'>[***]</span> " +
-                "incompetente que solo sabe <span style='color: #eb4d4b; font-weight: bold;'>[***]</span> a los estudiantes.\"</body></html>";
+                bundle.getString("reportdetail.comment_text") +
+                "</body></html>";
         
         JLabel bodyText = new JLabel(msg);
         content.add(bodyText);
         content.add(Box.createVerticalStrut(15));
 
         // Warning Badge
-        JLabel warn = new JLabel("<html>⚠️ <b>Filtro automático:</b> detectó 3 palabras prohibidas</html>");
+        JLabel warn = new JLabel(bundle.getString("reportdetail.warn.filter_detected"));
         warn.setOpaque(true);
         warn.setBackground(WARNING_BG);
         warn.setForeground(WARNING_TEXT);
@@ -151,12 +152,11 @@ public class ReportDetailPanel extends JPanel {
         JPanelRedondeado card = buildBaseCard(25);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
-        card.add(createRichLabel("Reportado por: ", "1 usuario"));
+        card.add(createRichLabel(java.text.MessageFormat.format(bundle.getString("reportdetail.reported_by"), "1 usuario"), ""));
         card.add(Box.createVerticalStrut(4));
-        card.add(createRichLabel("Publicado: ", "Hace 2 horas"));
+        card.add(createRichLabel(java.text.MessageFormat.format(bundle.getString("reportdetail.published"), "Hace 2 horas"), ""));
         card.add(Box.createVerticalStrut(4));
-        card.add(createRichLabel("Usuario autor: ", "fran.perez (sin historial previo)"));
-
+        card.add(createRichLabel(bundle.getString("reportdetail.user_author"), "fran.perez (sin historial previo)"));
         return card;
     }
 
@@ -164,10 +164,10 @@ public class ReportDetailPanel extends JPanel {
         JPanelRedondeado card = buildBaseCard(25);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
-        card.add(createMutedLabel("Motivos de reporte (1 usuario)"));
+        card.add(createMutedLabel(bundle.getString("reportdetail.reason_title")));
         card.add(Box.createVerticalStrut(8));
         
-        JLabel item = new JLabel("• Lenguaje ofensivo");
+        JLabel item = new JLabel(bundle.getString("reportdetail.reason_item"));
         item.setFont(new Font("SansSerif", Font.BOLD, 14));
         card.add(item);
 
@@ -179,13 +179,13 @@ public class ReportDetailPanel extends JPanel {
         p.setOpaque(false);
 
         // Botones tipo píldora (muy redondeados)
-        BotonRedondeado btnOk = new BotonRedondeado("<html><center>✓ Aprobar<br>Comentario</center></html>");
+        BotonRedondeado btnOk = new BotonRedondeado(bundle.getString("reportdetail.btn_approve"));
         btnOk.setBackground(GREEN_ACTION);
         btnOk.setForeground(Color.WHITE);
         btnOk.setPreferredSize(new Dimension(160, 60));
         btnOk.setFont(new Font("SansSerif", Font.BOLD, 14));
 
-        BotonRedondeado btnNo = new BotonRedondeado("✕ Eliminar");
+        BotonRedondeado btnNo = new BotonRedondeado(bundle.getString("reportdetail.btn_reject"));
         btnNo.setBackground(RED_ACTION);
         btnNo.setForeground(Color.WHITE);
         btnNo.setPreferredSize(new Dimension(160, 60));

@@ -121,7 +121,10 @@ public class LoginPanel extends JPanel {
             JButton btnDevPrincipal = new JButton("Principal");
             JButton btnDevPrincipalModerador = new JButton("Moderador");
             
-            btnDevPrincipal.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
+            btnDevPrincipal.addActionListener(e -> {
+                mainFrame.setUserRole("ESTUDIANTE");
+                mainFrame.showView("MAIN_ESTUDIANTE");
+            });
             // Acceso directo al MainPanel con rol moderador
             btnDevPrincipalModerador.addActionListener(e -> {
                 mainFrame.setUserRole("MODERADOR");
