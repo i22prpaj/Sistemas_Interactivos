@@ -23,9 +23,6 @@ public class ModerationPanel extends JPanel {
     private final MainFrame mainFrame;
     private final java.util.ResourceBundle bundle;
     private final boolean runningInCodespaces;
-    // Guardar tamaño/posición previos para restaurar al ocultar este panel
-    private java.awt.Dimension previousSize = null;
-    private java.awt.Point previousLocation = null;
 
     public ModerationPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -33,34 +30,6 @@ public class ModerationPanel extends JPanel {
         this.runningInCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
         setBackground(BG);
         setLayout(new BorderLayout());
-        // Ajustar el tamaño de la ventana solo cuando este panel se haga visible
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            @Override
-            public void componentShown(java.awt.event.ComponentEvent e) {
-                if (ModerationPanel.this.mainFrame != null) {
-                    // Guardar estado previo
-                    previousSize = ModerationPanel.this.mainFrame.getSize();
-                    previousLocation = ModerationPanel.this.mainFrame.getLocation();
-                    javax.swing.SwingUtilities.invokeLater(() -> {
-                        ModerationPanel.this.mainFrame.setSize(500, 650);
-                        // Centrar la ventana al cambiar tamaño
-                        ModerationPanel.this.mainFrame.setLocationRelativeTo(null);
-                    });
-                }
-            }
-
-            @Override
-            public void componentHidden(java.awt.event.ComponentEvent e) {
-                if (ModerationPanel.this.mainFrame != null && previousSize != null) {
-                    javax.swing.SwingUtilities.invokeLater(() -> {
-                        ModerationPanel.this.mainFrame.setSize(previousSize);
-                        if (previousLocation != null) ModerationPanel.this.mainFrame.setLocation(previousLocation);
-                        previousSize = null;
-                        previousLocation = null;
-                    });
-                }
-            }
-        });
 
         // USAMOS NUESTRO PANEL ESPECIAL QUE NO SE DESBORDA HORIZONTALMENTE
         ScrollablePanel container = new ScrollablePanel();
