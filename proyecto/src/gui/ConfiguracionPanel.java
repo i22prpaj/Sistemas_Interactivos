@@ -121,9 +121,11 @@ public class ConfiguracionPanel extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Quitamos borde oscuro
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
-        // Ocultamos la barra tosca, pero mantenemos la capacidad de hacer scroll (rueda ratón o táctil)
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        
+        boolean isCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
+        scrollPane.setVerticalScrollBarPolicy(isCodespaces ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Hace que el scroll sea rápido y suave
 
         add(scrollPane, BorderLayout.CENTER);

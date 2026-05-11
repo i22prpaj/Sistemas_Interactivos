@@ -188,8 +188,11 @@ public class ValoracionPanel extends JPanel {
         scrollPane.setBorder(null);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
+        
+        boolean isCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
+        scrollPane.setVerticalScrollBarPolicy(isCodespaces ? ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED : ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
         add(scrollPane, BorderLayout.CENTER);
     }
 

@@ -55,6 +55,11 @@ public class Asignaturas extends JPanel {
         scroll.setBorder(null);
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
+        
+        boolean isCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
+        scroll.setVerticalScrollBarPolicy(isCodespaces ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
 
         // Creamos un panel vertical alineado a la izquierda que contendrá la etiqueta y la lista
         JPanel leftPanel = new JPanel();

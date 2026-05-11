@@ -33,8 +33,8 @@ public class ReportDetailPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(BG);
 
-        // ScrollPane para evitar que se corte en pantallas pequeñas
-        JPanel root = new JPanel();
+        // Panel desplazable que no permite crecer hacia la derecha
+        ScrollablePanel root = new ScrollablePanel();
         root.setOpaque(false);
         root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
         root.setBorder(new EmptyBorder(30, 25, 30, 25));
@@ -59,11 +59,29 @@ public class ReportDetailPanel extends JPanel {
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
         
+        boolean isCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
+        scroll.setVerticalScrollBarPolicy(isCodespaces ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+        
         add(scroll, BorderLayout.CENTER);
     }
 
+    class ScrollablePanel extends JPanel implements Scrollable {
+        @Override
+        public Dimension getPreferredScrollableViewportSize() { return super.getPreferredSize(); }
+        @Override
+        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) { return 16; }
+        @Override
+        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) { return 16; }
+        @Override
+        public boolean getScrollableTracksViewportWidth() { return true; }
+        @Override
+        public boolean getScrollableTracksViewportHeight() { return false; }
+    }
+
     private JComponent createHeader() {
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         p.setOpaque(false);
 
         JButton back = new JButton(bundle.getString("config.back"));
@@ -74,7 +92,7 @@ public class ReportDetailPanel extends JPanel {
         back.addActionListener(e -> mainFrame.goBack());
 
         JLabel title = new JLabel(bundle.getString("reportdetail.title"));
-        title.setFont(new Font("SansSerif", Font.BOLD, 22));
+        title.setFont(new Font("SansSerif", Font.BOLD, 20));
         title.setForeground(TEXT_DARK);
 
         p.add(back);
@@ -86,7 +104,7 @@ public class ReportDetailPanel extends JPanel {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         p.setOpaque(false);
 
-        JLabel tag = new JLabel(" 🚫 " + bundle.getString("moderation.pendientes") + " ");
+        JLabel tag = new JLabel(" 🚫 " + bundle.getString("moderation.card1.tag") + " ");
         tag.setOpaque(true);
         tag.setBackground(new Color(255, 230, 230));
         tag.setForeground(RED_ACCENT);
@@ -104,7 +122,7 @@ public class ReportDetailPanel extends JPanel {
         card.add(createMutedLabel(bundle.getString("reportdetail.professor_reported")));
         card.add(Box.createVerticalStrut(5));
         card.add(createBoldLabel(bundle.getString("reportdetail.professor_name"), 18));
-        card.add(createMutedLabel(bundle.getString("profesor.asig_algebra") + " • 2º Grado Informática"));
+        card.add(createMutedLabel(bundle.getString("profesor.asig_algebra")));
 
         return card;
     }
@@ -175,21 +193,23 @@ public class ReportDetailPanel extends JPanel {
     }
 
     private JComponent createActionButtons() {
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 0));
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         p.setOpaque(false);
+        p.setMaximumSize(new Dimension(320, 70));
+        p.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Botones tipo píldora (muy redondeados)
         BotonRedondeado btnOk = new BotonRedondeado(bundle.getString("reportdetail.btn_approve"));
         btnOk.setBackground(GREEN_ACTION);
         btnOk.setForeground(Color.WHITE);
-        btnOk.setPreferredSize(new Dimension(160, 60));
-        btnOk.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnOk.setPreferredSize(new Dimension(130, 50));
+        btnOk.setFont(new Font("SansSerif", Font.BOLD, 13));
 
         BotonRedondeado btnNo = new BotonRedondeado(bundle.getString("reportdetail.btn_reject"));
         btnNo.setBackground(RED_ACTION);
         btnNo.setForeground(Color.WHITE);
-        btnNo.setPreferredSize(new Dimension(160, 60));
-        btnNo.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnNo.setPreferredSize(new Dimension(130, 50));
+        btnNo.setFont(new Font("SansSerif", Font.BOLD, 13));
 
         p.add(btnOk);
         p.add(btnNo);
