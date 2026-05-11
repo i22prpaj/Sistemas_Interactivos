@@ -171,24 +171,25 @@ public class ModerationPanel extends JPanel {
         list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
 
         // Tarjeta 1
-        list.add(createReportCard("moderation.card1", true, RED_ACCENT));
+        list.add(createReportCard("moderation.card1", true, RED_ACCENT, "/resources/lenguaje_ofensivo.PNG"));
         
         list.add(Box.createVerticalStrut(20));
 
         // Tarjeta 2
-        list.add(createReportCard("moderation.card2", false, new Color(250, 190, 100)));
+        list.add(createReportCard("moderation.card2", false, new Color(250, 190, 100), "/resources/difamación.PNG"));
 
         return list;
     }
 
-    private JComponent createReportCard(String keyPrefix, boolean warn, Color tagColor) {
+    private JComponent createReportCard(String keyPrefix, boolean warn, Color tagColor, String tagIconPath) {
         return new ReportCard(
             bundle.getString(keyPrefix + ".tag"),
             bundle.getString(keyPrefix + ".body"),
             bundle.getString(keyPrefix + ".prof"),
             bundle.getString(keyPrefix + ".time"),
             warn,
-            tagColor
+            tagColor,
+            tagIconPath
         );
     }
 
@@ -252,7 +253,7 @@ public class ModerationPanel extends JPanel {
     }
 
     class ReportCard extends JPanelRedondeado {
-        ReportCard(String tag, String body, String prof, String time, boolean warn, Color tagColor) {
+        ReportCard(String tag, String body, String prof, String time, boolean warn, Color tagColor, String tagIconPath) {
             super(25);
             setBackground(CARD_WHITE);
             setLayout(new BorderLayout());
@@ -266,7 +267,7 @@ public class ModerationPanel extends JPanel {
             info.setOpaque(false);
             info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
 
-            JLabel lblTag = new JLabel("  " + tag, loadScaledIcon("/resources/lenguaje_ofensivo.PNG", 18, 18), SwingConstants.LEFT);
+            JLabel lblTag = new JLabel("  " + tag, loadScaledIcon(tagIconPath, 18, 18), SwingConstants.LEFT);
             lblTag.setHorizontalTextPosition(SwingConstants.RIGHT);
             lblTag.setIconTextGap(6);
             lblTag.setOpaque(true);
@@ -278,7 +279,9 @@ public class ModerationPanel extends JPanel {
             JLabel lblBody = new JLabel("<html><b>" + body + "</b></html>");
             lblBody.setFont(new Font("SansSerif", Font.PLAIN, 14)); 
 
-            JLabel lblMeta = new JLabel("📚 " + prof + " • " + time);
+            JLabel lblMeta = new JLabel(" " + prof + " • " + time, loadScaledIcon("/resources/libros.PNG", 18, 18), SwingConstants.LEFT);
+            lblMeta.setHorizontalTextPosition(SwingConstants.RIGHT);
+            lblMeta.setIconTextGap(6);
             lblMeta.setForeground(Color.GRAY);
             lblMeta.setFont(new Font("SansSerif", Font.PLAIN, 11));
 
@@ -289,7 +292,9 @@ public class ModerationPanel extends JPanel {
             info.add(lblMeta);
 
             if(warn) {
-                JLabel lblWarn = new JLabel(bundle.getString("moderation.warn.auto_filter"));
+                JLabel lblWarn = new JLabel(bundle.getString("moderation.warn.auto_filter"), loadScaledIcon("/resources/warning.PNG", 18, 18), SwingConstants.LEFT);
+                lblWarn.setHorizontalTextPosition(SwingConstants.RIGHT);
+                lblWarn.setIconTextGap(6);
                 lblWarn.setOpaque(true);
                 lblWarn.setBackground(WARNING_YELLOW);
                 lblWarn.setForeground(WARNING_TEXT);
