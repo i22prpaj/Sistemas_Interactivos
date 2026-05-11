@@ -33,8 +33,8 @@ public class ReportDetailPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(BG);
 
-        // ScrollPane para evitar que se corte en pantallas pequeñas
-        JPanel root = new JPanel();
+        // Panel desplazable que no permite crecer hacia la derecha
+        ScrollablePanel root = new ScrollablePanel();
         root.setOpaque(false);
         root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
         root.setBorder(new EmptyBorder(30, 25, 30, 25));
@@ -61,14 +61,27 @@ public class ReportDetailPanel extends JPanel {
         
         boolean isCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
         scroll.setVerticalScrollBarPolicy(isCodespaces ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
         
         add(scroll, BorderLayout.CENTER);
     }
 
+    class ScrollablePanel extends JPanel implements Scrollable {
+        @Override
+        public Dimension getPreferredScrollableViewportSize() { return super.getPreferredSize(); }
+        @Override
+        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) { return 16; }
+        @Override
+        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) { return 16; }
+        @Override
+        public boolean getScrollableTracksViewportWidth() { return true; }
+        @Override
+        public boolean getScrollableTracksViewportHeight() { return false; }
+    }
+
     private JComponent createHeader() {
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         p.setOpaque(false);
 
         JButton back = new JButton(bundle.getString("config.back"));
@@ -79,7 +92,7 @@ public class ReportDetailPanel extends JPanel {
         back.addActionListener(e -> mainFrame.goBack());
 
         JLabel title = new JLabel(bundle.getString("reportdetail.title"));
-        title.setFont(new Font("SansSerif", Font.BOLD, 22));
+        title.setFont(new Font("SansSerif", Font.BOLD, 20));
         title.setForeground(TEXT_DARK);
 
         p.add(back);

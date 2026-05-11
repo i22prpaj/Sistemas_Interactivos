@@ -114,7 +114,7 @@ public class ModerationPanel extends JPanel {
     private JPanel createTabSelector() {
         JPanelRedondeado wrapper = new JPanelRedondeado(40);
         wrapper.setBackground(new Color(235, 250, 210)); // Sutil contraste
-        wrapper.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        wrapper.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         wrapper.setMaximumSize(new Dimension(380, 50));
 
         wrapper.add(createTabButton(bundle.getString("moderation.tab.pending"), true));
@@ -270,7 +270,7 @@ public class ModerationPanel extends JPanel {
             }
 
             // Botones Acción
-            JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10)); 
+            JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 10)); 
             actions.setOpaque(false);
 
             JButton btnVer = new JButton(bundle.getString("moderation.view_details"));
