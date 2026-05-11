@@ -114,27 +114,53 @@ public class ModerationPanel extends JPanel {
     private JPanel createTabSelector() {
         JPanelRedondeado wrapper = new JPanelRedondeado(40);
         wrapper.setBackground(new Color(235, 250, 210)); // Sutil contraste
-        wrapper.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        wrapper.setMaximumSize(new Dimension(380, 50));
+        wrapper.setLayout(new FlowLayout(FlowLayout.LEFT, 6, 0));
+        wrapper.setPreferredSize(new Dimension(334, 70));
+        wrapper.setMinimumSize(new Dimension(334, 70));
+        wrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70));
 
-        wrapper.add(createTabButton(bundle.getString("moderation.tab.pending"), true));
-        wrapper.add(createTabButton(bundle.getString("moderation.tab.approved"), false));
-        wrapper.add(createTabButton(bundle.getString("moderation.tab.deleted"), false));
+        wrapper.add(createTabButton(bundle.getString("moderation.tab.pending"), "/resources/pendientes.PNG", true));
+        wrapper.add(createTabButton(bundle.getString("moderation.tab.approved"), "/resources/aprobados.PNG", false));
+        wrapper.add(createTabButton(bundle.getString("moderation.tab.deleted"), "/resources/eliminados.PNG", false));
 
-        return wrapper;
+        JScrollPane scroll = new JScrollPane(wrapper);
+        scroll.setBorder(null);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroll.setPreferredSize(new Dimension(0, 76));
+        scroll.setMinimumSize(new Dimension(0, 76));
+        scroll.setMaximumSize(new Dimension(Integer.MAX_VALUE, 76));
+        scroll.getHorizontalScrollBar().setUnitIncrement(16);
+
+        JPanel container = new JPanel(new BorderLayout());
+        container.setOpaque(false);
+        container.add(scroll, BorderLayout.CENTER);
+        container.setMaximumSize(new Dimension(Integer.MAX_VALUE, 76));
+        return container;
     }
 
-    private JButton createTabButton(String text, boolean active) {
-        JButton b = new JButton(text);
-        b.setFont(new Font("SansSerif", active ? Font.BOLD : Font.PLAIN, 12));
+    private JButton createTabButton(String text, String iconPath, boolean active) {
+        JButton b = new JButton();
+        b.setIcon(loadScaledIcon(iconPath, 22, 22));
+        b.setText(text);
+        b.setHorizontalAlignment(SwingConstants.CENTER);
+        b.setVerticalAlignment(SwingConstants.CENTER);
+        b.setHorizontalTextPosition(SwingConstants.CENTER);
+        b.setVerticalTextPosition(SwingConstants.BOTTOM);
+        b.setIconTextGap(2);
         b.setFocusPainted(false);
         b.setBorderPainted(false);
         b.setContentAreaFilled(false);
+        b.setPreferredSize(new Dimension(104, 62));
+        b.setMargin(new Insets(0, 0, 0, 0));
+        b.setFont(new Font("SansSerif", active ? Font.BOLD : Font.PLAIN, 10));
         
         if (active) {
             b.setOpaque(true);
             b.setBackground(Color.WHITE);
-            b.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+            b.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
         }
         return b;
     }
@@ -240,11 +266,14 @@ public class ModerationPanel extends JPanel {
             info.setOpaque(false);
             info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
 
-            JLabel lblTag = new JLabel(" 🚫 " + tag + " ");
-            lblTag.setFont(new Font("SansSerif", Font.BOLD, 11));
-            lblTag.setForeground(tagColor);
+            JLabel lblTag = new JLabel("  " + tag, loadScaledIcon("/resources/lenguaje_ofensivo.PNG", 18, 18), SwingConstants.LEFT);
+            lblTag.setHorizontalTextPosition(SwingConstants.RIGHT);
+            lblTag.setIconTextGap(6);
             lblTag.setOpaque(true);
             lblTag.setBackground(new Color(tagColor.getRed(), tagColor.getGreen(), tagColor.getBlue(), 30));
+            lblTag.setBorder(new EmptyBorder(4, 8, 4, 8));
+            lblTag.setForeground(tagColor);
+            lblTag.setFont(new Font("SansSerif", Font.BOLD, 11));
 
             JLabel lblBody = new JLabel("<html><b>" + body + "</b></html>");
             lblBody.setFont(new Font("SansSerif", Font.PLAIN, 14)); 
@@ -326,6 +355,17 @@ public class ModerationPanel extends JPanel {
             
             return b;
         }
+    }
+
+    private ImageIcon loadScaledIcon(String resourcePath, int width, int height) {
+        java.net.URL url = getClass().getResource(resourcePath);
+        if (url == null) {
+            return null;
+        }
+
+        ImageIcon icon = new ImageIcon(url);
+        Image scaled = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
     }
 
     class NotificationIcon extends JComponent {

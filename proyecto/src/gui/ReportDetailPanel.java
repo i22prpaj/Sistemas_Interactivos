@@ -104,7 +104,7 @@ public class ReportDetailPanel extends JPanel {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         p.setOpaque(false);
 
-        JLabel tag = new JLabel(" 🚫 " + bundle.getString("moderation.pendientes") + " ");
+        JLabel tag = new JLabel(" 🚫 " + bundle.getString("moderation.card1.tag") + " ");
         tag.setOpaque(true);
         tag.setBackground(new Color(255, 230, 230));
         tag.setForeground(RED_ACCENT);
@@ -122,7 +122,7 @@ public class ReportDetailPanel extends JPanel {
         card.add(createMutedLabel(bundle.getString("reportdetail.professor_reported")));
         card.add(Box.createVerticalStrut(5));
         card.add(createBoldLabel(bundle.getString("reportdetail.professor_name"), 18));
-        card.add(createMutedLabel(bundle.getString("profesor.asig_algebra") + " • 2º Grado Informática"));
+        card.add(createMutedLabel(bundle.getString("profesor.asig_algebra")));
 
         return card;
     }
@@ -193,21 +193,23 @@ public class ReportDetailPanel extends JPanel {
     }
 
     private JComponent createActionButtons() {
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 0));
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         p.setOpaque(false);
+        p.setMaximumSize(new Dimension(320, 70));
+        p.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Botones tipo píldora (muy redondeados)
         BotonRedondeado btnOk = new BotonRedondeado(bundle.getString("reportdetail.btn_approve"));
         btnOk.setBackground(GREEN_ACTION);
         btnOk.setForeground(Color.WHITE);
-        btnOk.setPreferredSize(new Dimension(160, 60));
-        btnOk.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnOk.setPreferredSize(new Dimension(130, 50));
+        btnOk.setFont(new Font("SansSerif", Font.BOLD, 13));
 
         BotonRedondeado btnNo = new BotonRedondeado(bundle.getString("reportdetail.btn_reject"));
         btnNo.setBackground(RED_ACTION);
         btnNo.setForeground(Color.WHITE);
-        btnNo.setPreferredSize(new Dimension(160, 60));
-        btnNo.setFont(new Font("SansSerif", Font.BOLD, 14));
+        btnNo.setPreferredSize(new Dimension(130, 50));
+        btnNo.setFont(new Font("SansSerif", Font.BOLD, 13));
 
         p.add(btnOk);
         p.add(btnNo);
