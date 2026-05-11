@@ -104,7 +104,9 @@ public class ReportDetailPanel extends JPanel {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         p.setOpaque(false);
 
-        JLabel tag = new JLabel(" 🚫 " + bundle.getString("moderation.card1.tag") + " ");
+        JLabel tag = new JLabel(" " + bundle.getString("moderation.card1.tag") + " ", loadScaledIcon("/resources/lenguaje_ofensivo.PNG", 22, 22), SwingConstants.LEFT);
+        tag.setHorizontalTextPosition(SwingConstants.RIGHT);
+        tag.setIconTextGap(6);
         tag.setOpaque(true);
         tag.setBackground(new Color(255, 230, 230));
         tag.setForeground(RED_ACCENT);
@@ -154,7 +156,9 @@ public class ReportDetailPanel extends JPanel {
         content.add(Box.createVerticalStrut(15));
 
         // Warning Badge
-        JLabel warn = new JLabel(bundle.getString("reportdetail.warn.filter_detected"));
+        JLabel warn = new JLabel(bundle.getString("reportdetail.warn.filter_detected"), loadScaledIcon("/resources/warning.PNG", 18, 18), SwingConstants.LEFT);
+        warn.setHorizontalTextPosition(SwingConstants.RIGHT);
+        warn.setIconTextGap(6);
         warn.setOpaque(true);
         warn.setBackground(WARNING_BG);
         warn.setForeground(WARNING_TEXT);
@@ -245,5 +249,16 @@ public class ReportDetailPanel extends JPanel {
                              "<font color='#282828'><b>" + bold + "</b></font></html>");
         l.setFont(new Font("SansSerif", Font.PLAIN, 14));
         return l;
+    }
+
+    private ImageIcon loadScaledIcon(String resourcePath, int width, int height) {
+        java.net.URL url = getClass().getResource(resourcePath);
+        if (url == null) {
+            return null;
+        }
+
+        ImageIcon icon = new ImageIcon(url);
+        Image scaled = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
     }
 }
