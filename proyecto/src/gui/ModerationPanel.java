@@ -322,8 +322,13 @@ public class ModerationPanel extends JPanel {
 
             // Creamos los botones
             JButton btnCheck = createIconButton("✓", GREEN_ACCENT);
+            btnCheck.addActionListener(e -> {
+                if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
+            });
             JButton btnCross = createIconButton("✕", RED_ACCENT);
-
+            btnCross.addActionListener(e -> {
+                if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
+            });
             actions.add(btnVer);
             actions.add(btnCheck);
             actions.add(btnCross);

@@ -13,6 +13,7 @@ import gui.ReportePanel;
 import gui.ValoracionEnviada;
 import gui.ValoracionPanel;
 import gui.ReportDetailPanel;
+import gui.OperacionRealizada;
 import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -72,7 +73,8 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ValoracionEnviada(this), "VALORACION_ENVIADA");
         mainPanel.add(new ModerationPanel(this), "MODERATION_PANEL");
         mainPanel.add(new ReportDetailPanel(this), "REPORT_DETAIL");
-       
+        mainPanel.add(new OperacionRealizada(this), "OPERACION_REALIZADA");
+        
         mainPanel.revalidate();
         mainPanel.repaint();
 

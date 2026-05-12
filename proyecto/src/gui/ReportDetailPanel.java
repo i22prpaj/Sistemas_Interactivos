@@ -208,12 +208,18 @@ public class ReportDetailPanel extends JPanel {
         btnOk.setForeground(Color.WHITE);
         btnOk.setPreferredSize(new Dimension(130, 50));
         btnOk.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btnOk.addActionListener(e -> {
+                if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
+            });
 
         BotonRedondeado btnNo = new BotonRedondeado(bundle.getString("reportdetail.btn_reject"));
         btnNo.setBackground(RED_ACTION);
         btnNo.setForeground(Color.WHITE);
         btnNo.setPreferredSize(new Dimension(130, 50));
         btnNo.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btnNo.addActionListener(e -> {
+                if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
+            });
 
         p.add(btnOk);
         p.add(btnNo);
