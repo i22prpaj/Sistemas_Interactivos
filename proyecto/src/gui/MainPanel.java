@@ -120,12 +120,12 @@ public class MainPanel extends JPanel {
 
         // --- 5. LISTA ---
         String[] subjects = {
-            textos.getString("subjects.calculo"),
+            textos.getString("common.calculus"),
             textos.getString("subjects.economia"),
             textos.getString("subjects.legislacion"),
             textos.getString("subjects.estadistica"),
             textos.getString("subjects.poo"),
-            textos.getString("subjects.algebra_lineal")
+            textos.getString("common.linear_algebra")
         };
         JList<String> list = new JList<>(subjects);
         list.setCellRenderer(new MobileListRenderer());
@@ -137,7 +137,7 @@ public class MainPanel extends JPanel {
         @Override
         public void mouseClicked(java.awt.event.MouseEvent e) {
                 String seleccionado = list.getSelectedValue();
-                if (textos.getString("subjects.algebra_lineal").equals(seleccionado)) {
+                if (textos.getString("common.linear_algebra").equals(seleccionado)) {
                     mainFrame.showView("ASIGNATURAS"); 
                 }
             }

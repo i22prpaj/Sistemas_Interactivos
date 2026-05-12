@@ -27,7 +27,7 @@ public class Asignaturas extends JPanel {
 
         // --- 1. TÍTULO DE LA ASIGNATURA ---
         // En la imagen aparece centrado y arriba (debajo de la "isla" del móvil)
-        JLabel title = new JLabel(textos.getString("asignaturas.titulo"), SwingConstants.CENTER);
+        JLabel title = new JLabel(textos.getString("common.linear_algebra"), SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 22));
         gbc.gridy = 0;
         gbc.insets = new Insets(40, 20, 20, 20); // Más margen superior para la "isla"
@@ -90,7 +90,7 @@ public class Asignaturas extends JPanel {
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 20));
         bottom.setOpaque(false);
 
-        BotonRedondeado inicio = new BotonRedondeado(textos.getString("config.home"));
+        BotonRedondeado inicio = new BotonRedondeado(textos.getString("common.home"));
         inicio.setBackground(VERDE_BOTON);
         inicio.setPreferredSize(new Dimension(100, 38));
         inicio.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));

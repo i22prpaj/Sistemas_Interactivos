@@ -123,8 +123,8 @@ public class ReportDetailPanel extends JPanel {
 
         card.add(createMutedLabel(bundle.getString("reportdetail.professor_reported")));
         card.add(Box.createVerticalStrut(5));
-        card.add(createBoldLabel(bundle.getString("reportdetail.professor_name"), 18));
-        card.add(createMutedLabel(bundle.getString("profesor.asig_algebra")));
+        card.add(createBoldLabel(bundle.getString("profesor.nombre"), 18));
+        card.add(createMutedLabel(bundle.getString("common.linear_algebra")));
 
         return card;
     }
@@ -156,7 +156,7 @@ public class ReportDetailPanel extends JPanel {
         content.add(Box.createVerticalStrut(15));
 
         // Warning Badge
-        JLabel warn = new JLabel(bundle.getString("reportdetail.warn.filter_detected"), loadScaledIcon("/resources/warning.PNG", 18, 18), SwingConstants.LEFT);
+        JLabel warn = new JLabel(bundle.getString("common.auto_filter_warning"), loadScaledIcon("/resources/warning.PNG", 18, 18), SwingConstants.LEFT);
         warn.setHorizontalTextPosition(SwingConstants.RIGHT);
         warn.setIconTextGap(6);
         warn.setOpaque(true);
@@ -212,7 +212,7 @@ public class ReportDetailPanel extends JPanel {
                 if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
             });
 
-        BotonRedondeado btnNo = new BotonRedondeado(bundle.getString("reportdetail.btn_reject"));
+        BotonRedondeado btnNo = new BotonRedondeado(bundle.getString("common.delete"));
         btnNo.setBackground(RED_ACTION);
         btnNo.setForeground(Color.WHITE);
         btnNo.setPreferredSize(new Dimension(130, 50));

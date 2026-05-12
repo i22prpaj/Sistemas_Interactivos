@@ -52,8 +52,8 @@ public class LoginErrorPanel extends JPanel {
         gbc.gridy = 2;
         centerPanel.add(lblMensaje, gbc);
 
-        // 4. Botón Reportar (Usando la clave LoginError.reportar)
-        JButton btnReportar = new JButton(textos.getString("LoginError.reportar"));
+        // 4. Botón Reportar (Usando la clave common.report_problem)
+        JButton btnReportar = new JButton(textos.getString("common.report_problem"));
         btnReportar.setForeground(Color.BLUE);
         btnReportar.setFont(new Font("Arial", Font.PLAIN, 14));
         btnReportar.setBorderPainted(false);

@@ -25,7 +25,7 @@ public class ReportePanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // 1. Título
-        JLabel lblTitulo = new JLabel(textos.getString("reporte.titulo"), SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel(textos.getString("common.report_problem"), SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
         gbc.gridy = 0;
         add(lblTitulo, gbc);
@@ -85,7 +85,7 @@ public class ReportePanel extends JPanel {
             new EmptyBorder(10, 10, 10, 10)
         ));
 
-        JButton btnEnviar = new JButton(textos.getString("reporte.enviar"));
+        JButton btnEnviar = new JButton(textos.getString("common.send"));
         btnEnviar.setBackground(new Color(25, 25, 112)); // Azul oscuro tipo Midnight Blue
         btnEnviar.setForeground(Color.WHITE);
         btnEnviar.setFocusPainted(false);

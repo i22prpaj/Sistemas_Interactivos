@@ -48,7 +48,7 @@ public class ReporteEnviadoPanel extends JPanel {
         add(lblIcono, gbc);
 
         // 3. Botón Volver
-        JButton btnVolver = new JButton(textos.getString("reporteEnviado.volver"));
+        JButton btnVolver = new JButton(textos.getString("common.back"));
         btnVolver.setBackground(new Color(25, 25, 112)); // Azul oscuro
         btnVolver.setForeground(Color.WHITE);
         btnVolver.setFont(new Font("Arial", Font.BOLD, 14));

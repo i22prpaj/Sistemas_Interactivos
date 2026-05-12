@@ -41,8 +41,8 @@ public class ValoracionPanel extends JPanel {
         // --- 2. SELECTOR DE ASIGNATURA ---
         String[] asigs = {
             textos.getString("valoracion.asignatura_placeholder"),
-            textos.getString("profesor.asig_algebra"),
-            textos.getString("profesor.asig_calculo")
+            textos.getString("common.linear_algebra"),
+            textos.getString("common.calculus")
         };
         JComboBox<String> combo = new JComboBox<>(asigs);
         combo.setPreferredSize(new Dimension(160, 35));
@@ -148,7 +148,7 @@ public class ValoracionPanel extends JPanel {
         gbc.weighty = 0;
         contentPanel.add(lblAnonimo, gbc);
 
-        BotonRedondeado btnEnviar = new BotonRedondeado(textos.getString("valoracion.enviar"));
+        BotonRedondeado btnEnviar = new BotonRedondeado(textos.getString("common.send"));
         btnEnviar.setBackground(AZUL_OSCURO);
         btnEnviar.setForeground(Color.WHITE);
         btnEnviar.setPreferredSize(new Dimension(105, 38));
@@ -166,7 +166,7 @@ public class ValoracionPanel extends JPanel {
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         bottom.setOpaque(false);
         
-        BotonRedondeado inicio = new BotonRedondeado(textos.getString("config.home"));
+        BotonRedondeado inicio = new BotonRedondeado(textos.getString("common.home"));
         inicio.setBackground(new Color(230, 255, 210)); // Verde clarito
         inicio.setPreferredSize(new Dimension(100, 36));
         inicio.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));

@@ -91,7 +91,7 @@ public class ModerationPanel extends JPanel {
         p.setOpaque(false);
         p.setMaximumSize(new Dimension(500, 40));
 
-        JLabel title = new JLabel(bundle.getString("moderation.title"));
+        JLabel title = new JLabel(bundle.getString("common.moderation_panel"));
         title.setFont(new Font("SansSerif", Font.BOLD, 20));
         title.setForeground(new Color(20, 20, 20));
 
@@ -105,7 +105,7 @@ public class ModerationPanel extends JPanel {
         row.setOpaque(false);
         row.setMaximumSize(new Dimension(500, 80));
 
-        row.add(new StatBubble("3", bundle.getString("moderation.pendientes")));
+        row.add(new StatBubble("3", bundle.getString("common.pending")));
         row.add(new StatBubble("5", bundle.getString("moderation.hoy")));
         row.add(new StatBubble("2", bundle.getString("moderation.urgentes")));
         return row;
@@ -119,7 +119,7 @@ public class ModerationPanel extends JPanel {
         wrapper.setMinimumSize(new Dimension(334, 70));
         wrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70));
 
-        wrapper.add(createTabButton(bundle.getString("moderation.tab.pending"), "/resources/pendientes.PNG", true));
+        wrapper.add(createTabButton(bundle.getString("common.pending"), "/resources/pendientes.PNG", true));
         wrapper.add(createTabButton(bundle.getString("moderation.tab.approved"), "/resources/aprobados.PNG", false));
         wrapper.add(createTabButton(bundle.getString("moderation.tab.deleted"), "/resources/eliminados.PNG", false));
 
@@ -171,21 +171,21 @@ public class ModerationPanel extends JPanel {
         list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
 
         // Tarjeta 1
-        list.add(createReportCard("moderation.card1", true, RED_ACCENT, "/resources/lenguaje_ofensivo.PNG"));
+        list.add(createReportCard("moderation.card1", bundle.getString("profesor.nombre"), true, RED_ACCENT, "/resources/lenguaje_ofensivo.PNG"));
         
         list.add(Box.createVerticalStrut(20));
 
         // Tarjeta 2
-        list.add(createReportCard("moderation.card2", false, new Color(250, 190, 100), "/resources/difamación.PNG"));
+        list.add(createReportCard("moderation.card2", bundle.getString("moderation.card2.prof"), false, new Color(250, 190, 100), "/resources/difamación.PNG"));
 
         return list;
     }
 
-    private JComponent createReportCard(String keyPrefix, boolean warn, Color tagColor, String tagIconPath) {
+    private JComponent createReportCard(String keyPrefix, String profName, boolean warn, Color tagColor, String tagIconPath) {
         return new ReportCard(
             bundle.getString(keyPrefix + ".tag"),
             bundle.getString(keyPrefix + ".body"),
-            bundle.getString(keyPrefix + ".prof"),
+            profName,
             bundle.getString(keyPrefix + ".time"),
             warn,
             tagColor,
@@ -206,7 +206,7 @@ public class ModerationPanel extends JPanel {
         // Columna 2 (Centro): Botón Inicio
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         centerPanel.setOpaque(false);
-        BotonRedondeado inicio = new BotonRedondeado(bundle.getString("moderation.btn_home"));
+        BotonRedondeado inicio = new BotonRedondeado(bundle.getString("common.home"));
         inicio.setPreferredSize(new Dimension(100, 40)); 
         inicio.setBackground(new Color(225, 255, 190));
         inicio.addActionListener(e -> {
@@ -292,7 +292,7 @@ public class ModerationPanel extends JPanel {
             info.add(lblMeta);
 
             if(warn) {
-                JLabel lblWarn = new JLabel(bundle.getString("moderation.warn.auto_filter"), loadScaledIcon("/resources/warning.PNG", 18, 18), SwingConstants.LEFT);
+                JLabel lblWarn = new JLabel(bundle.getString("common.auto_filter_warning"), loadScaledIcon("/resources/warning.PNG", 18, 18), SwingConstants.LEFT);
                 lblWarn.setHorizontalTextPosition(SwingConstants.RIGHT);
                 lblWarn.setIconTextGap(6);
                 lblWarn.setOpaque(true);

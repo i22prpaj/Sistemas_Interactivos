@@ -77,7 +77,7 @@ public class ConfiguracionPanel extends JPanel {
 
         // ===== PANEL DE MODERACIÓN (solo visible para moderadores) =====
         if (mainFrame.isModerator()) {
-            JLabel modPanel = createClickableLabel(bundle.getString("config.moderation_tools"), startX, currentY);
+            JLabel modPanel = createClickableLabel(bundle.getString("common.moderation_panel"), startX, currentY);
 
             modPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
@@ -142,7 +142,7 @@ public class ConfiguracionPanel extends JPanel {
         // Columna 2 (Centro): Botón Inicio
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         centerPanel.setOpaque(false);
-        RoundButton homeBtn = new RoundButton(bundle.getString("config.home"), 100, 40);
+        RoundButton homeBtn = new RoundButton(bundle.getString("common.home"), 100, 40);
         homeBtn.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
         centerPanel.add(homeBtn);
 

@@ -94,7 +94,7 @@ public class ProfesorDetalle extends JPanel {
 
         // Símbolos tipográficos clásicos que no se renderizan como "emojis gigantes"
         datos.add(createContactRow("⌂", textos.getString("profesor.despacho") + ": " + textos.getString("profesor.despacho_valor")));
-        datos.add(createContactRow("✉", textos.getString("profesor.correo") + ": " + textos.getString("profesor.correo_valor")));
+        datos.add(createContactRow("✉", textos.getString("common.email") + ": " + textos.getString("profesor.correo_valor")));
         datos.add(createContactRow("✆", textos.getString("profesor.telefono") + ": " + textos.getString("profesor.telefono_valor")));
         datos.add(createContactRow("◷", textos.getString("profesor.tutorias") + ": " + textos.getString("profesor.tutorias_valor")));
 
@@ -105,7 +105,7 @@ public class ProfesorDetalle extends JPanel {
         // --- 4. ASIGNATURAS IMPARTIDAS (Tarjeta Gris con Título) ---
         gbc.gridy = 3;
         contentPanel.add(crearTarjetaGrisConTitulo(textos.getString("profesor.asignaturas_impartidas"), 
-            new String[]{textos.getString("profesor.asig_algebra"), textos.getString("profesor.asig_calculo"), textos.getString("profesor.asig_fundamentos")}), gbc);
+            new String[]{textos.getString("common.linear_algebra"), textos.getString("common.calculus"), textos.getString("profesor.asig_fundamentos")}), gbc);
 
         // --- 5. CONSIDERACIONES (Tarjeta Gris con Título e Iconos) ---
         gbc.gridy = 4;
@@ -148,7 +148,7 @@ public class ProfesorDetalle extends JPanel {
 
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         centerPanel.setOpaque(false);
-        BotonRedondeado inicio = new BotonRedondeado(textos.getString("config.home"));
+        BotonRedondeado inicio = new BotonRedondeado(textos.getString("common.home"));
         inicio.setBackground(new Color(230, 255, 210)); 
         inicio.setPreferredSize(new Dimension(100, 36));
         inicio.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
