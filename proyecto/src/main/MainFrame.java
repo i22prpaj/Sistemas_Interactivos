@@ -8,6 +8,7 @@ import gui.MainPanel;
 import gui.ModerationPanel;
 import gui.ProfesorDetalle;
 import gui.RegistroPanel;
+import gui.ReportDetailPanel;
 import gui.ReporteEnviadoPanel;
 import gui.ReportePanel;
 import gui.ValoracionEnviada;
@@ -70,7 +71,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ValoracionPanel(this), "VALORACION");
         mainPanel.add(new ValoracionEnviada(this), "VALORACION_ENVIADA");
         mainPanel.add(new ModerationPanel(this), "MODERATION_PANEL");
-        mainPanel.add(new gui.ReportDetailPanel(this), "REPORT_DETAIL");
+        mainPanel.add(new ReportDetailPanel(this), "REPORT_DETAIL");
        
         mainPanel.revalidate();
         mainPanel.repaint();
