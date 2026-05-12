@@ -326,7 +326,7 @@ public class ModerationPanel extends JPanel {
                 if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
             });
             JButton btnCross = createIconButton("✕", RED_ACCENT);
-            btnCheck.addActionListener(e -> {
+            btnCross.addActionListener(e -> {
                 if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
             });
 
