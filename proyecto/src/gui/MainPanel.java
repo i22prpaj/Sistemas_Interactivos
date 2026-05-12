@@ -10,6 +10,34 @@ import model.MobileListRenderer;
 
 public class MainPanel extends JPanel {
 
+    private static final class SubjectOption {
+        private final String key;
+        private final String label;
+
+        private SubjectOption(String key, String label) {
+            this.key = key;
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+    }
+
+    private static final class ProfessorOption {
+        private final String name;
+
+        private ProfessorOption(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
     private MainFrame mainFrame;
     private final Color VERDE_FONDO = new Color(180,255,104);
     private final Color VERDE_BOTON = new Color(212,255,189); 
@@ -119,15 +147,32 @@ public class MainPanel extends JPanel {
         contentPanel.add(tabsContainer, gbc);
 
         // --- 5. LISTA ---
-        String[] subjects = {
-            textos.getString("common.calculus"),
-            textos.getString("subjects.economia"),
-            textos.getString("subjects.legislacion"),
-            textos.getString("subjects.estadistica"),
-            textos.getString("subjects.poo"),
-            textos.getString("common.linear_algebra")
+        SubjectOption[] subjects = {
+            new SubjectOption("subjects.intro_programacion", textos.getString("subjects.intro_programacion")),
+            new SubjectOption("common.calculus", textos.getString("common.calculus")),
+            new SubjectOption("subjects.estadistica", textos.getString("subjects.estadistica")),
+            new SubjectOption("subjects.fisica", textos.getString("subjects.fisica")),
+            new SubjectOption("subjects.economia", textos.getString("subjects.economia")),
+            new SubjectOption("subjects.metodologia_programacion", textos.getString("subjects.metodologia_programacion")),
+            new SubjectOption("subjects.fundamentos_computadores", textos.getString("subjects.fundamentos_computadores")),
+            new SubjectOption("subjects.circuitos", textos.getString("subjects.circuitos")),
+            new SubjectOption("subjects.matematica_discreta", textos.getString("subjects.matematica_discreta")),
+            new SubjectOption("common.linear_algebra", textos.getString("common.linear_algebra")),
+            new SubjectOption("subjects.poo", textos.getString("subjects.poo")),
+            new SubjectOption("subjects.bases_datos", textos.getString("subjects.bases_datos")),
+            new SubjectOption("subjects.sistemas_operativos", textos.getString("subjects.sistemas_operativos")),
+            new SubjectOption("subjects.ingenieria_software", textos.getString("subjects.ingenieria_software")),
+            new SubjectOption("subjects.arquitectura_computadores", textos.getString("subjects.arquitectura_computadores")),
+            new SubjectOption("subjects.programacion_administracion", textos.getString("subjects.programacion_administracion")),
+            new SubjectOption("subjects.estructuras_datos", textos.getString("subjects.estructuras_datos")),
+            new SubjectOption("subjects.sistemas_informacion", textos.getString("subjects.sistemas_informacion")),
+            new SubjectOption("subjects.sistemas_inteligentes", textos.getString("subjects.sistemas_inteligentes")),
+            new SubjectOption("subjects.arquitectura_redes", textos.getString("subjects.arquitectura_redes")),
+            new SubjectOption("subjects.programacion_web", textos.getString("subjects.programacion_web")),
+            new SubjectOption("subjects.redes", textos.getString("subjects.redes")),
+            new SubjectOption("subjects.legislacion", textos.getString("subjects.legislacion"))
         };
-        JList<String> list = new JList<>(subjects);
+        JList<SubjectOption> list = new JList<>(subjects);
         list.setCellRenderer(new MobileListRenderer());
         list.setBackground(VERDE_FONDO);
         list.setFixedCellHeight(50);
@@ -136,8 +181,12 @@ public class MainPanel extends JPanel {
         list.addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
         public void mouseClicked(java.awt.event.MouseEvent e) {
-                String seleccionado = list.getSelectedValue();
-                if (textos.getString("common.linear_algebra").equals(seleccionado)) {
+                SubjectOption seleccionado = list.getSelectedValue();
+                if (seleccionado != null) {
+                    mainFrame.setSelectedSubjectKey(seleccionado.key);
+                    mainFrame.setSelectedProfessorId(null);
+                    mainFrame.setSelectedProfessorKey(null);
+                    mainFrame.setSelectedProfessorName(null);
                     mainFrame.showView("ASIGNATURAS"); 
                 }
             }

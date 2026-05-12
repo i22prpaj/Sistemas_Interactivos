@@ -7,6 +7,8 @@ import javax.swing.border.EmptyBorder;
 import main.MainFrame;
 import model.BotonRedondeado;
 import model.JPanelRedondeado;
+import model.ProfessorDirectory;
+import model.ProfessorProfile;
 
 public class ProfesorDetalle extends JPanel {
 
@@ -20,6 +22,12 @@ public class ProfesorDetalle extends JPanel {
         this.mainFrame = mainFrame;
         this.runningInCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
         ResourceBundle textos = mainFrame.getBundle();
+        ProfessorProfile profile = ProfessorDirectory.get(mainFrame.getSelectedProfessorId());
+        if (profile == null) {
+            profile = ProfessorDirectory.getDefaultProfile();
+        }
+        String selectedProfessorName = mainFrame.getSelectedProfessorName();
+        String professorName = selectedProfessorName != null ? selectedProfessorName : (profile != null ? profile.getDisplayName() : "");
 
         setBackground(VERDE_FONDO);
         setLayout(new BorderLayout());
@@ -47,9 +55,9 @@ public class ProfesorDetalle extends JPanel {
         // Nombre y Departamento
         JPanel textHeader = new JPanel(new GridLayout(2, 1));
         textHeader.setOpaque(false);
-        JLabel name = new JLabel(textos.getString("profesor.nombre"));
+        JLabel name = new JLabel(professorName);
         name.setFont(new Font("SansSerif", Font.BOLD, 16));
-        JLabel dept = new JLabel(textos.getString("profesor.departamento"));
+        JLabel dept = new JLabel(profile != null ? profile.getDepartment() : "");
         dept.setFont(new Font("SansSerif", Font.PLAIN, 12));
         textHeader.add(name);
         textHeader.add(dept);
@@ -88,15 +96,13 @@ public class ProfesorDetalle extends JPanel {
         // --- 3. DATOS DE CONTACTO (Tarjeta Gris con Iconos) ---
         JPanelRedondeado datos = new JPanelRedondeado(15);
         datos.setBackground(GRIS_TARJETA);
-        // ¡LA MAGIA AQUÍ! Un GridLayout garantiza matemáticamente el mismo espacio entre todas las filas
         datos.setLayout(new GridLayout(4, 1, 0, 12));
         datos.setBorder(new EmptyBorder(15, 15, 15, 15));
 
-        // Símbolos tipográficos clásicos que no se renderizan como "emojis gigantes"
-        datos.add(createContactRow("⌂", textos.getString("profesor.despacho") + ": " + textos.getString("profesor.despacho_valor")));
-        datos.add(createContactRow("✉", textos.getString("common.email") + ": " + textos.getString("profesor.correo_valor")));
-        datos.add(createContactRow("✆", textos.getString("profesor.telefono") + ": " + textos.getString("profesor.telefono_valor")));
-        datos.add(createContactRow("◷", textos.getString("profesor.tutorias") + ": " + textos.getString("profesor.tutorias_valor")));
+        datos.add(createContactRow("⌂", textos.getString("profesor.despacho") + ": " + (profile != null ? profile.getOffice() : "")));
+        datos.add(createContactRow("✉", textos.getString("common.email") + ": " + (profile != null ? profile.getEmail() : "")));
+        datos.add(createContactRow("✆", textos.getString("profesor.telefono") + ": " + (profile != null ? profile.getPhone() : "")));
+        datos.add(createContactRow("◷", textos.getString("profesor.tutorias") + ": " + (profile != null ? profile.getOfficeHours() : "")));
 
         gbc.gridy = 2;
         gbc.insets = new Insets(0, 15, 15, 15);
@@ -105,11 +111,12 @@ public class ProfesorDetalle extends JPanel {
         // --- 4. ASIGNATURAS IMPARTIDAS (Tarjeta Gris con Título) ---
         gbc.gridy = 3;
         contentPanel.add(crearTarjetaGrisConTitulo(textos.getString("profesor.asignaturas_impartidas"), 
-            new String[]{textos.getString("common.linear_algebra"), textos.getString("common.calculus"), textos.getString("profesor.asig_fundamentos")}), gbc);
+            profile != null ? profile.getLocalizedSubjectNames(textos) : new String[0]), gbc);
 
         // --- 5. CONSIDERACIONES (Tarjeta Gris con Título e Iconos) ---
         gbc.gridy = 4;
-        contentPanel.add(crearTarjetaGrisConsideraciones(textos.getString("profesor.consideraciones"), textos), gbc);
+        contentPanel.add(crearTarjetaGrisConTitulo(textos.getString("profesor.consideraciones"), 
+            profile != null ? profile.getConsiderations().toArray(new String[0]) : new String[0]), gbc);
 
         // --- 6. BOTÓN PUNTUAR (Cápsula Blanca con Sombra) ---
         BotonRedondeado btnPuntuar = new BotonRedondeado(textos.getString("profesor.puntuar"));
@@ -222,51 +229,6 @@ public class ProfesorDetalle extends JPanel {
             lblItem.setFont(new Font("SansSerif", Font.PLAIN, 13));
             lblItem.setBorder(new EmptyBorder(5, 0, 5, 0));
             content.add(lblItem);
-        }
-        tarjeta.add(content, BorderLayout.CENTER);
-        
-        return tarjeta;
-    }
-
-    private JPanel crearTarjetaGrisConsideraciones(String titulo, ResourceBundle textos) {
-        JPanelRedondeado tarjeta = new JPanelRedondeado(15);
-        tarjeta.setBackground(GRIS_TARJETA);
-        tarjeta.setLayout(new BorderLayout());
-        
-        JLabel lblTitulo = new JLabel(titulo);
-        lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 14));
-        lblTitulo.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK),
-            new EmptyBorder(10, 15, 10, 15)
-        ));
-        tarjeta.add(lblTitulo, BorderLayout.NORTH);
-
-        JPanel content = new JPanel();
-        content.setOpaque(false);
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBorder(new EmptyBorder(10, 15, 15, 15));
-
-        String[] items = {
-            textos.getString("profesor.considera_pasa_lista"),
-            textos.getString("profesor.considera_explica_bien"),
-            textos.getString("profesor.considera_revisa_practicas"),
-            textos.getString("profesor.considera_hace_parciales")
-        };
-        ImageIcon check = loadScaledIcon(18, 18, "/resources/check.png"); 
-
-        for (String item : items) {
-            JPanel row = new JPanel(new BorderLayout());
-            row.setOpaque(false);
-            row.setBorder(new EmptyBorder(4, 0, 4, 0));
-
-            JLabel lblItem = new JLabel(item);
-            lblItem.setFont(new Font("SansSerif", Font.PLAIN, 12));
-            
-            JLabel lblCheck = (check != null) ? new JLabel(check) : new JLabel("✓");
-
-            row.add(lblItem, BorderLayout.WEST);
-            row.add(lblCheck, BorderLayout.EAST);
-            content.add(row);
         }
         tarjeta.add(content, BorderLayout.CENTER);
         

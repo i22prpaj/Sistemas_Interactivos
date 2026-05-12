@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ResourceBundle;
 import model.BotonRedondeado;
+import model.ProfessorDirectory;
+import model.ProfessorProfile;
 import model.ProfesorListRenderer;
 
 public class Asignaturas extends JPanel {
@@ -17,6 +19,8 @@ public class Asignaturas extends JPanel {
     public Asignaturas(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         ResourceBundle textos = mainFrame.getBundle();
+        String selectedSubjectKey = mainFrame.getSelectedSubjectKey();
+        java.util.List<ProfessorProfile> professors = ProfessorDirectory.getBySubject(selectedSubjectKey);
 
         setBackground(VERDE_FONDO);
         setLayout(new GridBagLayout());
@@ -27,15 +31,15 @@ public class Asignaturas extends JPanel {
 
         // --- 1. TÍTULO DE LA ASIGNATURA ---
         // En la imagen aparece centrado y arriba (debajo de la "isla" del móvil)
-        JLabel title = new JLabel(textos.getString("common.linear_algebra"), SwingConstants.CENTER);
+        String titleText = textos.containsKey(selectedSubjectKey) ? textos.getString(selectedSubjectKey) : textos.getString("subjects.label");
+        JLabel title = new JLabel(titleText, SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 22));
         gbc.gridy = 0;
         gbc.insets = new Insets(40, 20, 20, 20); // Más margen superior para la "isla"
         add(title, gbc);
 
         // --- 2. ETIQUETA "PROFESORES" Y LISTA (panel izquierdo alineado) ---
-        String[] profes = {textos.getString("profesor.nombre"), textos.getString("profesor.nombre_2")};
-        JList<String> list = new JList<>(profes);
+        JList<ProfessorProfile> list = new JList<>(professors.toArray(new ProfessorProfile[0]));
         // Usamos un renderizador similar al de asignaturas pero con icono de persona
         list.setCellRenderer(new ProfesorListRenderer());
         list.setBackground(VERDE_FONDO);
@@ -44,8 +48,11 @@ public class Asignaturas extends JPanel {
         list.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                String seleccionado = list.getSelectedValue();
-                if (textos.getString("profesor.nombre").equals(seleccionado)) {
+                ProfessorProfile seleccionado = list.getSelectedValue();
+                if (seleccionado != null) {
+                    mainFrame.setSelectedProfessorId(seleccionado.getId());
+                    mainFrame.setSelectedProfessorKey(seleccionado.getId());
+                    mainFrame.setSelectedProfessorName(seleccionado.getDisplayName());
                     mainFrame.showView("PROFESOR_DETALLE");
                 }
             }

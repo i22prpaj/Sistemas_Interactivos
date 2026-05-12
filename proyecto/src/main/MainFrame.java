@@ -27,6 +27,9 @@ public class MainFrame extends JFrame {
     private Deque<String> history = new ArrayDeque<>();
     private String currentView = null;
     private String userRole = "GUEST"; // Roles: GUEST, ESTUDIANTE, MODERADOR
+    private String selectedSubjectKey = "subjects.intro_programacion";
+    private String selectedProfessorId = null;
+    private String selectedProfessorName = null;
     private final boolean runningInCodespaces;
 
     public MainFrame() {
@@ -87,6 +90,9 @@ public class MainFrame extends JFrame {
         if (addToHistory && currentView != null && !currentView.equals(viewName)) {
             history.push(currentView);
         }
+        if ("ASIGNATURAS".equals(viewName) || "PROFESOR_DETALLE".equals(viewName) || "VALORACION".equals(viewName)) {
+            buildViews();
+        }
         cardLayout.show(mainPanel, viewName);
         currentView = viewName;
     }
@@ -115,6 +121,38 @@ public class MainFrame extends JFrame {
     // Método para que los paneles accedan al diccionario de textos
     public ResourceBundle getBundle() {
         return bundle;
+    }
+
+    public void setSelectedSubjectKey(String selectedSubjectKey) {
+        this.selectedSubjectKey = selectedSubjectKey == null ? "subjects.intro_programacion" : selectedSubjectKey;
+    }
+
+    public String getSelectedSubjectKey() {
+        return selectedSubjectKey;
+    }
+
+    public void setSelectedProfessorKey(String selectedProfessorKey) {
+        this.selectedProfessorId = selectedProfessorKey;
+    }
+
+    public String getSelectedProfessorKey() {
+        return selectedProfessorId;
+    }
+
+    public void setSelectedProfessorId(String selectedProfessorId) {
+        this.selectedProfessorId = selectedProfessorId;
+    }
+
+    public String getSelectedProfessorId() {
+        return selectedProfessorId;
+    }
+
+    public void setSelectedProfessorName(String selectedProfessorName) {
+        this.selectedProfessorName = selectedProfessorName;
+    }
+
+    public String getSelectedProfessorName() {
+        return selectedProfessorName;
     }
 
     // User role helpers

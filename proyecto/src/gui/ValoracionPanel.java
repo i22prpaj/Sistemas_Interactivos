@@ -7,6 +7,8 @@ import java.awt.*;
 import java.util.ResourceBundle;
 import model.BotonRedondeado;
 import model.JPanelRedondeado;
+import model.ProfessorDirectory;
+import model.ProfessorProfile;
 
 public class ValoracionPanel extends JPanel {
 
@@ -20,6 +22,14 @@ public class ValoracionPanel extends JPanel {
     public ValoracionPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         ResourceBundle textos = mainFrame.getBundle();
+        ProfessorProfile profile = ProfessorDirectory.get(mainFrame.getSelectedProfessorId());
+        if (profile == null) {
+            profile = ProfessorDirectory.getDefaultProfile();
+        }
+        String professorName = mainFrame.getSelectedProfessorName();
+        if (professorName == null && profile != null) {
+            professorName = profile.getDisplayName();
+        }
 
         setBackground(VERDE_FONDO);
         setLayout(new BorderLayout());
@@ -32,18 +42,17 @@ public class ValoracionPanel extends JPanel {
         gbc.insets = new Insets(5, 16, 5, 16);
 
         // --- 1. TÍTULO ---
-        JLabel title = new JLabel(textos.getString("valoracion.titulo"), SwingConstants.CENTER);
+        JLabel title = new JLabel(textos.getString("valoracion.titulo") + (professorName != null ? " " + professorName : ""), SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 17));
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 12, 5, 12); // Margen para la "isla"
         contentPanel.add(title, gbc);
 
         // --- 2. SELECTOR DE ASIGNATURA ---
-        String[] asigs = {
-            textos.getString("valoracion.asignatura_placeholder"),
-            textos.getString("common.linear_algebra"),
-            textos.getString("common.calculus")
-        };
+        String[] subjectLabels = profile != null ? profile.getLocalizedSubjectNames(textos) : new String[0];
+        String[] asigs = new String[subjectLabels.length + 1];
+        asigs[0] = textos.getString("valoracion.asignatura_placeholder");
+        System.arraycopy(subjectLabels, 0, asigs, 1, subjectLabels.length);
         JComboBox<String> combo = new JComboBox<>(asigs);
         combo.setPreferredSize(new Dimension(160, 35));
         combo.setBackground(GRIS_CLARITO);
