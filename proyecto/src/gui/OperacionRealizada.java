@@ -6,11 +6,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ResourceBundle;
 
-public class ValoracionEnviada extends JPanel {
+public class OperacionRealizada extends JPanel {
 
     private MainFrame mainFrame;
 
-    public ValoracionEnviada(MainFrame mainFrame) {
+    public OperacionRealizada(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         ResourceBundle textos = mainFrame.getBundle();
 
@@ -24,7 +24,7 @@ public class ValoracionEnviada extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
 
         // 1. Título
-        JLabel lblMensaje = new JLabel(textos.getString("valoracionEnviada.mensaje"), SwingConstants.CENTER);
+        JLabel lblMensaje = new JLabel(textos.getString("OperacionRealizada.mensaje"), SwingConstants.CENTER);
         lblMensaje.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridy = 0;
         add(lblMensaje, gbc);
@@ -48,7 +48,7 @@ public class ValoracionEnviada extends JPanel {
         add(lblIcono, gbc);
 
         // 3. Botón Volver
-        JButton btnVolver = new JButton(textos.getString("valoracionEnviada.volver"));
+        JButton btnVolver = new JButton(textos.getString("OperacionRealizada.volver"));
         btnVolver.setBackground(new Color(25, 25, 112)); // Azul oscuro
         btnVolver.setForeground(Color.WHITE);
         btnVolver.setFont(new Font("Arial", Font.BOLD, 14));
