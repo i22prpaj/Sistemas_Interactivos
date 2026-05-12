@@ -329,7 +329,6 @@ public class ModerationPanel extends JPanel {
             btnCross.addActionListener(e -> {
                 if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
             });
-
             actions.add(btnVer);
             actions.add(btnCheck);
             actions.add(btnCross);

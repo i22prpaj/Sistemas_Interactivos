@@ -27,6 +27,13 @@ RETRY_DELAY=2
 
 mkdir -p "$RUNTIME_DIR"
 
+# Compilar el código Java
+compile_project() {
+  echo "[Compile] Compilando código Java..."
+  find "$ROOT_DIR/proyecto/src" -name "*.java" -type f | xargs javac -d "$ROOT_DIR/bin" -cp "$ROOT_DIR/bin:$ROOT_DIR/proyecto/src" 2>&1 | grep -v "^Note:" || true
+  echo "[Compile] ✓ Compilación completada"
+}
+
 # Copiar recursos al classpath antes de arrancar Java.
 sync_resources() {
   mkdir -p "$ROOT_DIR/bin/resources" "$ROOT_DIR/bin/bundle"
@@ -66,6 +73,7 @@ wait_port_free() {
 
 # Limpiar e inicializar
 cleanup_processes
+compile_project
 sync_resources
 if $IS_CODESPACES; then
   wait_port_free "$VNC_PORT" || true

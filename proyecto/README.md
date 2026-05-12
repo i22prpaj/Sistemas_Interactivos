@@ -25,7 +25,12 @@ sudo apt-get update
 Desde la raiz del workspace:
 
 ```bash
-cd /workspaces/Sistemas_Interactivos && javac -target 11 -source 11 -d bin $(find proyecto/src -name '*.java') 2>&1 | sed -n '1,200p'
+
+```
+
+En local:
+```bash
+
 ```
 
 ## Ejecutar interfaz grafica en contenedor
