@@ -307,6 +307,37 @@ public final class ProfessorDirectory {
         return List.copyOf(profiles);
     }
 
+    public static double getRating(String professorId) {
+        return switch (professorId == null ? "" : professorId) {
+            case "profesor_antonio_lopez" -> 4.9d;
+            case "profesora_rosa_munoz" -> 4.8d;
+            case "profesora_laura_martinez" -> 4.4d;
+            case "profesor_javier_nunez" -> 4.5d;
+            case "profesora_marta_gil" -> 4.3d;
+            case "profesor_diego_ramos" -> 4.2d;
+            case "profesora_carmen_prieto" -> 4.1d;
+            case "profesor_sergio_hidalgo" -> 4.6d;
+            case "profesora_elena_cruz" -> 4.7d;
+            case "profesor_raul_ortega" -> 4.0d;
+            case "profesora_noelia_sanchez" -> 4.8d;
+            case "profesor_alberto_medina" -> 4.3d;
+            case "profesora_patricia_leon" -> 4.5d;
+            case "profesor_hugo_varela" -> 4.2d;
+            case "profesora_silvia_ferrer" -> 4.6d;
+            case "profesor_ivan_serrano" -> 4.1d;
+            case "profesora_aitana_romero" -> 4.4d;
+            case "profesor_marcos_pineda" -> 4.7d;
+            case "profesora_nuria_casas" -> 4.5d;
+            case "profesor_oscar_medina" -> 4.6d;
+            case "profesora_lucia_navarro" -> 4.2d;
+            case "profesora_sandra_molina" -> 4.8d;
+            case "profesor_pablo_campos" -> 4.1d;
+            case "profesora_elena_vargas" -> 4.4d;
+            case "profesor_tomas_gil" -> 4.2d;
+            default -> 4.4d;
+        };
+    }
+
     private static void register(ProfessorProfile profile) {
         PROFILES.put(profile.getId(), profile);
         for (String subjectKey : profile.getSubjectKeys()) {

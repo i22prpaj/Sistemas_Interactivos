@@ -76,7 +76,9 @@ public class ProfesorDetalle extends JPanel {
         valCard.setBackground(BLANCO_BOTON);
         valCard.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 8));
 
-        JLabel val = new JLabel("<html>" + textos.getString("profesor.valoracion") + ": <b><font color='#32CD32'>4.4</font>/5</b></html>");
+        double rating = profile != null ? model.ProfessorDirectory.getRating(profile.getId()) : 4.4d;
+        String ratingText = String.format(java.util.Locale.US, "%.1f", rating);
+        JLabel val = new JLabel("<html>" + textos.getString("profesor.valoracion") + ": <b><font color='#32CD32'>" + ratingText + "</font>/5</b></html>");
         val.setFont(new Font("SansSerif", Font.PLAIN, 13));
         val.setOpaque(false);
         
