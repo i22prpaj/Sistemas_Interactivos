@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ResourceBundle;
 
 public final class ProfessorDirectory {
 
@@ -382,6 +383,112 @@ public final class ProfessorDirectory {
     public static List<String> getSavedAspects(String professorId) {
         List<String> aspects = SAVED_ASPECTS.getOrDefault(professorId, new ArrayList<>());
         return new ArrayList<>(aspects);
+    }
+
+    public static String localizeConsideration(String value, ResourceBundle bundle) {
+        String translatedNote = localizedNoteForValue(value, bundle);
+        if (translatedNote != null) {
+            return translatedNote;
+        }
+
+        String key = considerationKeyForValue(value);
+        if (key != null && bundle != null && bundle.containsKey(key)) {
+            return bundle.getString(key);
+        }
+        return value;
+    }
+
+    public static String considerationIdentity(String value) {
+        String key = considerationKeyForValue(value);
+        return key != null ? key : value;
+    }
+
+    public static List<String> localizeConsiderations(List<String> values, ResourceBundle bundle) {
+        List<String> localized = new ArrayList<>();
+        for (String value : values) {
+            localized.add(localizeConsideration(value, bundle));
+        }
+        return localized;
+    }
+
+    private static String considerationKeyForValue(String value) {
+        return switch (value == null ? "" : value.trim()) {
+            case "profesor.considera_pasa_lista", "Pasa Lista", "Takes attendance" -> "profesor.considera_pasa_lista";
+            case "profesor.considera_explica_bien", "Explica bien", "Explains well" -> "profesor.considera_explica_bien";
+            case "profesor.considera_revisa_practicas", "Revisa las prácticas", "Reviews assignments" -> "profesor.considera_revisa_practicas";
+            case "profesor.considera_hace_parciales", "Hace parciales", "Uses midterms" -> "profesor.considera_hace_parciales";
+            case "valoracion.aspecto_lee_pdf", "Lee PDF", "Reads PDFs" -> "valoracion.aspecto_lee_pdf";
+            case "valoracion.aspecto_examen_dificil", "Examen Difícil", "Hard exam" -> "valoracion.aspecto_examen_dificil";
+            case "valoracion.aspecto_asistencia_obligatoria", "Asistencia Obligatoria", "Mandatory attendance" -> "valoracion.aspecto_asistencia_obligatoria";
+            case "valoracion.aspecto_examen_test", "Examen Tipo Test", "Multiple-choice exam" -> "valoracion.aspecto_examen_test";
+            case "valoracion.aspecto_muy_practico", "Muy Práctico", "Very practical" -> "valoracion.aspecto_muy_practico";
+            case "valoracion.aspecto_buen_material", "Buen material", "Good materials" -> "valoracion.aspecto_buen_material";
+            default -> null;
+        };
+    }
+
+    private static String localizedNoteForValue(String value, ResourceBundle bundle) {
+        if (!isEnglishBundle(bundle) || value == null) {
+            return null;
+        }
+
+        return switch (value.trim()) {
+            case "Prepara ejercicios extra para quien quiera ampliar." -> "Provides extra exercises for anyone who wants to go further.";
+            case "Explica con mucho detalle los pasos de resolución." -> "Explains the solution steps in great detail.";
+            case "Comparte resúmenes antes de los parciales." -> "Shares summaries before midterms.";
+            case "Resuelve dudas con bastante rapidez." -> "Resolves doubts quite quickly.";
+            case "Prioriza el trabajo práctico." -> "Prioritizes practical work.";
+            case "Revisa el código con ejemplos muy visuales." -> "Reviews the code with very visual examples.";
+            case "Suele centrar la clase en problemas resueltos." -> "Usually focuses class on solved problems.";
+            case "Aporta ejercicios guiados para practicar." -> "Provides guided exercises to practice.";
+            case "Insiste en interpretar bien los datos." -> "Insists on interpreting the data correctly.";
+            case "Trabaja con ejemplos de casos reales." -> "Works with real-case examples.";
+            case "Combina teoría y demostraciones cortas." -> "Combines theory and short demonstrations.";
+            case "Da prioridad a la comprensión conceptual." -> "Gives priority to conceptual understanding.";
+            case "Relaciona la materia con ejemplos de empresa." -> "Relates the subject to company examples.";
+            case "Pide que se lleven las lecturas al día." -> "Expects students to keep up with the readings.";
+            case "Cuida especialmente la calidad del código." -> "Pays special attention to code quality.";
+            case "Trabaja con entregas parciales y feedback continuo." -> "Works with partial submissions and continuous feedback.";
+            case "Explica la materia con esquemas de hardware." -> "Explains the subject with hardware diagrams.";
+            case "Valora mucho la participación en clase." -> "Values class participation highly.";
+            case "Suele usar problemas cortos al final de cada tema." -> "Usually uses short problems at the end of each topic.";
+            case "Insiste en entender la base física de cada bloque." -> "Insists on understanding the physical basis of each block.";
+            case "Recomienda practicar con muchos ejercicios." -> "Recommends practicing with many exercises.";
+            case "Deja bastante margen para resolver dudas." -> "Leaves plenty of room to ask questions.";
+            case "Se centra en buenas prácticas y diseño." -> "Focuses on good practices and design.";
+            case "Propone pequeñas implementaciones de clase." -> "Proposes small in-class implementations.";
+            case "Subraya la importancia del modelo relacional." -> "Emphasizes the importance of the relational model.";
+            case "Revisa entregas con bastante detalle." -> "Reviews submissions in quite a lot of detail.";
+            case "Suele conectar la teoría con ejemplos del sistema real." -> "Usually connects theory with examples from the real system.";
+            case "Pide que se prueben los ejercicios en casa." -> "Asks that exercises be tested at home.";
+            case "Da mucha importancia a la documentación." -> "Places a lot of importance on documentation.";
+            case "Entrega rúbricas claras antes de cada práctica." -> "Provides clear rubrics before each lab.";
+            case "Trabaja desde bloques muy concretos." -> "Works from very concrete blocks.";
+            case "Suele dedicar tiempo a ejercicios guiados." -> "Usually devotes time to guided exercises.";
+            case "Relaciona la materia con casos de administración real." -> "Relates the subject to real administration cases.";
+            case "Valora la entrega limpia y bien organizada." -> "Values clean, well-organized submissions.";
+            case "Insiste en la eficiencia de cada algoritmo." -> "Insists on the efficiency of each algorithm.";
+            case "Revisa la complejidad en cada práctica." -> "Reviews complexity in each lab.";
+            case "Busca que el alumnado vea el proceso completo." -> "Seeks for students to see the complete process.";
+            case "Repite varios ejemplos antes de cada entrega." -> "Repeats several examples before each submission.";
+            case "Explica los conceptos con ejemplos de datos reales." -> "Explains concepts with real data examples.";
+            case "Suele dejar tiempo para preguntas al final." -> "Usually leaves time for questions at the end.";
+            case "Combina teoría con simulaciones." -> "Combines theory with simulations.";
+            case "Pide revisar la configuración paso a paso." -> "Asks to review the configuration step by step.";
+            case "Focaliza mucho en la parte práctica." -> "Focuses heavily on the practical side.";
+            case "Revisa con detalle la estructura de los proyectos." -> "Reviews project structure in detail.";
+            case "Se centra en topologías y protocolos." -> "Focuses on topologies and protocols.";
+            case "Pide razonamiento, no solo memorización." -> "Asks for reasoning, not just memorization.";
+            case "Aporta casos reales para contextualizar la materia." -> "Provides real cases to contextualize the subject.";
+            case "Recomienda leer la normativa con calma." -> "Recommends reading the regulations calmly.";
+            case "Suele trabajar con ejemplos de procedimientos." -> "Usually works with procedure examples.";
+            case "Da importancia a la precisión en las respuestas." -> "Gives importance to precision in answers.";
+            default -> null;
+        };
+    }
+
+    private static boolean isEnglishBundle(ResourceBundle bundle) {
+        return bundle != null && "en".equalsIgnoreCase(bundle.getLocale().getLanguage());
     }
     
     private static void loadRatingsFromFile() {

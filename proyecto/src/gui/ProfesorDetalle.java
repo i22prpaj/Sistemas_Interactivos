@@ -116,10 +116,13 @@ public class ProfesorDetalle extends JPanel {
             profile != null ? profile.getLocalizedSubjectNames(textos) : new String[0]), gbc);
 
         // --- 5. CONSIDERACIONES (Tarjeta Gris con Título e Iconos) ---
-        // Combinar consideraciones del perfil con aspectos guardados
-        java.util.List<String> allConsiderations = new java.util.ArrayList<>();
+        // Combinar consideraciones del perfil con aspectos guardados, traduciendo al idioma activo
+        java.util.LinkedHashMap<String, String> allConsiderations = new java.util.LinkedHashMap<>();
         if (profile != null) {
-            allConsiderations.addAll(profile.getConsiderations());
+            for (String consideration : profile.getConsiderations()) {
+                String localized = ProfessorDirectory.localizeConsideration(consideration, textos);
+                allConsiderations.putIfAbsent(ProfessorDirectory.considerationIdentity(consideration), localized);
+            }
         }
         
         // Agregar aspectos guardados de valoraciones
@@ -127,15 +130,14 @@ public class ProfesorDetalle extends JPanel {
         if (currentProfessorId != null) {
             java.util.List<String> savedAspects = ProfessorDirectory.getSavedAspects(currentProfessorId);
             for (String aspect : savedAspects) {
-                if (!allConsiderations.contains(aspect)) {
-                    allConsiderations.add(aspect);
-                }
+                String localized = ProfessorDirectory.localizeConsideration(aspect, textos);
+                allConsiderations.putIfAbsent(ProfessorDirectory.considerationIdentity(aspect), localized);
             }
         }
         
         gbc.gridy = 4;
         contentPanel.add(crearTarjetaGrisConTitulo(textos.getString("profesor.consideraciones"), 
-            allConsiderations.toArray(new String[0])), gbc);
+            allConsiderations.values().toArray(new String[0])), gbc);
 
         // --- 6. BOTÓN PUNTUAR (Cápsula Blanca con Sombra) ---
         BotonRedondeado btnPuntuar = new BotonRedondeado(textos.getString("profesor.puntuar"));

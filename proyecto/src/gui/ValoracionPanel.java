@@ -14,6 +14,16 @@ import model.ProfessorProfile;
 
 public class ValoracionPanel extends JPanel {
 
+    private static final class AspectOption {
+        private final String key;
+        private final String label;
+
+        private AspectOption(String key, String label) {
+            this.key = key;
+            this.label = label;
+        }
+    }
+
     private MainFrame mainFrame;
     private final Color VERDE_FONDO = new Color(180, 255, 104);
     private final Color GRIS_CLARITO = new Color(220, 220, 220);
@@ -107,20 +117,21 @@ public class ValoracionPanel extends JPanel {
         cuadroBlanco.setLayout(new GridLayout(0, 1, 0, 5));
         cuadroBlanco.setBorder(new EmptyBorder(15, 14, 15, 14));
 
-        String[] aspectos = {
-            textos.getString("profesor.considera_pasa_lista"),
-            textos.getString("valoracion.aspecto_lee_pdf"),
-            textos.getString("valoracion.aspecto_examen_dificil"),
-            textos.getString("valoracion.aspecto_asistencia_obligatoria"),
-            textos.getString("valoracion.aspecto_examen_test"),
-            textos.getString("valoracion.aspecto_muy_practico"),
-            textos.getString("valoracion.aspecto_buen_material")
+        AspectOption[] aspectos = {
+            new AspectOption("profesor.considera_pasa_lista", textos.getString("profesor.considera_pasa_lista")),
+            new AspectOption("valoracion.aspecto_lee_pdf", textos.getString("valoracion.aspecto_lee_pdf")),
+            new AspectOption("valoracion.aspecto_examen_dificil", textos.getString("valoracion.aspecto_examen_dificil")),
+            new AspectOption("valoracion.aspecto_asistencia_obligatoria", textos.getString("valoracion.aspecto_asistencia_obligatoria")),
+            new AspectOption("valoracion.aspecto_examen_test", textos.getString("valoracion.aspecto_examen_test")),
+            new AspectOption("valoracion.aspecto_muy_practico", textos.getString("valoracion.aspecto_muy_practico")),
+            new AspectOption("valoracion.aspecto_buen_material", textos.getString("valoracion.aspecto_buen_material"))
         };
         
         java.util.List<JCheckBox> checkboxes = new java.util.ArrayList<>();
-        for (String asp : aspectos) {
-            JCheckBox cb = new JCheckBox(asp);
+        for (AspectOption asp : aspectos) {
+            JCheckBox cb = new JCheckBox(asp.label);
             cb.setOpaque(false);
+            cb.putClientProperty("aspectKey", asp.key);
             cuadroBlanco.add(cb);
             checkboxes.add(cb);
         }
@@ -189,7 +200,10 @@ public class ValoracionPanel extends JPanel {
                 java.util.List<String> marcados = new java.util.ArrayList<>();
                 for (JCheckBox cb : checkboxes) {
                     if (cb.isSelected()) {
-                        marcados.add(cb.getText());
+                        Object aspectKey = cb.getClientProperty("aspectKey");
+                        if (aspectKey instanceof String key) {
+                            marcados.add(key);
+                        }
                     }
                 }
                 ProfessorDirectory.setSavedAspects(professorId, marcados);
