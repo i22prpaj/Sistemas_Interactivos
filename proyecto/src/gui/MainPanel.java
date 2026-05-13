@@ -181,6 +181,10 @@ public class MainPanel extends JPanel {
 
         // --- MÉTODO AUXILIAR PARA FILTRAR LA LISTA ---
         final int[] selectedYear = {0}; // 0 = Todo
+        java.util.function.Supplier<String> effectiveSearchText = () -> {
+            String currentText = search.getText();
+            return placeholderText.equals(currentText) ? "" : currentText;
+        };
         java.util.function.BiConsumer<Integer, String> updateListFilter = (yearIndex, searchText) -> {
             listModel.clear();
             String query = searchText.toLowerCase().trim();
@@ -229,7 +233,7 @@ public class MainPanel extends JPanel {
                 selectedYear[0] = yearIndex;
                 
                 // Actualizar lista con filtro de año + búsqueda
-                updateListFilter.accept(yearIndex, search.getText());
+                updateListFilter.accept(yearIndex, effectiveSearchText.get());
                 
                 // Actualizar apariencia de botones
                 for (int j = 0; j < yearButtons.length; j++) {
@@ -261,15 +265,12 @@ public class MainPanel extends JPanel {
             public void changedUpdate(DocumentEvent e) { updateSearch(); }
             
             private void updateSearch() {
-                String searchText = search.getText();
-                // Ignorar el placeholder al buscar
-                if (!searchText.equals(placeholderText)) {
-                    updateListFilter.accept(selectedYear[0], searchText);
-                } else {
-                    updateListFilter.accept(selectedYear[0], "");
-                }
+                updateListFilter.accept(selectedYear[0], effectiveSearchText.get());
             }
         });
+
+        // Estado inicial: mostrar todas las asignaturas sin depender del placeholder.
+        updateListFilter.accept(0, "");
 
         // --- 5. LISTA ---
         JList<SubjectOption> list = new JList<>(listModel);
