@@ -2,6 +2,7 @@ package main;
 
 import gui.Asignaturas;
 import gui.ConfiguracionPanel;
+import gui.AjustesCuentaPanel;
 import gui.LoginErrorPanel;
 import gui.LoginPanel;
 import gui.MainPanel;
@@ -71,6 +72,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ReporteEnviadoPanel(this), "REPORTE_ENVIADO");
         mainPanel.add(new MainPanel(this), "MAIN_ESTUDIANTE");
         mainPanel.add(new ConfiguracionPanel(this), "CONFIGURACION");
+        mainPanel.add(new AjustesCuentaPanel(this), "AJUSTES_CUENTA");
         mainPanel.add(new CambiarContrasenaPanel(this), "CAMBIAR_CONTRASENA");
         mainPanel.add(new Asignaturas(this), "ASIGNATURAS");
         mainPanel.add(new ProfesorDetalle(this), "PROFESOR_DETALLE");
@@ -93,7 +95,7 @@ public class MainFrame extends JFrame {
         if (addToHistory && currentView != null && !currentView.equals(viewName)) {
             history.push(currentView);
         }
-        if ("ASIGNATURAS".equals(viewName) || "PROFESOR_DETALLE".equals(viewName) || "VALORACION".equals(viewName) || "CAMBIAR_CONTRASENA".equals(viewName)) {
+        if ("ASIGNATURAS".equals(viewName) || "PROFESOR_DETALLE".equals(viewName) || "VALORACION".equals(viewName) || "CAMBIAR_CONTRASENA".equals(viewName) || "AJUSTES_CUENTA".equals(viewName)) {
             buildViews();
         }
         cardLayout.show(mainPanel, viewName);

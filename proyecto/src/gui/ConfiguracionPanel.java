@@ -62,7 +62,24 @@ public class ConfiguracionPanel extends JPanel {
         int currentY = 100; // Punto de inicio
         int spacing = 60;   // Distancia EXACTA entre cada elemento
 
-        contentPanel.add(createLabel(bundle.getString("config.account_settings"), startX, currentY, true));
+        JLabel accountSettingsLabel = createClickableLabel(bundle.getString("config.account_settings"), startX, currentY);
+        accountSettingsLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                mainFrame.showView("AJUSTES_CUENTA");
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                accountSettingsLabel.setForeground(new Color(80, 120, 255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                accountSettingsLabel.setForeground(new Color(40, 40, 40));
+            }
+        });
+        contentPanel.add(accountSettingsLabel);
         currentY += spacing;
         
         contentPanel.add(createLabel(bundle.getString("config.language"), startX, currentY, true));
