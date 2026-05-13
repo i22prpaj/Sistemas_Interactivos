@@ -12,6 +12,7 @@ import main.MainFrame;
 public class ConfiguracionPanel extends JPanel {
 
     private final MainFrame mainFrame;
+    private Timer cacheMessageTimer;
 
     public ConfiguracionPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -72,7 +73,24 @@ public class ConfiguracionPanel extends JPanel {
         contentPanel.add(createLabel(bundle.getString("config.change_password"), startX, currentY, true));
         currentY += spacing;
 
-        contentPanel.add(createLabel(bundle.getString("config.clear_cache"), startX, currentY, true));
+        JLabel clearCacheLabel = createClickableLabel(bundle.getString("config.clear_cache"), startX, currentY);
+        clearCacheLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                showCacheMessage();
+            }
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                clearCacheLabel.setForeground(new Color(80, 120, 255));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                clearCacheLabel.setForeground(new Color(40, 40, 40));
+            }
+        });
+        contentPanel.add(clearCacheLabel);
         currentY += spacing;
 
         // ===== PANEL DE MODERACIÓN (solo visible para moderadores) =====
@@ -157,7 +175,71 @@ public class ConfiguracionPanel extends JPanel {
         footerPanel.add(centerPanel);
         footerPanel.add(rightPanel);
 
-        add(footerPanel, BorderLayout.SOUTH);
+        JPanel bottomWrapper = new JPanel(new BorderLayout());
+        bottomWrapper.setOpaque(false);
+
+        JPanel messageBar = new JPanel(new BorderLayout());
+        messageBar.setOpaque(false);
+        messageBar.setBorder(BorderFactory.createEmptyBorder(0, 20, 8, 20));
+
+        JLabel cacheMessageLabel = new JLabel("Se han liberado 2.37MB", SwingConstants.CENTER);
+        cacheMessageLabel.setOpaque(true);
+        cacheMessageLabel.setBackground(Color.BLACK);
+        cacheMessageLabel.setForeground(Color.WHITE);
+        cacheMessageLabel.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
+        cacheMessageLabel.setVisible(false);
+        cacheMessageLabel.setFont(new Font("Arial", Font.BOLD, 13));
+
+        messageBar.add(cacheMessageLabel, BorderLayout.CENTER);
+        bottomWrapper.add(messageBar, BorderLayout.NORTH);
+        bottomWrapper.add(footerPanel, BorderLayout.SOUTH);
+
+        add(bottomWrapper, BorderLayout.SOUTH);
+    }
+
+    private void showCacheMessage() {
+        Container south = getComponentCount() > 0 ? getComponent(1) instanceof Container ? (Container) getComponent(1) : null : null;
+        if (south == null) {
+            return;
+        }
+
+        JLabel cacheMessageLabel = findCacheMessageLabel(south);
+        if (cacheMessageLabel == null) {
+            return;
+        }
+
+        if (cacheMessageTimer != null && cacheMessageTimer.isRunning()) {
+            cacheMessageTimer.stop();
+        }
+
+        cacheMessageLabel.setVisible(true);
+        cacheMessageLabel.revalidate();
+        cacheMessageLabel.repaint();
+
+        System.gc();
+
+        cacheMessageTimer = new Timer(2800, e -> {
+            cacheMessageLabel.setVisible(false);
+            cacheMessageLabel.revalidate();
+            cacheMessageLabel.repaint();
+        });
+        cacheMessageTimer.setRepeats(false);
+        cacheMessageTimer.start();
+    }
+
+    private JLabel findCacheMessageLabel(Container container) {
+        for (Component child : container.getComponents()) {
+            if (child instanceof JLabel label && "Se han liberado 2.37MB".equals(label.getText())) {
+                return label;
+            }
+            if (child instanceof Container nested) {
+                JLabel found = findCacheMessageLabel(nested);
+                if (found != null) {
+                    return found;
+                }
+            }
+        }
+        return null;
     }
 
     private JLabel createLabel(String text, int x, int y, boolean bold) {
