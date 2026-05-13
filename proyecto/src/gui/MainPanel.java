@@ -13,10 +13,12 @@ public class MainPanel extends JPanel {
     private static final class SubjectOption {
         private final String key;
         private final String label;
+        private final int year;  // 0 = Todo, 1-4 = year
 
-        private SubjectOption(String key, String label) {
+        private SubjectOption(String key, String label, int year) {
             this.key = key;
             this.label = label;
+            this.year = year;
         }
 
         @Override
@@ -116,6 +118,43 @@ public class MainPanel extends JPanel {
         gbc.insets = new Insets(10, 20, 5, 15); 
         contentPanel.add(lbl, gbc);
 
+        // --- PRE-CREACIÓN: Array de asignaturas con años ---
+        SubjectOption[] allSubjects = {
+            // 1º
+            new SubjectOption("subjects.intro_programacion", textos.getString("subjects.intro_programacion"), 1),
+            new SubjectOption("subjects.estadistica", textos.getString("subjects.estadistica"), 1),
+            new SubjectOption("subjects.fisica", textos.getString("subjects.fisica"), 1),
+            new SubjectOption("subjects.economia", textos.getString("subjects.economia"), 1),
+            new SubjectOption("common.calculus", textos.getString("common.calculus"), 1),
+            new SubjectOption("subjects.metodologia_programacion", textos.getString("subjects.metodologia_programacion"), 1),
+            new SubjectOption("subjects.fundamentos_computadores", textos.getString("subjects.fundamentos_computadores"), 1),
+            new SubjectOption("subjects.circuitos", textos.getString("subjects.circuitos"), 1),
+            new SubjectOption("subjects.matematica_discreta", textos.getString("subjects.matematica_discreta"), 1),
+            new SubjectOption("common.linear_algebra", textos.getString("common.linear_algebra"), 1),
+            // 2º
+            new SubjectOption("subjects.poo", textos.getString("subjects.poo"), 2),
+            new SubjectOption("subjects.bases_datos", textos.getString("subjects.bases_datos"), 2),
+            new SubjectOption("subjects.sistemas_operativos", textos.getString("subjects.sistemas_operativos"), 2),
+            new SubjectOption("subjects.ingenieria_software", textos.getString("subjects.ingenieria_software"), 2),
+            new SubjectOption("subjects.arquitectura_computadores", textos.getString("subjects.arquitectura_computadores"), 2),
+            new SubjectOption("subjects.programacion_administracion", textos.getString("subjects.programacion_administracion"), 2),
+            new SubjectOption("subjects.estructuras_datos", textos.getString("subjects.estructuras_datos"), 2),
+            new SubjectOption("subjects.sistemas_informacion", textos.getString("subjects.sistemas_informacion"), 2),
+            new SubjectOption("subjects.sistemas_inteligentes", textos.getString("subjects.sistemas_inteligentes"), 2),
+            new SubjectOption("subjects.arquitectura_redes", textos.getString("subjects.arquitectura_redes"), 2),
+            // 3º
+            new SubjectOption("subjects.programacion_web", textos.getString("subjects.programacion_web"), 3),
+            new SubjectOption("subjects.redes", textos.getString("subjects.redes"), 3),
+            new SubjectOption("subjects.legislacion", textos.getString("subjects.legislacion"), 3),
+            // 4º
+            new SubjectOption("subjects.proyectos", textos.getString("subjects.proyectos"), 4),
+        };
+        
+        DefaultListModel<SubjectOption> listModel = new DefaultListModel<>();
+        for (SubjectOption s : allSubjects) {
+            listModel.addElement(s);
+        }
+
         // --- 4. TABS ---
         JPanel tabsContainer = new JPanel(new GridLayout(1, 5)) {
             @Override
@@ -129,8 +168,13 @@ public class MainPanel extends JPanel {
         tabsContainer.setPreferredSize(new Dimension(280, 40));
 
         String[] años = {"Todo", "1º", "2º", "3º", "4º"};
+        final int[] selectedYear = {0}; // 0 = Todo
+        JButton[] yearButtons = new JButton[años.length];
+        
         for (int i = 0; i < años.length; i++) {
+            final int yearIndex = i;
             JButton b = new JButton(años[i]);
+            yearButtons[i] = b;
             b.setFocusPainted(false);
             b.setContentAreaFilled(false);
             b.setBorderPainted(false);
@@ -140,6 +184,33 @@ public class MainPanel extends JPanel {
             if (i == 0) {
                 b.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(100, 100, 255)));
             }
+            
+            // Agregar listener para filtrar
+            b.addActionListener(e -> {
+                selectedYear[0] = yearIndex;
+                
+                // Actualizar modelo de lista con filtro
+                listModel.clear();
+                for (SubjectOption s : allSubjects) {
+                    if (yearIndex == 0 || s.year == yearIndex) {
+                        listModel.addElement(s);
+                    }
+                }
+                
+                // Actualizar apariencia de botones
+                for (int j = 0; j < yearButtons.length; j++) {
+                    if (j == yearIndex) {
+                        yearButtons[j].setFont(new Font("SansSerif", Font.BOLD, 12));
+                        yearButtons[j].setForeground(new Color(100, 100, 255));
+                        yearButtons[j].setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(100, 100, 255)));
+                    } else {
+                        yearButtons[j].setFont(new Font("SansSerif", Font.PLAIN, 12));
+                        yearButtons[j].setForeground(Color.DARK_GRAY);
+                        yearButtons[j].setBorder(null);
+                    }
+                }
+            });
+            
             tabsContainer.add(b);
         }
         gbc.gridy = 3;
@@ -147,36 +218,11 @@ public class MainPanel extends JPanel {
         contentPanel.add(tabsContainer, gbc);
 
         // --- 5. LISTA ---
-        SubjectOption[] subjects = {
-            new SubjectOption("subjects.intro_programacion", textos.getString("subjects.intro_programacion")),
-            new SubjectOption("common.calculus", textos.getString("common.calculus")),
-            new SubjectOption("subjects.estadistica", textos.getString("subjects.estadistica")),
-            new SubjectOption("subjects.fisica", textos.getString("subjects.fisica")),
-            new SubjectOption("subjects.economia", textos.getString("subjects.economia")),
-            new SubjectOption("subjects.metodologia_programacion", textos.getString("subjects.metodologia_programacion")),
-            new SubjectOption("subjects.fundamentos_computadores", textos.getString("subjects.fundamentos_computadores")),
-            new SubjectOption("subjects.circuitos", textos.getString("subjects.circuitos")),
-            new SubjectOption("subjects.matematica_discreta", textos.getString("subjects.matematica_discreta")),
-            new SubjectOption("common.linear_algebra", textos.getString("common.linear_algebra")),
-            new SubjectOption("subjects.poo", textos.getString("subjects.poo")),
-            new SubjectOption("subjects.bases_datos", textos.getString("subjects.bases_datos")),
-            new SubjectOption("subjects.sistemas_operativos", textos.getString("subjects.sistemas_operativos")),
-            new SubjectOption("subjects.ingenieria_software", textos.getString("subjects.ingenieria_software")),
-            new SubjectOption("subjects.arquitectura_computadores", textos.getString("subjects.arquitectura_computadores")),
-            new SubjectOption("subjects.programacion_administracion", textos.getString("subjects.programacion_administracion")),
-            new SubjectOption("subjects.estructuras_datos", textos.getString("subjects.estructuras_datos")),
-            new SubjectOption("subjects.sistemas_informacion", textos.getString("subjects.sistemas_informacion")),
-            new SubjectOption("subjects.sistemas_inteligentes", textos.getString("subjects.sistemas_inteligentes")),
-            new SubjectOption("subjects.arquitectura_redes", textos.getString("subjects.arquitectura_redes")),
-            new SubjectOption("subjects.programacion_web", textos.getString("subjects.programacion_web")),
-            new SubjectOption("subjects.redes", textos.getString("subjects.redes")),
-            new SubjectOption("subjects.legislacion", textos.getString("subjects.legislacion"))
-        };
-        JList<SubjectOption> list = new JList<>(subjects);
+        JList<SubjectOption> list = new JList<>(listModel);
         list.setCellRenderer(new MobileListRenderer());
         list.setBackground(VERDE_FONDO);
         list.setFixedCellHeight(50);
-        list.setVisibleRowCount(subjects.length); // Muestra todos los elementos
+        list.setVisibleRowCount(allSubjects.length); // Muestra todos los elementos
 
         list.addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
