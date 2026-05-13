@@ -116,9 +116,26 @@ public class ProfesorDetalle extends JPanel {
             profile != null ? profile.getLocalizedSubjectNames(textos) : new String[0]), gbc);
 
         // --- 5. CONSIDERACIONES (Tarjeta Gris con Título e Iconos) ---
+        // Combinar consideraciones del perfil con aspectos guardados
+        java.util.List<String> allConsiderations = new java.util.ArrayList<>();
+        if (profile != null) {
+            allConsiderations.addAll(profile.getConsiderations());
+        }
+        
+        // Agregar aspectos guardados de valoraciones
+        String currentProfessorId = mainFrame.getSelectedProfessorId();
+        if (currentProfessorId != null) {
+            java.util.List<String> savedAspects = ProfessorDirectory.getSavedAspects(currentProfessorId);
+            for (String aspect : savedAspects) {
+                if (!allConsiderations.contains(aspect)) {
+                    allConsiderations.add(aspect);
+                }
+            }
+        }
+        
         gbc.gridy = 4;
         contentPanel.add(crearTarjetaGrisConTitulo(textos.getString("profesor.consideraciones"), 
-            profile != null ? profile.getConsiderations().toArray(new String[0]) : new String[0]), gbc);
+            allConsiderations.toArray(new String[0])), gbc);
 
         // --- 6. BOTÓN PUNTUAR (Cápsula Blanca con Sombra) ---
         BotonRedondeado btnPuntuar = new BotonRedondeado(textos.getString("profesor.puntuar"));

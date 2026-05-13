@@ -4,11 +4,20 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public final class ProfessorDirectory {
 
     private static final Map<String, ProfessorProfile> PROFILES = new LinkedHashMap<>();
     private static final Map<String, List<ProfessorProfile>> BY_SUBJECT = new LinkedHashMap<>();
+    private static final Map<String, List<Double>> ALL_RATINGS = new LinkedHashMap<>();  // Todos los ratings
+    private static final Map<String, List<String>> SAVED_ASPECTS = new LinkedHashMap<>();  // Aspectos guardados
+    private static final String RATINGS_FILE = System.getProperty("user.home") + "/.sisint_ratings.json";
 
     static {
         register(new ProfessorProfile(
@@ -285,6 +294,9 @@ public final class ProfessorDirectory {
             "martes y viernes de 9:00 a 11:00",
             subjects("subjects.legislacion", "subjects.programacion_administracion"),
             notes("Suele trabajar con ejemplos de procedimientos.", "Da importancia a la precisión en las respuestas.")));
+        
+        // Cargar ratings persistentes desde archivo
+        loadRatingsFromFile();
     }
 
     private ProfessorDirectory() {
@@ -308,6 +320,16 @@ public final class ProfessorDirectory {
     }
 
     public static double getRating(String professorId) {
+        // Si existen ratings personalizados, calcular promedio; si no, usar el rating por defecto
+        if (ALL_RATINGS.containsKey(professorId) && !ALL_RATINGS.get(professorId).isEmpty()) {
+            List<Double> ratings = ALL_RATINGS.get(professorId);
+            double sum = 0;
+            for (Double r : ratings) {
+                sum += r;
+            }
+            return sum / ratings.size();
+        }
+        
         return switch (professorId == null ? "" : professorId) {
             case "profesor_antonio_lopez" -> 4.9d;
             case "profesora_rosa_munoz" -> 4.8d;
@@ -336,6 +358,161 @@ public final class ProfessorDirectory {
             case "profesor_tomas_gil" -> 4.2d;
             default -> 4.4d;
         };
+    }
+    
+    public static void addRating(String professorId, double rating) {
+        if (rating < 0.0) rating = 0.0;
+        if (rating > 5.0) rating = 5.0;
+        ALL_RATINGS.computeIfAbsent(professorId, k -> new ArrayList<>()).add(rating);
+        saveRatingsToFile();
+    }
+    
+    public static void setSavedAspects(String professorId, List<String> aspects) {
+        if (aspects != null) {
+            SAVED_ASPECTS.put(professorId, new ArrayList<>(aspects));
+            saveRatingsToFile();
+        }
+    }
+    
+    public static List<String> getSavedAspects(String professorId) {
+        List<String> aspects = SAVED_ASPECTS.getOrDefault(professorId, new ArrayList<>());
+        return new ArrayList<>(aspects);
+    }
+    
+    private static void loadRatingsFromFile() {
+        try {
+            if (Files.exists(Paths.get(RATINGS_FILE))) {
+                String content = Files.readString(Paths.get(RATINGS_FILE));
+                parseRatingsJson(content);
+            }
+        } catch (Exception e) {
+            // Silenciar errores de carga, usar ratings por defecto
+        }
+    }
+    
+    private static void saveRatingsToFile() {
+        try {
+            StringBuilder json = new StringBuilder("{");
+            boolean first = true;
+            
+            for (String professorId : ALL_RATINGS.keySet()) {
+                if (!first) json.append(",");
+                json.append("\"").append(professorId).append("\":{");
+                
+                // Guardar ratings
+                List<Double> ratings = ALL_RATINGS.get(professorId);
+                json.append("\"ratings\":[");
+                for (int i = 0; i < ratings.size(); i++) {
+                    if (i > 0) json.append(",");
+                    json.append(ratings.get(i));
+                }
+                json.append("]");
+                
+                // Guardar aspects
+                if (SAVED_ASPECTS.containsKey(professorId)) {
+                    List<String> aspects = SAVED_ASPECTS.get(professorId);
+                    json.append(",\"aspects\":[");
+                    for (int i = 0; i < aspects.size(); i++) {
+                        if (i > 0) json.append(",");
+                        json.append("\"").append(escapeJson(aspects.get(i))).append("\"");
+                    }
+                    json.append("]");
+                }
+                
+                json.append("}");
+                first = false;
+            }
+            json.append("}");
+            
+            Files.writeString(Paths.get(RATINGS_FILE), json.toString());
+        } catch (Exception e) {
+            // Silenciar errores de guardado
+        }
+    }
+    
+    private static String escapeJson(String str) {
+        return str.replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r");
+    }
+    
+    private static void parseRatingsJson(String json) {
+        // Parse JSON structure: {"prof1":{"ratings":[4.5,4.2],"aspects":["a","b"]},...}
+        try {
+            String content = json.trim();
+            if (content.startsWith("{") && content.endsWith("}")) {
+                content = content.substring(1, content.length() - 1);
+                if (!content.isEmpty()) {
+                    int braceDepth = 0;
+                    int lastComma = -1;
+                    
+                    for (int i = 0; i < content.length(); i++) {
+                        char c = content.charAt(i);
+                        if (c == '{') braceDepth++;
+                        else if (c == '}') braceDepth--;
+                        else if (c == ',' && braceDepth == 0) {
+                            String entry = content.substring(lastComma + 1, i).trim();
+                            if (!entry.isEmpty()) parseProfessorEntry(entry);
+                            lastComma = i;
+                        }
+                    }
+                    // Última entrada
+                    String entry = content.substring(lastComma + 1).trim();
+                    if (!entry.isEmpty()) parseProfessorEntry(entry);
+                }
+            }
+        } catch (Exception e) {
+            // Ignorar errores de parsing
+        }
+    }
+    
+    private static void parseProfessorEntry(String entry) {
+        int colonIdx = entry.indexOf(":");
+        if (colonIdx <= 0) return;
+        
+        String professorId = entry.substring(0, colonIdx).trim().replaceAll("\"", "");
+        String data = entry.substring(colonIdx + 1).trim();
+        
+        if (data.startsWith("{") && data.endsWith("}")) {
+            data = data.substring(1, data.length() - 1);
+            
+            // Parse ratings array
+            int ratingsStart = data.indexOf("\"ratings\":[");
+            if (ratingsStart >= 0) {
+                int arrayStart = data.indexOf("[", ratingsStart);
+                int arrayEnd = data.indexOf("]", arrayStart);
+                if (arrayEnd > arrayStart) {
+                    String ratingsStr = data.substring(arrayStart + 1, arrayEnd);
+                    List<Double> ratings = new ArrayList<>();
+                    for (String r : ratingsStr.split(",")) {
+                        try {
+                            ratings.add(Double.parseDouble(r.trim()));
+                        } catch (Exception ignored) {}
+                    }
+                    if (!ratings.isEmpty()) {
+                        ALL_RATINGS.put(professorId, ratings);
+                    }
+                }
+            }
+            
+            // Parse aspects array
+            int aspectsStart = data.indexOf("\"aspects\":[");
+            if (aspectsStart >= 0) {
+                int arrayStart = data.indexOf("[", aspectsStart);
+                int arrayEnd = data.indexOf("]", arrayStart);
+                if (arrayEnd > arrayStart) {
+                    String aspectsStr = data.substring(arrayStart + 1, arrayEnd);
+                    List<String> aspects = new ArrayList<>();
+                    for (String a : aspectsStr.split(",")) {
+                        a = a.trim().replaceAll("\"", "").replace("\\\"", "\"");
+                        if (!a.isEmpty()) {
+                            aspects.add(a);
+                        }
+                    }
+                    if (!aspects.isEmpty()) {
+                        SAVED_ASPECTS.put(professorId, aspects);
+                    }
+                }
+            }
+        }
     }
 
     private static void register(ProfessorProfile profile) {

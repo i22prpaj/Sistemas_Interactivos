@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import main.MainFrame;
 import model.BotonRedondeado;
 import model.MobileListRenderer;
@@ -102,6 +104,26 @@ public class MainPanel extends JPanel {
         search.setOpaque(false);
         search.setBorder(new EmptyBorder(0, 15, 0, 5));
         search.setPreferredSize(new Dimension(150, 35));
+        
+        // Placeholder dinámico: desaparece al hacer clic, reaparece si está vacío
+        String placeholderText = textos.getString("principal.buscar");
+        search.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (search.getText().equals(placeholderText)) {
+                    search.setText("");
+                    search.setForeground(Color.BLACK);
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (search.getText().isEmpty()) {
+                    search.setText(placeholderText);
+                    search.setForeground(new Color(150, 150, 150));
+                }
+            }
+        });
+        
         searchRow.add(search, BorderLayout.CENTER);
 
         // Settings -> Acción: CONFIGURACION
@@ -239,7 +261,13 @@ public class MainPanel extends JPanel {
             public void changedUpdate(DocumentEvent e) { updateSearch(); }
             
             private void updateSearch() {
-                updateListFilter.accept(selectedYear[0], search.getText());
+                String searchText = search.getText();
+                // Ignorar el placeholder al buscar
+                if (!searchText.equals(placeholderText)) {
+                    updateListFilter.accept(selectedYear[0], searchText);
+                } else {
+                    updateListFilter.accept(selectedYear[0], "");
+                }
             }
         });
 

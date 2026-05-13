@@ -115,16 +115,12 @@ public class ValoracionPanel extends JPanel {
             textos.getString("valoracion.aspecto_buen_material")
         };
         
+        java.util.List<JCheckBox> checkboxes = new java.util.ArrayList<>();
         for (String asp : aspectos) {
             JCheckBox cb = new JCheckBox(asp);
             cb.setOpaque(false);
-            cb.setHorizontalTextPosition(SwingConstants.LEFT);
-            // Esto hace que el check aparezca a la derecha
-            JPanel p = new JPanel(new BorderLayout());
-            p.setOpaque(false);
-            p.add(new JLabel(asp), BorderLayout.WEST);
-            p.add(new JCheckBox(), BorderLayout.EAST);
-            cuadroBlanco.add(p);
+            cuadroBlanco.add(cb);
+            checkboxes.add(cb);
         }
 
         gbc.gridy = 5;
@@ -161,8 +157,25 @@ public class ValoracionPanel extends JPanel {
         btnEnviar.setBackground(AZUL_OSCURO);
         btnEnviar.setForeground(Color.WHITE);
         btnEnviar.setPreferredSize(new Dimension(105, 38));
-        // Al pulsar enviar mostramos la pantalla de confirmación
-        btnEnviar.addActionListener(e -> mainFrame.showView("OPERACION_REALIZADA"));
+        
+        // Al pulsar enviar: guardar el rating y mostrar pantalla de confirmación
+        btnEnviar.addActionListener(e -> {
+            String professorId = mainFrame.getSelectedProfessorId();
+            if (professorId != null && rating[0] > 0) {
+                // Agregar el rating de forma persistente (se acumula, no reemplaza)
+                ProfessorDirectory.addRating(professorId, (double) rating[0]);
+                
+                // Guardar los aspectos marcados
+                java.util.List<String> marcados = new java.util.ArrayList<>();
+                for (JCheckBox cb : checkboxes) {
+                    if (cb.isSelected()) {
+                        marcados.add(cb.getText());
+                    }
+                }
+                ProfessorDirectory.setSavedAspects(professorId, marcados);
+            }
+            mainFrame.showView("OPERACION_REALIZADA");
+        });
         
         JPanel btnWrap = new JPanel();
         btnWrap.setOpaque(false);
