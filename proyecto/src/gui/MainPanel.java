@@ -4,6 +4,8 @@ import java.awt.*;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import main.MainFrame;
 import model.BotonRedondeado;
 import model.MobileListRenderer;
@@ -99,7 +101,7 @@ public class MainPanel extends JPanel {
         };
         search.setOpaque(false);
         search.setBorder(new EmptyBorder(0, 15, 0, 5));
-        search.setPreferredSize(new Dimension(150, 35)); 
+        search.setPreferredSize(new Dimension(150, 35));
         searchRow.add(search, BorderLayout.CENTER);
 
         // Settings -> Acción: CONFIGURACION
@@ -155,6 +157,22 @@ public class MainPanel extends JPanel {
             listModel.addElement(s);
         }
 
+        // --- MÉTODO AUXILIAR PARA FILTRAR LA LISTA ---
+        final int[] selectedYear = {0}; // 0 = Todo
+        java.util.function.BiConsumer<Integer, String> updateListFilter = (yearIndex, searchText) -> {
+            listModel.clear();
+            String query = searchText.toLowerCase().trim();
+            
+            for (SubjectOption s : allSubjects) {
+                boolean matchesYear = (yearIndex == 0 || s.year == yearIndex);
+                boolean matchesSearch = query.isEmpty() || s.label.toLowerCase().contains(query);
+                
+                if (matchesYear && matchesSearch) {
+                    listModel.addElement(s);
+                }
+            }
+        };
+
         // --- 4. TABS ---
         JPanel tabsContainer = new JPanel(new GridLayout(1, 5)) {
             @Override
@@ -168,7 +186,6 @@ public class MainPanel extends JPanel {
         tabsContainer.setPreferredSize(new Dimension(280, 40));
 
         String[] años = {"Todo", "1º", "2º", "3º", "4º"};
-        final int[] selectedYear = {0}; // 0 = Todo
         JButton[] yearButtons = new JButton[años.length];
         
         for (int i = 0; i < años.length; i++) {
@@ -189,13 +206,8 @@ public class MainPanel extends JPanel {
             b.addActionListener(e -> {
                 selectedYear[0] = yearIndex;
                 
-                // Actualizar modelo de lista con filtro
-                listModel.clear();
-                for (SubjectOption s : allSubjects) {
-                    if (yearIndex == 0 || s.year == yearIndex) {
-                        listModel.addElement(s);
-                    }
-                }
+                // Actualizar lista con filtro de año + búsqueda
+                updateListFilter.accept(yearIndex, search.getText());
                 
                 // Actualizar apariencia de botones
                 for (int j = 0; j < yearButtons.length; j++) {
@@ -216,6 +228,20 @@ public class MainPanel extends JPanel {
         gbc.gridy = 3;
         gbc.insets = new Insets(5, 15, 5, 15);
         contentPanel.add(tabsContainer, gbc);
+
+        // Agregar listener de búsqueda al TextField
+        search.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { updateSearch(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { updateSearch(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { updateSearch(); }
+            
+            private void updateSearch() {
+                updateListFilter.accept(selectedYear[0], search.getText());
+            }
+        });
 
         // --- 5. LISTA ---
         JList<SubjectOption> list = new JList<>(listModel);
