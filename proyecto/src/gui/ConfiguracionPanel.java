@@ -4,10 +4,13 @@ import gui.ConfiguracionPanel.RoundButton;
 import gui.ConfiguracionPanel.TogglePill;
 import gui.ConfiguracionPanel.ToggleSwitch;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import main.MainFrame;
+import model.CredentialStore;
 
 public class ConfiguracionPanel extends JPanel {
 
@@ -70,7 +73,24 @@ public class ConfiguracionPanel extends JPanel {
         contentPanel.add(new ToggleSwitch(280, currentY - 2)); // Ajustado al centro del texto
         currentY += spacing;
 
-        contentPanel.add(createLabel(bundle.getString("config.change_password"), startX, currentY, true));
+        JLabel changePasswordLabel = createClickableLabel(bundle.getString("config.change_password"), startX, currentY);
+        changePasswordLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                mainFrame.showView("CAMBIAR_CONTRASENA");
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                changePasswordLabel.setForeground(new Color(80, 120, 255));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                changePasswordLabel.setForeground(new Color(40, 40, 40));
+            }
+        });
+        contentPanel.add(changePasswordLabel);
         currentY += spacing;
 
         JLabel clearCacheLabel = createClickableLabel(bundle.getString("config.clear_cache"), startX, currentY);
@@ -123,6 +143,7 @@ public class ConfiguracionPanel extends JPanel {
         logoutLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
+                mainFrame.clearCurrentUserEmail();
                 mainFrame.showView("LOGIN");
             }
         });

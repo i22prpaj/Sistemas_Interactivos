@@ -8,6 +8,7 @@ import gui.MainPanel;
 import gui.ModerationPanel;
 import gui.ProfesorDetalle;
 import gui.RegistroPanel;
+import gui.CambiarContrasenaPanel;
 import gui.ReportDetailPanel;
 import gui.ReporteEnviadoPanel;
 import gui.ReportePanel;
@@ -27,6 +28,7 @@ public class MainFrame extends JFrame {
     private Deque<String> history = new ArrayDeque<>();
     private String currentView = null;
     private String userRole = "GUEST"; // Roles: GUEST, ESTUDIANTE, MODERADOR
+    private String currentUserEmail = null;
     private String selectedSubjectKey = "subjects.intro_programacion";
     private String selectedProfessorId = null;
     private String selectedProfessorName = null;
@@ -69,6 +71,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ReporteEnviadoPanel(this), "REPORTE_ENVIADO");
         mainPanel.add(new MainPanel(this), "MAIN_ESTUDIANTE");
         mainPanel.add(new ConfiguracionPanel(this), "CONFIGURACION");
+        mainPanel.add(new CambiarContrasenaPanel(this), "CAMBIAR_CONTRASENA");
         mainPanel.add(new Asignaturas(this), "ASIGNATURAS");
         mainPanel.add(new ProfesorDetalle(this), "PROFESOR_DETALLE");
         mainPanel.add(new ValoracionPanel(this), "VALORACION");
@@ -90,7 +93,7 @@ public class MainFrame extends JFrame {
         if (addToHistory && currentView != null && !currentView.equals(viewName)) {
             history.push(currentView);
         }
-        if ("ASIGNATURAS".equals(viewName) || "PROFESOR_DETALLE".equals(viewName) || "VALORACION".equals(viewName)) {
+        if ("ASIGNATURAS".equals(viewName) || "PROFESOR_DETALLE".equals(viewName) || "VALORACION".equals(viewName) || "CAMBIAR_CONTRASENA".equals(viewName)) {
             buildViews();
         }
         cardLayout.show(mainPanel, viewName);
@@ -160,6 +163,18 @@ public class MainFrame extends JFrame {
         this.userRole = role == null ? "GUEST" : role;
         // Recreate all views so role-dependent panels are built with the new state
         buildViews();
+    }
+
+    public void setCurrentUserEmail(String currentUserEmail) {
+        this.currentUserEmail = currentUserEmail;
+    }
+
+    public String getCurrentUserEmail() {
+        return currentUserEmail;
+    }
+
+    public void clearCurrentUserEmail() {
+        this.currentUserEmail = null;
     }
 
     public boolean isModerator() {

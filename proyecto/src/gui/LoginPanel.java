@@ -7,6 +7,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import main.MainFrame;
+import model.CredentialStore;
 
 public class LoginPanel extends JPanel {
 
@@ -123,11 +124,13 @@ public class LoginPanel extends JPanel {
             
             btnDevPrincipal.addActionListener(e -> {
                 mainFrame.setUserRole("ESTUDIANTE");
+                mainFrame.setCurrentUserEmail("elena.ruiz@uco.es");
                 mainFrame.showView("MAIN_ESTUDIANTE");
             });
             // Acceso directo al MainPanel con rol moderador
             btnDevPrincipalModerador.addActionListener(e -> {
                 mainFrame.setUserRole("MODERADOR");
+                mainFrame.setCurrentUserEmail("moderador@uco.es");
                 mainFrame.showView("MAIN_ESTUDIANTE");
             });
             
@@ -154,16 +157,18 @@ public class LoginPanel extends JPanel {
             String correo = txtCorreo.getText();
             String password = new String(txtPassword.getPassword());
 
-            if (correo.equals("moderador@uco.es") && password.equals("1234")) {
+            if (CredentialStore.authenticate(correo, password) && correo.equalsIgnoreCase("moderador@uco.es")) {
                 // Caso 2: Cuenta de moderador
                 // Aquí en un futuro le pasaríamos un parámetro al MainFrame indicando el rol
                 System.out.println("Acceso concedido: Moderador");
                 mainFrame.setUserRole("MODERADOR");
+                mainFrame.setCurrentUserEmail(correo);
                 mainFrame.showView("MAIN_ESTUDIANTE");
-            } else if (correo.equals("elena.ruiz@uco.es") && password.equals("1234")) {
+            } else if (CredentialStore.authenticate(correo, password) && correo.equalsIgnoreCase("elena.ruiz@uco.es")) {
                 // Caso 1: Cuenta general
                 System.out.println("Acceso concedido: Estudiante");
                 mainFrame.setUserRole("ESTUDIANTE");
+                mainFrame.setCurrentUserEmail(correo);
                 mainFrame.showView("MAIN_ESTUDIANTE");
             } else {
                 // Caso 3: Credenciales inválidas
