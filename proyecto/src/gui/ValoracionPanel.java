@@ -4,6 +4,8 @@ import main.MainFrame;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.ResourceBundle;
 import model.BotonRedondeado;
 import model.JPanelRedondeado;
@@ -129,13 +131,31 @@ public class ValoracionPanel extends JPanel {
         contentPanel.add(cuadroBlanco, gbc);
 
         // --- 5. COMENTARIOS (Cuadro Gris) ---
-        JTextArea txtComentario = new JTextArea(textos.getString("valoracion.comentario_placeholder"));
+        String comentarioPlaceholder = textos.getString("valoracion.comentario_placeholder");
+        JTextArea txtComentario = new JTextArea(comentarioPlaceholder);
         txtComentario.setFont(new Font("SansSerif", Font.ITALIC, 12));
         txtComentario.setForeground(Color.GRAY);
         txtComentario.setBackground(GRIS_CLARITO);
         txtComentario.setBorder(new EmptyBorder(10, 10, 5, 10));
         txtComentario.setLineWrap(true);
         txtComentario.setWrapStyleWord(true);
+        txtComentario.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (txtComentario.getText().equals(comentarioPlaceholder)) {
+                    txtComentario.setText("");
+                    txtComentario.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txtComentario.getText().trim().isEmpty()) {
+                    txtComentario.setText(comentarioPlaceholder);
+                    txtComentario.setForeground(Color.GRAY);
+                }
+            }
+        });
 
         JPanelRedondeado wrapComentario = new JPanelRedondeado(20);
         wrapComentario.setBackground(GRIS_CLARITO);

@@ -369,7 +369,12 @@ public final class ProfessorDirectory {
     
     public static void setSavedAspects(String professorId, List<String> aspects) {
         if (aspects != null) {
-            SAVED_ASPECTS.put(professorId, new ArrayList<>(aspects));
+            List<String> currentAspects = SAVED_ASPECTS.computeIfAbsent(professorId, key -> new ArrayList<>());
+            for (String aspect : aspects) {
+                if (aspect != null && !aspect.isBlank() && !currentAspects.contains(aspect)) {
+                    currentAspects.add(aspect);
+                }
+            }
             saveRatingsToFile();
         }
     }
