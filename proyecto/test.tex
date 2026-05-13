@@ -1,0 +1,265 @@
+\documentclass[12pt,oneside]{book}
+\usepackage[justification=raggedright,singlelinecheck=false]{caption}
+\usepackage[spanish,provide=*]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{etoolbox}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{chngcntr}
+\graphicspath{{imagenes/}{Imagenes/}{outputs/}}
+\makeatletter
+\patchcmd{\@makechapterhead}{\vspace*{50\p@}}{\vspace*{0\p@}}{}{}
+\patchcmd{\@makeschapterhead}{\vspace*{50\p@}}{\vspace*{0\p@}}{}{}
+\makeatother
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+\fancyhead[C]{\textcolor{gray}{\small Práctica Final - Interfaz - Sistemas Interactivos - EPSC}}
+\renewcommand{\headrulewidth}{0pt}
+\addtolength{\footskip}{8pt}
+\fancyfoot[C]{\hspace*{-1.6cm}\textcolor{gray}{Juan Luis Prieto Panadero y Alejandro Luque Núñez}}
+\fancyfoot[R]{\textcolor{gray}{Pagina \thepage\ de \pageref{LastPage}}}
+\fancypagestyle{plain}{%
+    \fancyhf{}
+    \fancyhead[C]{\textcolor{gray}{\small Práctica Final - Interfaz - Sistemas Interactivos - EPSC}}
+    \renewcommand{\headrulewidth}{0pt}
+    \fancyfoot[C]{\hspace*{-1.6cm}\textcolor{gray}{Juan Luis Prieto Panadero y Alejandro Luque Núñez}}
+    \fancyfoot[R]{\textcolor{gray}{Pagina \thepage\ de \pageref{LastPage}}}
+}
+
+\newcommand{\wireframecontexto}[3]{%
+    \begin{figure}[H]
+        \raggedright
+        \begin{minipage}[t]{0.25\linewidth}
+            \vspace{0pt}
+            \includegraphics[width=\linewidth]{#1}
+        \end{minipage}\hfill
+        \begin{minipage}[t]{0.70\linewidth}
+            \vspace{0pt}
+            \textbf{#2}\\[2pt]
+            #3
+        \end{minipage}
+    \end{figure}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\newcommand{\titlepagelogo}[2]{%
+\IfFileExists{#1}{\includegraphics[height=2.2cm]{#1}}{\fbox{\parbox[c][2.2cm][c]{#2}{\centering Logo}}}%
+}
+
+\vspace*{0.5cm}
+\noindent
+\begin{minipage}[c]{0.45\textwidth}
+    \raggedright
+    \titlepagelogo{logo_uco.png}{3.2cm}
+\end{minipage}
+\begin{minipage}[c]{0.45\textwidth}
+    \raggedleft
+    \titlepagelogo{logotipo-EPSC.png}{3.6cm}
+\end{minipage}
+
+\vspace{0.9cm}
+\rule{0.9\textwidth}{0.4pt}
+
+\vspace{0.9cm}
+{\LARGE\bfseries Práctica Final: Interfaz\par}
+\vspace{0.25cm}
+{\Large\bfseries Sistemas Interactivos\par}
+
+\vspace{0.9cm}
+\rule{0.9\textwidth}{0.4pt}
+
+\vspace{0.9cm}
+{\large\bfseries Escuela Politécnica Superior de Córdoba\par}
+\vspace{0.25cm}
+{\large\bfseries Universidad de Córdoba\par}
+\vspace{0.25cm}
+{\large\bfseries Grado de Ingeniería Informática\par}
+
+\vfill
+{\large\bfseries Autores:\par}
+\vspace{0.2cm}
+{\normalsize Juan Luis Prieto Panadero\par}
+{\normalsize Alejandro Luque Núñez\par}
+
+\vspace*{0.5cm}
+\end{titlepage}
+
+\clearpage
+\setcounter{page}{1}
+
+\tableofcontents
+\clearpage
+
+\counterwithout{section}{chapter}
+
+\section{Implementación de la interfaz}
+
+La segunda parte de la práctica se ha desarrollado como una interfaz gráfica incremental a partir del prototipo de la primera entrega. El objetivo principal ha sido transformar el flujo conceptual en una aplicación funcional, manteniendo la coherencia visual del prototipo pero añadiendo navegación real, persistencia de estado y localización de textos.
+
+\subsection{Organización del código}
+
+El proyecto se ha estructurado en paquetes para separar responsabilidades y facilitar el mantenimiento:
+
+\begin{itemize}
+    \item \texttt{src/main}: contiene la clase principal \texttt{MainFrame}, responsable de la navegación mediante \texttt{CardLayout}, del estado global y del cambio de idioma.
+    \item \texttt{src/gui}: agrupa las pantallas de la interfaz. Cada vista representa una pantalla concreta: inicio de sesión, registro, configuración, listado de asignaturas, detalle de profesor, valoración, moderación, etc.
+    \item \texttt{src/model}: incluye componentes reutilizables y clases de apoyo, como paneles redondeados, bordes, renderers de listas y los directorios de datos de profesores, credenciales y valoraciones.
+    \item \texttt{src/bundle}: almacena los ficheros de internacionalización \texttt{Bundle\_es\_ES.properties} y \texttt{Bundle\_en.properties} para español e inglés.
+    \item \texttt{src/resources}: contiene los iconos e imágenes usados por la interfaz.
+\end{itemize}
+
+\subsubsection*{Estructura del proyecto}
+
+La siguiente figura resume la estructura principal del proyecto. Si se dispone de un diagrama más detallado, se puede sustituir el recuadro por una captura o una imagen exportada del árbol de directorios.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.9\textwidth}{
+    \vspace{0.4cm}
+    \textbf{Estructura de directorios del proyecto}\\
+    \vspace{0.2cm}
+
+    \texttt{proyecto/}\\
+    \quad \texttt{src/main} -- lógica principal y navegación\\
+    \quad \texttt{src/gui} -- pantallas Swing\\
+    \quad \texttt{src/model} -- componentes y modelos reutilizables\\
+    \quad \texttt{src/bundle} -- textos traducidos\\
+    \quad \texttt{src/resources} -- imágenes e iconos\\
+    \quad \texttt{run-gui.sh} -- arranque de la aplicación\\
+    \quad \texttt{stop-gui.sh} -- detención de la aplicación\\
+    \vspace{0.4cm}
+    }}
+    \caption{Estructura general del proyecto.}
+\end{figure}
+
+\subsubsection*{Diagrama de clases}
+
+La arquitectura se apoya en una clase contenedora principal y en una serie de paneles especializados. \texttt{MainFrame} administra el estado de navegación y las vistas cargadas. Las pantallas \texttt{LoginPanel}, \texttt{MainPanel}, \texttt{ConfiguracionPanel}, \texttt{Asignaturas}, \texttt{ProfesorDetalle}, \texttt{ValoracionPanel} y el resto de paneles se encargan de la interacción visual. En la capa de apoyo, \texttt{ProfessorDirectory} centraliza la información de profesores y valoraciones, \texttt{ProfessorProfile} modela cada profesor y \texttt{CredentialStore} gestiona el acceso y el cambio de contraseña.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.9\textwidth}{
+    \vspace{0.4cm}
+    \centering
+    \textbf{Espacio reservado para el diagrama de clases}\
+    \vspace{0.2cm}
+
+    Aquí se recomienda insertar un diagrama UML con las clases principales:\\
+    \texttt{MainFrame}, \texttt{LoginPanel}, \texttt{MainPanel}, \texttt{ConfiguracionPanel},\\
+    \texttt{CambiarContrasenaPanel}, \texttt{AjustesCuentaPanel}, \texttt{Asignaturas},\\
+    \texttt{ProfesorDetalle}, \texttt{ValoracionPanel}, \texttt{ProfessorDirectory},\\
+    \texttt{ProfessorProfile} y \texttt{CredentialStore}.\\
+    \vspace{0.4cm}
+    }}
+    \caption{Diagrama de clases de la aplicación.}
+\end{figure}
+
+\subsection{Aspectos más significativos}
+
+\paragraph{Navegación con \texttt{CardLayout}.} La aplicación se ha organizado como un conjunto de pantallas independientes gestionadas por \texttt{MainFrame}. Cada vista se carga como una tarjeta distinta y la navegación se resuelve mediante llamadas a \texttt{showView}. Esto permite construir un flujo claro y fácil de mantener.
+
+\paragraph{Internacionalización.} Todos los textos visibles se obtienen desde \texttt{Bundle\_es\_ES.properties} y \texttt{Bundle\_en.properties}. El cambio de idioma no solo afecta a botones o etiquetas, sino también a asignaturas, valores de detalle y mensajes auxiliares.
+
+\paragraph{Persistencia ligera.} Para que la interacción fuera real, se han guardado en ficheros locales aspectos de valoración, ratings promedio y credenciales de acceso. Esto permite que los cambios realizados desde la interfaz se mantengan entre ejecuciones.
+
+\paragraph{Reutilización de componentes Swing.} Se han creado paneles y componentes auxiliares para evitar repetir lógica de estilo: bordes redondeados, botones personalizados, renderers de listas y campos con placeholder.
+
+\paragraph{Diferencias respecto al prototipo.} La interfaz final no es una réplica exacta del prototipo, sino una evolución funcional. Las diferencias más relevantes, como los filtros por curso, el buscador, la pantalla de cambio de contraseña y la pantalla de ajustes de cuenta, se han introducido para dar respuesta a la interacción real del usuario y se consideran justificadas por la mejora de usabilidad.
+
+\subsection{Capturas y pantallas}
+
+En esta práctica se deben incluir capturas de todas las vistas principales. A modo de guía, conviene insertar al menos las siguientes:
+
+\begin{itemize}
+    \item Pantalla de login.
+    \item Pantalla principal con asignaturas y filtros por curso.
+    \item Listado de profesores por asignatura.
+    \item Detalle completo del profesor.
+    \item Pantalla de valoración.
+    \item Pantalla de configuración.
+    \item Pantalla de ajustes de la cuenta.
+    \item Pantalla de cambio de contraseña.
+    \item Pantallas de moderación y detalle del reporte.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.85\textwidth}{
+    \vspace{0.4cm}
+    \centering
+    \textbf{Captura pendiente}\\
+    \vspace{0.2cm}
+
+    Sustituir este recuadro por una captura de la pantalla correspondiente.
+    \vspace{0.4cm}
+    }}
+    \caption{Ejemplo de espacio reservado para capturas.}
+\end{figure}
+
+\section{Tutorial / breve manual de usuario}
+
+\subsection{Compilación y ejecución}
+
+Para ejecutar la aplicación, basta con situarse en la carpeta \texttt{proyecto} y lanzar el script de arranque:
+
+\begin{verbatim}
+cd /ruta/al/proyecto
+./run-gui.sh
+\end{verbatim}
+
+En local, el script compila el código Java y abre la interfaz gráfica directamente. En entornos sin escritorio gráfico, el mismo script levanta automáticamente el entorno necesario para visualizar la aplicación.
+
+\subsection{Uso básico}
+
+\begin{enumerate}
+    \item Inicia sesión con una cuenta válida.
+    \item Desde la pantalla principal, utiliza los filtros por curso o la barra de búsqueda para localizar una asignatura.
+    \item Selecciona una asignatura para ver el listado de profesores asociados.
+    \item Abre el detalle del profesor para consultar toda la información disponible.
+    \item Accede a la valoración para puntuar y marcar aspectos relevantes.
+    \item Desde configuración puedes cambiar el idioma, acceder a los ajustes de la cuenta o cambiar la contraseña.
+\end{enumerate}
+
+\subsection{Descripción de las vistas}
+
+\begin{itemize}
+    \item \textbf{Login}: acceso a la aplicación con usuario y contraseña.
+    \item \textbf{Pantalla principal}: muestra las asignaturas por curso y permite buscarlas.
+    \item \textbf{Asignaturas}: lista los profesores vinculados a una asignatura.
+    \item \textbf{Detalle del profesor}: enseña datos completos, valoración y consideraciones.
+    \item \textbf{Valoración}: permite puntuar y seleccionar aspectos destacados.
+    \item \textbf{Configuración}: acceso a idioma, caché, cuenta, contraseña y moderación.
+    \item \textbf{Ajustes de la cuenta}: muestra la sesión actual y accesos rápidos a la gestión de la cuenta.
+    \item \textbf{Cambio de contraseña}: formulario específico para actualizar la contraseña.
+    \item \textbf{Moderación}: vista destinada a revisar reportes y gestionar contenido.
+\end{itemize}
+
+\subsection{Notas para el usuario}
+
+Los mensajes de confirmación se muestran dentro de la propia interfaz para mantener una experiencia coherente con el uso en móvil. Las acciones importantes, como la valoración o el cambio de contraseña, muestran feedback temporal y después regresan a la vista anterior cuando corresponde.
+
+\section{Conclusiones}
+
+La práctica ha permitido pasar de un prototipo conceptual a una interfaz funcional con navegación, persistencia, internacionalización y flujo real de usuario. La parte más interesante del desarrollo ha sido adaptar la idea original a una aplicación coherente en Swing, donde el comportamiento de cada pantalla depende del estado global de la aplicación y de la información almacenada.
+
+Como aprendizaje principal, se ha comprobado que una buena separación entre vistas, modelos y recursos simplifica mucho la implementación de cambios posteriores. Además, el uso de pantallas propias para operaciones frecuentes —como cambiar la contraseña o gestionar la cuenta— resulta más natural en una interfaz pensada para móvil que el uso de diálogos aislados.
+
+También se han introducido pequeñas decisiones de diseño justificadas por la usabilidad: buscador con placeholder, filtros por curso, mensajes temporales sobre la misma pantalla y reutilización de componentes para mantener una estética consistente.
+
+En conjunto, la interfaz final cumple los objetivos principales de la práctica y deja una base clara para seguir ampliándola si fuera necesario.
+
+
+\end{document}
