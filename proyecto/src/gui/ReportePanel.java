@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ResourceBundle;
+import model.BotonRedondeado;
 
 public class ReportePanel extends JPanel {
 
@@ -77,19 +78,17 @@ public class ReportePanel extends JPanel {
         JPanel panelBotones = new JPanel(new GridLayout(1, 2, 20, 0));
         panelBotones.setOpaque(false);
 
-        JButton btnCancelar = new JButton(textos.getString("reporte.cancelar"));
+        BotonRedondeado btnCancelar = new BotonRedondeado(textos.getString("reporte.cancelar"));
         btnCancelar.setBackground(Color.WHITE);
+        btnCancelar.setForeground(Color.BLACK);
+        btnCancelar.setPreferredSize(new Dimension(130, 38));
         btnCancelar.setFocusPainted(false);
-        btnCancelar.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.GRAY, 1, true),
-            new EmptyBorder(10, 10, 10, 10)
-        ));
 
-        JButton btnEnviar = new JButton(textos.getString("common.send"));
+        BotonRedondeado btnEnviar = new BotonRedondeado(textos.getString("common.send"));
         btnEnviar.setBackground(new Color(25, 25, 112)); // Azul oscuro tipo Midnight Blue
         btnEnviar.setForeground(Color.WHITE);
+        btnEnviar.setPreferredSize(new Dimension(130, 38));
         btnEnviar.setFocusPainted(false);
-        btnEnviar.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         panelBotones.add(btnCancelar);
         panelBotones.add(btnEnviar);

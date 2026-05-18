@@ -81,8 +81,8 @@ public class RegistroPanel extends JPanel {
         btnRegistrar.setFont(new Font("Arial", Font.BOLD, 14));
         btnRegistrar.setPreferredSize(new Dimension(150, 35));
         gbc.gridy = 8;
-        gbc.insets = new Insets(30, 60, 20, 60);
-        centerPanel.add(btnRegistrar, gbc);
+        gbc.insets = new Insets(10, 20, 20, 20);
+        centerPanel.add(wrapCentered(btnRegistrar, 35), gbc);
 
         add(centerPanel, BorderLayout.CENTER);
 

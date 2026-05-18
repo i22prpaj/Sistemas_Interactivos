@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ResourceBundle;
+import model.BotonRedondeado;
 
 public class OperacionRealizada extends JPanel {
 
@@ -48,12 +49,11 @@ public class OperacionRealizada extends JPanel {
         add(lblIcono, gbc);
 
         // 3. Botón Volver
-        JButton btnVolver = new JButton(textos.getString("common.back"));
+        BotonRedondeado btnVolver = new BotonRedondeado(textos.getString("common.back"));
         btnVolver.setBackground(new Color(25, 25, 112)); // Azul oscuro
         btnVolver.setForeground(Color.WHITE);
         btnVolver.setFont(new Font("Arial", Font.BOLD, 14));
-        btnVolver.setFocusPainted(false);
-        btnVolver.setBorder(new EmptyBorder(12, 40, 12, 40));
+        btnVolver.setPreferredSize(new Dimension(160, 38));
         
         // Centrar el botón limitando su tamaño
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER));
