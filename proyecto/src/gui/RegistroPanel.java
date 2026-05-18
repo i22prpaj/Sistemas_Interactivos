@@ -38,19 +38,19 @@ public class RegistroPanel extends JPanel {
 
         // 2. Campos de texto con Placeholders
         JTextField txtCorreo = crearCampo(textos.getString("registro.correo"), false);
-        gbc.gridy = 1; centerPanel.add(txtCorreo, gbc);
+        gbc.gridy = 1; centerPanel.add(wrapCentered(txtCorreo, 35), gbc);
 
         JPasswordField txtPass = (JPasswordField) crearCampo(textos.getString("registro.pass"), true);
-        gbc.gridy = 2; centerPanel.add(txtPass, gbc);
+        gbc.gridy = 2; centerPanel.add(wrapCentered(txtPass, 35), gbc);
 
         JPasswordField txtConfirmPass = (JPasswordField) crearCampo(textos.getString("registro.confirmPass"), true);
-        gbc.gridy = 3; centerPanel.add(txtConfirmPass, gbc);
+        gbc.gridy = 3; centerPanel.add(wrapCentered(txtConfirmPass, 35), gbc);
 
         JTextField txtNombre = crearCampo(textos.getString("registro.nombre"), false);
-        gbc.gridy = 4; centerPanel.add(txtNombre, gbc);
+        gbc.gridy = 4; centerPanel.add(wrapCentered(txtNombre, 35), gbc);
 
         JTextField txtApellidos = crearCampo(textos.getString("registro.apellidos"), false);
-        gbc.gridy = 5; centerPanel.add(txtApellidos, gbc);
+        gbc.gridy = 5; centerPanel.add(wrapCentered(txtApellidos, 35), gbc);
 
         // 3. Desplegable (JComboBox)
         String[] grados = {
@@ -61,10 +61,10 @@ public class RegistroPanel extends JPanel {
             textos.getString("grado.veterinaria")
         };
         JComboBox<String> comboGrado = new JComboBox<>(grados);
-        comboGrado.setPreferredSize(new Dimension(250, 40));
+        comboGrado.setPreferredSize(new Dimension(220, 20));
         comboGrado.setBackground(Color.WHITE);
         gbc.gridy = 6;
-        centerPanel.add(comboGrado, gbc);
+        centerPanel.add(wrapCentered(comboGrado, 35), gbc);
 
         // 4. Checkbox Términos
         JCheckBox checkTerminos = new JCheckBox(textos.getString("registro.terminos"));
@@ -111,10 +111,10 @@ public class RegistroPanel extends JPanel {
     // Método auxiliar para crear campos con placeholder (reutilizando tu lógica)
     private JTextField crearCampo(String placeholder, boolean esPassword) {
         JTextField campo = esPassword ? new JPasswordField(placeholder) : new JTextField(placeholder);
-        campo.setPreferredSize(new Dimension(250, 40));
+        campo.setPreferredSize(new Dimension(220, 40));
         campo.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(Color.WHITE), 
-            new EmptyBorder(5, 10, 5, 10)
+            new EmptyBorder(7, 10, 9, 10)
         ));
 
         if (esPassword) ((JPasswordField) campo).setEchoChar((char) 0);
@@ -136,5 +136,13 @@ public class RegistroPanel extends JPanel {
             }
         });
         return campo;
+    }
+
+    private JPanel wrapCentered(JComponent component, int horizontalPadding) {
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        wrapper.setOpaque(false);
+        wrapper.setBorder(new EmptyBorder(0, horizontalPadding, 0, horizontalPadding));
+        wrapper.add(component);
+        return wrapper;
     }
 }
