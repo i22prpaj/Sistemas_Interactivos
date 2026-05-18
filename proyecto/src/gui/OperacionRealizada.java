@@ -66,7 +66,7 @@ public class OperacionRealizada extends JPanel {
 
         // --- LÓGICA DE NAVEGACIÓN ---
         btnVolver.addActionListener(e -> {
-            mainFrame.showView("MAIN_ESTUDIANTE"); // Te devuelve al mainPanel
+            mainFrame.showView(mainFrame.getOperationResultReturnView());
         });
     }
 }

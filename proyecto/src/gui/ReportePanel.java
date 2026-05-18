@@ -105,7 +105,7 @@ public class ReportePanel extends JPanel {
 
         btnEnviar.addActionListener(e -> {
             // Aquí iría la lógica para enviar el reporte (ej. guardar en BD)
-            mainFrame.showView("REPORTE_ENVIADO"); 
+            mainFrame.showOperacionRealizada("LOGIN");
         });
     }
 }

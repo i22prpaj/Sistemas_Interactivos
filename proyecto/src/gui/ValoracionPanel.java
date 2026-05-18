@@ -208,7 +208,7 @@ public class ValoracionPanel extends JPanel {
                 }
                 ProfessorDirectory.setSavedAspects(professorId, marcados);
             }
-            mainFrame.showView("OPERACION_REALIZADA");
+            mainFrame.showOperacionRealizada("MAIN_ESTUDIANTE");
         });
         
         JPanel btnWrap = new JPanel();

@@ -209,7 +209,7 @@ public class ReportDetailPanel extends JPanel {
         btnOk.setPreferredSize(new Dimension(130, 50));
         btnOk.setFont(new Font("SansSerif", Font.BOLD, 13));
         btnOk.addActionListener(e -> {
-                if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
+            if (mainFrame != null) mainFrame.showOperacionRealizada("MAIN_ESTUDIANTE");
             });
 
         BotonRedondeado btnNo = new BotonRedondeado(bundle.getString("common.delete"));
@@ -218,7 +218,7 @@ public class ReportDetailPanel extends JPanel {
         btnNo.setPreferredSize(new Dimension(130, 50));
         btnNo.setFont(new Font("SansSerif", Font.BOLD, 13));
         btnNo.addActionListener(e -> {
-                if (mainFrame != null) mainFrame.showView("OPERACION_REALIZADA");
+            if (mainFrame != null) mainFrame.showOperacionRealizada("MAIN_ESTUDIANTE");
             });
 
         p.add(btnOk);

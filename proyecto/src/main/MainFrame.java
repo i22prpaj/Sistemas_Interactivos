@@ -11,7 +11,6 @@ import gui.ProfesorDetalle;
 import gui.RegistroPanel;
 import gui.CambiarContrasenaPanel;
 import gui.ReportDetailPanel;
-import gui.ReporteEnviadoPanel;
 import gui.ReportePanel;
 import gui.ValoracionPanel;
 import gui.OperacionRealizada;
@@ -33,6 +32,7 @@ public class MainFrame extends JFrame {
     private String selectedSubjectKey = "subjects.intro_programacion";
     private String selectedProfessorId = null;
     private String selectedProfessorName = null;
+    private String operationResultReturnView = "MAIN_ESTUDIANTE";
     private final boolean runningInCodespaces;
 
     public MainFrame() {
@@ -69,7 +69,6 @@ public class MainFrame extends JFrame {
         mainPanel.add(new LoginErrorPanel(this), "LOGIN_ERROR");
         mainPanel.add(new RegistroPanel(this), "REGISTRO");
         mainPanel.add(new ReportePanel(this), "REPORTE");
-        mainPanel.add(new ReporteEnviadoPanel(this), "REPORTE_ENVIADO");
         mainPanel.add(new MainPanel(this), "MAIN_ESTUDIANTE");
         mainPanel.add(new ConfiguracionPanel(this), "CONFIGURACION");
         mainPanel.add(new AjustesCuentaPanel(this), "AJUSTES_CUENTA");
@@ -100,6 +99,11 @@ public class MainFrame extends JFrame {
         }
         cardLayout.show(mainPanel, viewName);
         currentView = viewName;
+    }
+
+    public void showOperacionRealizada(String returnView) {
+        setOperationResultReturnView(returnView);
+        showView("OPERACION_REALIZADA");
     }
 
     public void goBack() {
@@ -177,6 +181,16 @@ public class MainFrame extends JFrame {
 
     public void clearCurrentUserEmail() {
         this.currentUserEmail = null;
+    }
+
+    public String getOperationResultReturnView() {
+        return operationResultReturnView;
+    }
+
+    public void setOperationResultReturnView(String operationResultReturnView) {
+        if (operationResultReturnView != null && !operationResultReturnView.isBlank()) {
+            this.operationResultReturnView = operationResultReturnView;
+        }
     }
 
     public boolean isModerator() {
