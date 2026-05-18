@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import main.MainFrame;
+import model.BotonRedondeado;
 
 public class RegistroPanel extends JPanel {
 
@@ -73,15 +74,11 @@ public class RegistroPanel extends JPanel {
         centerPanel.add(checkTerminos, gbc);
 
         // 5. Botón Registrar
-        JButton btnRegistrar = new JButton(textos.getString("registro.boton"));
+        BotonRedondeado btnRegistrar = new BotonRedondeado(textos.getString("registro.boton"));
         btnRegistrar.setBackground(Color.WHITE);
         btnRegistrar.setForeground(Color.BLACK);
         btnRegistrar.setFont(new Font("Arial", Font.BOLD, 14));
-        btnRegistrar.setFocusPainted(false);
-        btnRegistrar.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true),
-            new EmptyBorder(10, 20, 10, 20)
-        ));
+        btnRegistrar.setPreferredSize(new Dimension(50, 44));
         gbc.gridy = 8;
         gbc.insets = new Insets(30, 60, 20, 60);
         centerPanel.add(btnRegistrar, gbc);

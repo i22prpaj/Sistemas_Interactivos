@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.12.26)  18 MAY 2026 08:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.12.26)  18 MAY 2026 09:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -524,89 +524,87 @@ File: screenshots/login.PNG Graphic file (type png)
 <use screenshots/login.PNG>
 Package pdftex.def Info: screenshots/login.PNG  used on input line 211.
 (pdftex.def)             Requested size: 151.10536pt x 227.62419pt.
-<screenshots/loginError.PNG, id=91, 264.38776pt x 361.95226pt>
+<screenshots/registro.PNG, id=91, 263.18324pt x 358.33875pt>
+File: screenshots/registro.PNG Graphic file (type png)
+<use screenshots/registro.PNG>
+Package pdftex.def Info: screenshots/registro.PNG  used on input line 216.
+(pdftex.def)             Requested size: 167.17973pt x 227.62459pt.
+<screenshots/loginError.PNG, id=92, 264.38776pt x 361.95226pt>
 File: screenshots/loginError.PNG Graphic file (type png)
 <use screenshots/loginError.PNG>
-Package pdftex.def Info: screenshots/loginError.PNG  used on input line 216.
+Package pdftex.def Info: screenshots/loginError.PNG  used on input line 225.
 (pdftex.def)             Requested size: 166.27066pt x 227.62794pt.
-<screenshots/mainPanel.PNG, id=92, 280.04625pt x 384.2355pt>
-File: screenshots/mainPanel.PNG Graphic file (type png)
-<use screenshots/mainPanel.PNG>
-Package pdftex.def Info: screenshots/mainPanel.PNG  used on input line 225.
-(pdftex.def)             Requested size: 165.89673pt x 227.61746pt.
-<screenshots/asignatura.PNG, id=93, 239.6955pt x 378.213pt>
-File: screenshots/asignatura.PNG Graphic file (type png)
-<use screenshots/asignatura.PNG>
-Package pdftex.def Info: screenshots/asignatura.PNG  used on input line 230.
-(pdftex.def)             Requested size: 144.2573pt x 227.62207pt.
- [4 <./screenshots/login.PNG> <./screenshots/loginError.PNG>]
-<screenshots/profesorDetalle.PNG, id=102, 283.65974pt x 484.209pt>
-File: screenshots/profesorDetalle.PNG Graphic file (type png)
-<use screenshots/profesorDetalle.PNG>
-Package pdftex.def Info: screenshots/profesorDetalle.PNG  used on input line 23
-9.
-(pdftex.def)             Requested size: 183.35516pt x 312.98845pt.
-<screenshots/valorarProfesor.PNG, id=103, 266.1945pt x 391.4625pt>
-File: screenshots/valorarProfesor.PNG Graphic file (type png)
-<use screenshots/valorarProfesor.PNG>
-Package pdftex.def Info: screenshots/valorarProfesor.PNG  used on input line 24
-4.
-(pdftex.def)             Requested size: 154.78284pt x 227.62183pt.
-<screenshots/settings.PNG, id=104, 234.8775pt x 372.1905pt>
-File: screenshots/settings.PNG Graphic file (type png)
-<use screenshots/settings.PNG>
-Package pdftex.def Info: screenshots/settings.PNG  used on input line 253.
-(pdftex.def)             Requested size: 143.64421pt x 227.62082pt.
-<screenshots/detallesCuenta.PNG, id=105, 239.6955pt x 355.3275pt>
-File: screenshots/detallesCuenta.PNG Graphic file (type png)
-<use screenshots/detallesCuenta.PNG>
-Package pdftex.def Info: screenshots/detallesCuenta.PNG  used on input line 258
-.
-(pdftex.def)             Requested size: 153.55089pt x 227.62569pt.
- [5 <./screenshots/mainPanel.PNG> <./screenshots/asignatura.PNG> <./screenshots
-/profesorDetalle.PNG> <./screenshots/valorarProfesor.PNG>]
-<screenshots/changePassword.PNG, id=117, 238.491pt x 369.17924pt>
-File: screenshots/changePassword.PNG Graphic file (type png)
-<use screenshots/changePassword.PNG>
-Package pdftex.def Info: screenshots/changePassword.PNG  used on input line 267
-.
-(pdftex.def)             Requested size: 147.04408pt x 227.62129pt.
-<screenshots/moderationPanel.PNG, id=118, 256.5585pt x 360.74776pt>
-File: screenshots/moderationPanel.PNG Graphic file (type png)
-<use screenshots/moderationPanel.PNG>
-Package pdftex.def Info: screenshots/moderationPanel.PNG  used on input line 27
-2.
-(pdftex.def)             Requested size: 161.88326pt x 227.62457pt.
-<screenshots/reportProblem.PNG, id=119, 248.72925pt x 381.8265pt>
+<screenshots/reportProblem.PNG, id=93, 248.72925pt x 381.8265pt>
 File: screenshots/reportProblem.PNG Graphic file (type png)
 <use screenshots/reportProblem.PNG>
-Package pdftex.def Info: screenshots/reportProblem.PNG  used on input line 281.
+Package pdftex.def Info: screenshots/reportProblem.PNG  used on input line 230.
 
 (pdftex.def)             Requested size: 148.28227pt x 227.62946pt.
-<screenshots/reportDetailPanel.PNG, id=120, 258.9675pt x 462.528pt>
+ [4 <./screenshots/login.PNG> <./screenshots/registro.PNG>]
+<screenshots/mainPanel.PNG, id=102, 280.04625pt x 384.2355pt>
+File: screenshots/mainPanel.PNG Graphic file (type png)
+<use screenshots/mainPanel.PNG>
+Package pdftex.def Info: screenshots/mainPanel.PNG  used on input line 239.
+(pdftex.def)             Requested size: 165.89673pt x 227.61746pt.
+<screenshots/asignatura.PNG, id=103, 239.6955pt x 378.213pt>
+File: screenshots/asignatura.PNG Graphic file (type png)
+<use screenshots/asignatura.PNG>
+Package pdftex.def Info: screenshots/asignatura.PNG  used on input line 244.
+(pdftex.def)             Requested size: 144.2573pt x 227.62207pt.
+<screenshots/profesorDetalle.PNG, id=104, 283.65974pt x 484.209pt>
+File: screenshots/profesorDetalle.PNG Graphic file (type png)
+<use screenshots/profesorDetalle.PNG>
+Package pdftex.def Info: screenshots/profesorDetalle.PNG  used on input line 25
+3.
+(pdftex.def)             Requested size: 183.35516pt x 312.98845pt.
+<screenshots/valorarProfesor.PNG, id=105, 266.1945pt x 391.4625pt>
+File: screenshots/valorarProfesor.PNG Graphic file (type png)
+<use screenshots/valorarProfesor.PNG>
+Package pdftex.def Info: screenshots/valorarProfesor.PNG  used on input line 25
+8.
+(pdftex.def)             Requested size: 154.78284pt x 227.62183pt.
+ [5 <./screenshots/loginError.PNG> <./screenshots/reportProblem.PNG> <./screens
+hots/mainPanel.PNG> <./screenshots/asignatura.PNG>]
+<screenshots/settings.PNG, id=117, 234.8775pt x 372.1905pt>
+File: screenshots/settings.PNG Graphic file (type png)
+<use screenshots/settings.PNG>
+Package pdftex.def Info: screenshots/settings.PNG  used on input line 267.
+(pdftex.def)             Requested size: 143.64421pt x 227.62082pt.
+<screenshots/detallesCuenta.PNG, id=118, 239.6955pt x 355.3275pt>
+File: screenshots/detallesCuenta.PNG Graphic file (type png)
+<use screenshots/detallesCuenta.PNG>
+Package pdftex.def Info: screenshots/detallesCuenta.PNG  used on input line 272
+.
+(pdftex.def)             Requested size: 153.55089pt x 227.62569pt.
+<screenshots/changePassword.PNG, id=119, 238.491pt x 369.17924pt>
+File: screenshots/changePassword.PNG Graphic file (type png)
+<use screenshots/changePassword.PNG>
+Package pdftex.def Info: screenshots/changePassword.PNG  used on input line 281
+.
+(pdftex.def)             Requested size: 147.04408pt x 227.62129pt.
+<screenshots/moderationPanel.PNG, id=120, 256.5585pt x 360.74776pt>
+File: screenshots/moderationPanel.PNG Graphic file (type png)
+<use screenshots/moderationPanel.PNG>
+Package pdftex.def Info: screenshots/moderationPanel.PNG  used on input line 28
+6.
+(pdftex.def)             Requested size: 161.88326pt x 227.62457pt.
+ [6 <./screenshots/profesorDetalle.PNG> <./screenshots/valorarProfesor.PNG> <./
+screenshots/settings.PNG> <./screenshots/detallesCuenta.PNG>]
+<screenshots/reportDetailPanel.PNG, id=133, 258.9675pt x 462.528pt>
 File: screenshots/reportDetailPanel.PNG Graphic file (type png)
 <use screenshots/reportDetailPanel.PNG>
 Package pdftex.def Info: screenshots/reportDetailPanel.PNG  used on input line 
-286.
+295.
 (pdftex.def)             Requested size: 175.24597pt x 312.99748pt.
- [6 <./screenshots/settings.PNG> <./screenshots/detallesCuenta.PNG> <./screensh
-ots/changePassword.PNG> <./screenshots/moderationPanel.PNG>]
-<screenshots/operacionRealizada.PNG, id=133, 236.082pt x 369.17924pt>
+<screenshots/operacionRealizada.PNG, id=134, 236.082pt x 369.17924pt>
 File: screenshots/operacionRealizada.PNG Graphic file (type png)
 <use screenshots/operacionRealizada.PNG>
 Package pdftex.def Info: screenshots/operacionRealizada.PNG  used on input line
- 295.
+ 300.
 (pdftex.def)             Requested size: 145.55879pt x 227.62129pt.
-<screenshots/reporteRealizado.PNG, id=134, 236.082pt x 358.941pt>
-File: screenshots/reporteRealizado.PNG Graphic file (type png)
-<use screenshots/reporteRealizado.PNG>
-Package pdftex.def Info: screenshots/reporteRealizado.PNG  used on input line 3
-00.
-(pdftex.def)             Requested size: 149.70866pt x 227.61829pt.
- [7 <./screenshots/reportProblem.PNG> <./screenshots/reportDetailPanel.PNG> <./
-screenshots/operacionRealizada.PNG> <./screenshots/reporteRealizado.PNG>] [8] [
-9]
-
+ [7 <./screenshots/changePassword.PNG> <./screenshots/moderationPanel.PNG> <./s
+creenshots/reportDetailPanel.PNG> <./screenshots/operacionRealizada.PNG>] [8] [
+9] 
 enddocument/afterlastpage: lastpage setting LastPage.
 (./test.aux)
  ***********
@@ -618,7 +616,7 @@ Package rerunfilecheck Info: File `test.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  13098 strings out of 476182
- 211943 string characters out of 5795594
+ 211871 string characters out of 5795594
  1933975 words of memory out of 5000000
  34906 multiletter control sequences out of 15000+600000
  565015 words of font info for 60 fonts, out of 8000000 for 9000
@@ -629,7 +627,7 @@ Here is how much of TeX's memory you used:
 usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on test.pdf (10 pages, 291342 bytes).
+Output written on test.pdf (10 pages, 295295 bytes).
 PDF statistics:
  198 PDF objects out of 1000 (max. 8388607)
  147 compressed objects within 2 object streams

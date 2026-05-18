@@ -13,6 +13,7 @@ public class BotonRedondeado extends JButton {
         setFocusPainted(false);
         setBorderPainted(false);
         setOpaque(false);
+        setMargin(new Insets(8, 18, 8, 18));
         
         // Fuente más moderna y parecida a la imagen
         setFont(new Font("SansSerif", Font.BOLD, 13));

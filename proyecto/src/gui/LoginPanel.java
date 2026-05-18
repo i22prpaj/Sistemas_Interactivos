@@ -7,11 +7,12 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import main.MainFrame;
+import model.BotonRedondeado;
 import model.CredentialStore;
 
 public class LoginPanel extends JPanel {
 
-    private static final boolean DEV_MODE = true;
+    private static final boolean DEV_MODE = false;
     private MainFrame mainFrame; // Referencia al contenedor principal para cambiar de pantalla
 
     public LoginPanel(MainFrame mainFrame) {
@@ -101,13 +102,11 @@ public class LoginPanel extends JPanel {
         contentPanel.add(panelRegistro, gbc);
 
         // 7. Botón de Iniciar Sesión (Color granate/magenta)
-        JButton btnIniciar = new JButton(textos.getString("login.boton"));
+        BotonRedondeado btnIniciar = new BotonRedondeado(textos.getString("login.boton"));
         btnIniciar.setBackground(new Color(194, 24, 91)); // Color rosa/granate de tu diseño
         btnIniciar.setForeground(Color.WHITE);
         btnIniciar.setFont(new Font("Arial", Font.BOLD, 14));
-        btnIniciar.setFocusPainted(false);
-        btnIniciar.setBorder(new EmptyBorder(10, 10, 10, 10)); // Botón más grande
-        btnIniciar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnIniciar.setPreferredSize(new Dimension(150, 35));
         gbc.gridy = 5;
         gbc.insets = new Insets(20, 10, 10, 10); // Margen externo mínimo; el padding lo pone el wrapper
         contentPanel.add(wrapCentered(btnIniciar, 50), gbc);
