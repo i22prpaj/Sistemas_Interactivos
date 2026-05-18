@@ -13,7 +13,7 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{chngcntr}
-\graphicspath{{imagenes/}{Imagenes/}{outputs/}}
+\graphicspath{{imagenes/}{Imagenes/}{outputs/}{screenshots/}}
 \makeatletter
 \patchcmd{\@makechapterhead}{\vspace*{50\p@}}{\vspace*{0\p@}}{}{}
 \patchcmd{\@makeschapterhead}{\vspace*{50\p@}}{\vspace*{0\p@}}{}{}
@@ -47,6 +47,14 @@
             #3
         \end{minipage}
     \end{figure}
+}
+
+\newcommand{\capturaestandar}[1]{%
+    \includegraphics[width=\linewidth,height=8cm,keepaspectratio]{#1}%
+}
+
+\newcommand{\capturagrande}[1]{%
+    \includegraphics[width=\linewidth,height=11cm,keepaspectratio]{#1}%
 }
 
 \begin{document}
@@ -193,20 +201,105 @@ En esta práctica se deben incluir capturas de todas las vistas principales. A m
     \item Pantalla de ajustes de la cuenta.
     \item Pantalla de cambio de contraseña.
     \item Pantallas de moderación y detalle del reporte.
+    \item Pantalla de registro: pendiente de captura.
 \end{itemize}
 
 \begin{figure}[H]
     \centering
-    \fbox{\parbox{0.85\textwidth}{
-    \vspace{0.4cm}
-    \centering
-    \textbf{Captura pendiente}\\
-    \vspace{0.2cm}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{login.PNG}
+        \caption{Pantalla de login.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{loginError.PNG}
+        \caption{Acceso denegado.}
+    \end{minipage}
+\end{figure}
 
-    Sustituir este recuadro por una captura de la pantalla correspondiente.
-    \vspace{0.4cm}
-    }}
-    \caption{Ejemplo de espacio reservado para capturas.}
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{mainPanel.PNG}
+        \caption{Pantalla principal con filtros por curso.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{asignatura.PNG}
+        \caption{Listado de profesores de una asignatura.}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturagrande{profesorDetalle.PNG}
+        \caption{Detalle completo del profesor.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{valorarProfesor.PNG}
+        \caption{Pantalla de valoración.}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{settings.PNG}
+        \caption{Pantalla de configuración.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{detallesCuenta.PNG}
+        \caption{Ajustes de la cuenta.}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{changePassword.PNG}
+        \caption{Cambio de contraseña.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{moderationPanel.PNG}
+        \caption{Panel de moderación.}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{reportProblem.PNG}
+        \caption{Formulario para reportar un problema.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturagrande{reportDetailPanel.PNG}
+        \caption{Detalle del reporte.}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{operacionRealizada.PNG}
+        \caption{Mensaje de operación realizada con éxito.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \capturaestandar{reporteRealizado.PNG}
+        \caption{Mensaje de reporte enviado con éxito.}
+    \end{minipage}
 \end{figure}
 
 \section{Tutorial / breve manual de usuario}

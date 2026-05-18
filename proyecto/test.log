@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.12.26)  13 MAY 2026 16:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.12.26)  18 MAY 2026 08:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -399,32 +399,32 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count299
 \l__pdf_internal_box=\box57
 )
-No file test.aux.
+(./test.aux)
 \openout1 = `test.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 60.
+LaTeX Font Info:    ... okay on input line 60.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+ (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count300
 \scratchdimen=\dimen188
@@ -480,108 +480,159 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 52.
+Package hyperref Info: Link coloring OFF on input line 60.
+(./test.out) (./test.out)
 \@outlinefile=\write3
 \openout3 = `test.out'.
 
-[1
+ [1
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-No file test.toc.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./test.toc)
 \tf@toc=\write4
 \openout4 = `test.toc'.
-
-
-LaTeX Warning: Reference `LastPage' on page 1 undefined on input line 104.
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.104 \clearpage
+l.112 \clearpage
                  [1
 
 
 ]
-Overfull \hbox (6.31194pt too wide) in paragraph at lines 120--121
+Overfull \hbox (6.31194pt too wide) in paragraph at lines 128--129
 []\OT1/cmtt/m/n/12 src/bundle\OT1/cmr/m/n/12 : al-ma-ce-na los ficheros de in-t
 er-na-cional-izaci^^Son \OT1/cmtt/m/n/12 Bundle[]es[]ES.properties
  []
-
-
-LaTeX Warning: Reference `LastPage' on page 2 undefined on input line 151.
 
 [2
 
 ]
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <12> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 172.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 180.
 
-Overfull \hbox (29.19424pt too wide) in paragraph at lines 174--175
+Overfull \hbox (29.19424pt too wide) in paragraph at lines 182--183
  []\OT1/cmr/bx/n/12 Internacionalizaci^^Son.[] \OT1/cmr/m/n/12 To-dos los tex-t
 os vis-i-bles se ob-tienen des-de \OT1/cmtt/m/n/12 Bundle[]es[]ES.properties
  []
 
-
-LaTeX Warning: Reference `LastPage' on page 3 undefined on input line 187.
-
 [3]
+<screenshots/login.PNG, id=89, 235.47975pt x 354.72525pt>
+File: screenshots/login.PNG Graphic file (type png)
+<use screenshots/login.PNG>
+Package pdftex.def Info: screenshots/login.PNG  used on input line 211.
+(pdftex.def)             Requested size: 151.10536pt x 227.62419pt.
+<screenshots/loginError.PNG, id=91, 264.38776pt x 361.95226pt>
+File: screenshots/loginError.PNG Graphic file (type png)
+<use screenshots/loginError.PNG>
+Package pdftex.def Info: screenshots/loginError.PNG  used on input line 216.
+(pdftex.def)             Requested size: 166.27066pt x 227.62794pt.
+<screenshots/mainPanel.PNG, id=92, 280.04625pt x 384.2355pt>
+File: screenshots/mainPanel.PNG Graphic file (type png)
+<use screenshots/mainPanel.PNG>
+Package pdftex.def Info: screenshots/mainPanel.PNG  used on input line 225.
+(pdftex.def)             Requested size: 165.89673pt x 227.61746pt.
+<screenshots/asignatura.PNG, id=93, 239.6955pt x 378.213pt>
+File: screenshots/asignatura.PNG Graphic file (type png)
+<use screenshots/asignatura.PNG>
+Package pdftex.def Info: screenshots/asignatura.PNG  used on input line 230.
+(pdftex.def)             Requested size: 144.2573pt x 227.62207pt.
+ [4 <./screenshots/login.PNG> <./screenshots/loginError.PNG>]
+<screenshots/profesorDetalle.PNG, id=102, 283.65974pt x 484.209pt>
+File: screenshots/profesorDetalle.PNG Graphic file (type png)
+<use screenshots/profesorDetalle.PNG>
+Package pdftex.def Info: screenshots/profesorDetalle.PNG  used on input line 23
+9.
+(pdftex.def)             Requested size: 183.35516pt x 312.98845pt.
+<screenshots/valorarProfesor.PNG, id=103, 266.1945pt x 391.4625pt>
+File: screenshots/valorarProfesor.PNG Graphic file (type png)
+<use screenshots/valorarProfesor.PNG>
+Package pdftex.def Info: screenshots/valorarProfesor.PNG  used on input line 24
+4.
+(pdftex.def)             Requested size: 154.78284pt x 227.62183pt.
+<screenshots/settings.PNG, id=104, 234.8775pt x 372.1905pt>
+File: screenshots/settings.PNG Graphic file (type png)
+<use screenshots/settings.PNG>
+Package pdftex.def Info: screenshots/settings.PNG  used on input line 253.
+(pdftex.def)             Requested size: 143.64421pt x 227.62082pt.
+<screenshots/detallesCuenta.PNG, id=105, 239.6955pt x 355.3275pt>
+File: screenshots/detallesCuenta.PNG Graphic file (type png)
+<use screenshots/detallesCuenta.PNG>
+Package pdftex.def Info: screenshots/detallesCuenta.PNG  used on input line 258
+.
+(pdftex.def)             Requested size: 153.55089pt x 227.62569pt.
+ [5 <./screenshots/mainPanel.PNG> <./screenshots/asignatura.PNG> <./screenshots
+/profesorDetalle.PNG> <./screenshots/valorarProfesor.PNG>]
+<screenshots/changePassword.PNG, id=117, 238.491pt x 369.17924pt>
+File: screenshots/changePassword.PNG Graphic file (type png)
+<use screenshots/changePassword.PNG>
+Package pdftex.def Info: screenshots/changePassword.PNG  used on input line 267
+.
+(pdftex.def)             Requested size: 147.04408pt x 227.62129pt.
+<screenshots/moderationPanel.PNG, id=118, 256.5585pt x 360.74776pt>
+File: screenshots/moderationPanel.PNG Graphic file (type png)
+<use screenshots/moderationPanel.PNG>
+Package pdftex.def Info: screenshots/moderationPanel.PNG  used on input line 27
+2.
+(pdftex.def)             Requested size: 161.88326pt x 227.62457pt.
+<screenshots/reportProblem.PNG, id=119, 248.72925pt x 381.8265pt>
+File: screenshots/reportProblem.PNG Graphic file (type png)
+<use screenshots/reportProblem.PNG>
+Package pdftex.def Info: screenshots/reportProblem.PNG  used on input line 281.
 
-LaTeX Warning: Reference `LastPage' on page 4 undefined on input line 234.
+(pdftex.def)             Requested size: 148.28227pt x 227.62946pt.
+<screenshots/reportDetailPanel.PNG, id=120, 258.9675pt x 462.528pt>
+File: screenshots/reportDetailPanel.PNG Graphic file (type png)
+<use screenshots/reportDetailPanel.PNG>
+Package pdftex.def Info: screenshots/reportDetailPanel.PNG  used on input line 
+286.
+(pdftex.def)             Requested size: 175.24597pt x 312.99748pt.
+ [6 <./screenshots/settings.PNG> <./screenshots/detallesCuenta.PNG> <./screensh
+ots/changePassword.PNG> <./screenshots/moderationPanel.PNG>]
+<screenshots/operacionRealizada.PNG, id=133, 236.082pt x 369.17924pt>
+File: screenshots/operacionRealizada.PNG Graphic file (type png)
+<use screenshots/operacionRealizada.PNG>
+Package pdftex.def Info: screenshots/operacionRealizada.PNG  used on input line
+ 295.
+(pdftex.def)             Requested size: 145.55879pt x 227.62129pt.
+<screenshots/reporteRealizado.PNG, id=134, 236.082pt x 358.941pt>
+File: screenshots/reporteRealizado.PNG Graphic file (type png)
+<use screenshots/reporteRealizado.PNG>
+Package pdftex.def Info: screenshots/reporteRealizado.PNG  used on input line 3
+00.
+(pdftex.def)             Requested size: 149.70866pt x 227.61829pt.
+ [7 <./screenshots/reportProblem.PNG> <./screenshots/reportDetailPanel.PNG> <./
+screenshots/operacionRealizada.PNG> <./screenshots/reporteRealizado.PNG>] [8] [
+9]
 
-[4]
-
-LaTeX Warning: Reference `LastPage' on page 5 undefined on input line 259.
-
-[5]
-
-LaTeX Warning: Reference `LastPage' on page 6 undefined on input line 265.
-
-[6] 
 enddocument/afterlastpage: lastpage setting LastPage.
 (./test.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `test.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `test.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  C2BC6A034BABB05D27EE5FFDA9B786F0;1776.
-
-Package lastpage Warning: Rerun to get the references right on input line 265.
-
+Package rerunfilecheck Info: File `test.out' has not changed.
+(rerunfilecheck)             Checksum: C2BC6A034BABB05D27EE5FFDA9B786F0;1776.
  ) 
 Here is how much of TeX's memory you used:
- 12939 strings out of 476182
- 207362 string characters out of 5795594
- 1934975 words of memory out of 5000000
- 34764 multiletter control sequences out of 15000+600000
+ 13098 strings out of 476182
+ 211943 string characters out of 5795594
+ 1933975 words of memory out of 5000000
+ 34906 multiletter control sequences out of 15000+600000
  565015 words of font info for 60 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,11n,79p,663b,552s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,11n,79p,663b,516s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/juanlu/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.60
 0pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on test.pdf (7 pages, 70651 bytes).
+Output written on test.pdf (10 pages, 291342 bytes).
 PDF statistics:
- 96 PDF objects out of 1000 (max. 8388607)
- 77 compressed objects within 1 object stream
- 34 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 198 PDF objects out of 1000 (max. 8388607)
+ 147 compressed objects within 2 object streams
+ 43 named destinations out of 1000 (max. 500000)
+ 151 words of extra memory for PDF output out of 10000 (max. 10000000)
 
