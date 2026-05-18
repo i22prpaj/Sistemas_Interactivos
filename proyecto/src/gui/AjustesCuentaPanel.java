@@ -81,8 +81,10 @@ public class AjustesCuentaPanel extends JPanel {
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         footer.setOpaque(false);
 
-        JButton backBtn = new JButton(textos.getString("config.account_back"));
-        backBtn.setFocusPainted(false);
+        BotonRedondeado backBtn = new BotonRedondeado(textos.getString("config.account_back"));
+        backBtn.setPreferredSize(new Dimension(120, 36));
+        backBtn.setBackground(new Color(212, 250, 187));
+        backBtn.setForeground(Color.BLACK);
         backBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         backBtn.addActionListener(e -> mainFrame.goBack());
         footer.add(backBtn);

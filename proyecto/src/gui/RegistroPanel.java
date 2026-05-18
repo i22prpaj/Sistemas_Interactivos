@@ -68,6 +68,7 @@ public class RegistroPanel extends JPanel {
 
         // 4. Checkbox Términos
         JCheckBox checkTerminos = new JCheckBox(textos.getString("registro.terminos"));
+        checkTerminos.setText("<html><span style='width:280px;'>" + textos.getString("registro.terminos") + "</span></html>");
         checkTerminos.setOpaque(false);
         checkTerminos.setFont(new Font("Arial", Font.BOLD, 11));
         gbc.gridy = 7;
@@ -78,7 +79,7 @@ public class RegistroPanel extends JPanel {
         btnRegistrar.setBackground(Color.WHITE);
         btnRegistrar.setForeground(Color.BLACK);
         btnRegistrar.setFont(new Font("Arial", Font.BOLD, 14));
-        btnRegistrar.setPreferredSize(new Dimension(50, 44));
+        btnRegistrar.setPreferredSize(new Dimension(150, 35));
         gbc.gridy = 8;
         gbc.insets = new Insets(30, 60, 20, 60);
         centerPanel.add(btnRegistrar, gbc);
@@ -88,9 +89,11 @@ public class RegistroPanel extends JPanel {
         // --- PANEL INFERIOR (Botón Atrás) ---
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         bottomPanel.setOpaque(false);
-        JButton btnAtras = new JButton("⬅");
+        BotonRedondeado btnAtras = new BotonRedondeado("⬅");
         btnAtras.setFont(new Font("Arial", Font.BOLD, 18));
+        btnAtras.setPreferredSize(new Dimension(48, 36));
         btnAtras.setBackground(new Color(160, 255, 90));
+        btnAtras.setForeground(Color.BLACK);
         btnAtras.setCursor(new Cursor(Cursor.HAND_CURSOR));
         bottomPanel.add(btnAtras);
         add(bottomPanel, BorderLayout.SOUTH);

@@ -123,8 +123,10 @@ public class CambiarContrasenaPanel extends JPanel {
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 14));
         footerPanel.setOpaque(false);
 
-        JButton backBtn = new JButton(textos.getString("config.back"));
-        backBtn.setFocusPainted(false);
+        BotonRedondeado backBtn = new BotonRedondeado(textos.getString("config.back"));
+        backBtn.setPreferredSize(new Dimension(120, 36));
+        backBtn.setBackground(new Color(175, 255, 100));
+        backBtn.setForeground(Color.BLACK);
         backBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         backBtn.addActionListener(e -> {
             if (statusTimer != null && statusTimer.isRunning()) {

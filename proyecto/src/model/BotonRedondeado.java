@@ -3,6 +3,7 @@ package model;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JButton;
+import javax.swing.Icon;
 
 public class BotonRedondeado extends JButton {
 
@@ -23,27 +24,41 @@ public class BotonRedondeado extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
-        
-        // 1. Suavizado de bordes (Crucial para que no se vea pixelado)
+
+        // Suavizado de bordes
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // 2. Lógica de color (Efecto de clic)
+        // Lógica de color (Efecto de clic/rollover)
+        Color fillColor = getBackground();
         if (getModel().isPressed()) {
-            g2.setColor(getBackground().darker()); // Se oscurece un poco al pulsar
+            fillColor = fillColor.darker();
         } else if (getModel().isRollover()) {
-            g2.setColor(getBackground().brighter()); // Se ilumina al pasar el ratón
-        } else {
-            g2.setColor(getBackground());
+            fillColor = fillColor.brighter();
         }
 
-        // 3. Dibujar el fondo redondeado
-        // Para que sea una "cápsula" perfecta, el radio (25) debe ser similar a la altura
-        int arc = getHeight(); 
+        // Dibujar fondo redondeado
+        int arc = getHeight();
+        g2.setColor(fillColor);
         g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), arc, arc));
 
-        // 4. Dibujar el texto original del botón
-        super.paintComponent(g);
-        
+        // Dibujar texto centrado manualmente para evitar el truncamiento por layout
+        String text = getText();
+        Icon icon = getIcon();
+        g2.setFont(getFont());
+        g2.setColor(getForeground());
+        FontMetrics fm = g2.getFontMetrics();
+
+        if (icon != null) {
+            // Si hay icono, dejar que la implementación por defecto lo gestione
+            super.paintComponent(g);
+        } else if (text != null && !text.isEmpty()) {
+            int textWidth = fm.stringWidth(text);
+            int textAscent = fm.getAscent();
+            int x = (getWidth() - textWidth) / 2;
+            int y = (getHeight() + textAscent) / 2 - fm.getDescent();
+            g2.drawString(text, x, y);
+        }
+
         g2.dispose();
     }
 }
