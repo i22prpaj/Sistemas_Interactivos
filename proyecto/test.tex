@@ -1,5 +1,5 @@
 \documentclass[12pt,oneside]{book}
-\usepackage[justification=raggedright,singlelinecheck=false]{caption}
+\usepackage[justification=centering,singlelinecheck=true]{caption}
 \usepackage[spanish,provide=*]{babel}
 \usepackage{graphicx}
 \usepackage{amsmath}
@@ -56,6 +56,12 @@
 \newcommand{\capturagrande}[1]{%
     \includegraphics[width=\linewidth,height=11cm,keepaspectratio]{#1}%
 }
+
+% Show subsections and subsubsections in the table of contents
+% (0=part,1=chapter,2=section,3=subsection,4=subsubsection)
+\setcounter{tocdepth}{3}
+% Also number subsections/subsubsections
+\setcounter{secnumdepth}{3}
 
 \begin{document}
 
@@ -129,7 +135,7 @@ El proyecto se ha estructurado en paquetes para separar responsabilidades y faci
     \item \texttt{src/resources}: contiene los iconos e imágenes usados por la interfaz.
 \end{itemize}
 
-\subsubsection*{Estructura del proyecto}
+\subsection{Estructura del proyecto}
 
 La siguiente figura resume la estructura principal del proyecto. Si se dispone de un diagrama más detallado, se puede sustituir el recuadro por una captura o una imagen exportada del árbol de directorios.
 
@@ -153,28 +159,99 @@ La siguiente figura resume la estructura principal del proyecto. Si se dispone d
     \caption{Estructura general del proyecto.}
 \end{figure}
 
-\subsubsection*{Diagrama de clases}
+\subsection{Diagrama de clases}
 
 La arquitectura se apoya en una clase contenedora principal y en una serie de paneles especializados. \texttt{MainFrame} administra el estado de navegación y las vistas cargadas. Las pantallas \texttt{LoginPanel}, \texttt{MainPanel}, \texttt{ConfiguracionPanel}, \texttt{Asignaturas}, \texttt{ProfesorDetalle}, \texttt{ValoracionPanel} y el resto de paneles se encargan de la interacción visual. En la capa de apoyo, \texttt{ProfessorDirectory} centraliza la información de profesores y valoraciones, \texttt{ProfessorProfile} modela cada profesor y \texttt{CredentialStore} gestiona el acceso y el cambio de contraseña.
 
+% Diagrama de clases añadido con TikZ
 \begin{figure}[H]
     \centering
-    \fbox{\parbox{0.9\textwidth}{
-    \vspace{0.4cm}
-    \centering
-    \textbf{Espacio reservado para el diagrama de clases}\
-    \vspace{0.2cm}
+        \includegraphics[width=0.85\linewidth]{imagenes/diagrama_clases.png}
+        \caption{Diagrama de clases}
+    \end{figure}
 
-    Aquí se recomienda insertar un diagrama UML con las clases principales:\\
-    \texttt{MainFrame}, \texttt{LoginPanel}, \texttt{MainPanel}, \texttt{ConfiguracionPanel},\\
-    \texttt{CambiarContrasenaPanel}, \texttt{AjustesCuentaPanel}, \texttt{Asignaturas},\\
-    \texttt{ProfesorDetalle}, \texttt{ValoracionPanel}, \texttt{ProfessorDirectory},\\
-    \texttt{ProfessorProfile} y \texttt{CredentialStore}.\\
-    \vspace{0.4cm}
-    }}
-    \caption{Diagrama de clases de la aplicación.}
-\end{figure}
+% --- Secciones añadidas: conceptos te\'oricos, diferencias y diagrama de directorios ---
+\subsection{Conceptos te\'oricos aplicados}
 
+En esta subsecci\'on se enumeran y explican brevemente los conceptos te\'oricos aplicados en la implementaci\'on:
+
+\begin{itemize}
+    \item \textbf{Separaci\'on de responsabilidades / arquitectura:} la aplicaci\'on sigue una organizaci\'on cercana a MVC: \texttt{MainFrame} act\'ua como controlador/gestor de vistas, los paneles en \texttt{src/gui} son las vistas y las clases en \texttt{src/model} contienen la l\'ogica de datos (modelo).
+    \item \textbf{Patr\'ones Swing y listeners:} los paneles usan \texttt{ActionListener}, \texttt{FocusListener} y otros listeners para manejar eventos de usuario y desencadenar transiciones mediante \texttt{showView}.
+    \item \textbf{Navegaci\'on por tarjetas:} se emplea \texttt{CardLayout} para cambiar entre pantallas sin abrir ventanas nuevas, lo que facilita el flujo en dispositivo m\'ovil.
+    \item \textbf{Internacionalizaci\'on:} todos los textos se obtienen mediante \texttt{ResourceBundle} (ficheros en \texttt{src/bundle}). Esto permite cambiar idioma en tiempo de ejecuci\'on.
+    \item \textbf{Persistencia ligera:} las credenciales y las valoraciones se almacenan en ficheros locales (propiedades y JSON) para simular persistencia entre ejecuciones sin una base de datos.
+    \item \textbf{Reutilizaci\'on de componentes:} se crearon componentes reutilizables (botones y paneles redondeados, renderers) para homogeneizar la interfaz y evitar duplicaci\'on de estilos.
+    \item \textbf{Accesibilidad y feedback:} se muestran mensajes integrados en las pantallas (no di\'alogos modales) para mantener una experiencia coherente en pantallas peque\~nas y dar retroalimentaci\'on inmediata.
+\end{itemize}
+
+\subsection{Diferencias respecto al prototipo y justificaci\'on}
+
+Aunque la implementaci\'on parte del prototipo entregado previamente, se introdujeron varias diferencias relevantes que se describen y justifican a continuaci\'on:
+
+\begin{itemize}
+    \item \textbf{Filtros por curso y buscador:} se a\~nadieron filtros por a\~no y una barra de b\'usqueda para mejorar la usabilidad y facilitar el acceso directo a asignaturas, justificando la mejora de eficiencia en navegaci\'on.
+    \item \textbf{Pantalla dedicada de cambio de contrase\~na:} se opt\'o por una vista propia en lugar de un di\'alogo modal para facilitar la interacci\'on en dispositivos con pantallas peque\~nas y permitir feedback integrado.
+    \item \textbf{Ajustes de cuenta:} se incluyeron ajustes propios (ver/ cerrar sesi\'on, cambiar contrase\~na) para centralizar la gesti\'on del usuario y evitar men\'us dispersos.
+    \item \textbf{Persistencia de valoraciones:} las valoraciones y aspectos marcados se guardan en un fichero JSON, permitiendo medias reales y persistencia entre sesiones en lugar de datos ef\'imeros del prototipo.
+    \item \textbf{Estilo visual:} se emplearon botones y paneles redondeados y se unificaron tamaños y paddings para coherencia; estos cambios son puramente de UI y se justifican por legibilidad y adaptaci\'on m\'ovil.
+    \item \textbf{Mensajes y flujo de \"operaci\'on realizada\":} se unific\'o la pantalla de confirmaci\'on para reutilizarla en distintos flujos y permitir regresar a vistas concretas seg\'un el contexto (login vs main), reduciendo c\'odigo duplicado.
+\end{itemize}
+
+% TODO: Si hay diferencias adicionales detectadas en revisiones posteriores, incluirlas aqu\'i con su justificaci\'on.
+
+\newpage
+
+\subsection{Diagrama de la estructura de directorios (detallado)}
+
+En lugar del recuadro simple, a\ continuaci\'on se incluye un \texttt{tree}-like detallado que el lector puede comparar con el contenido entregado:
+
+\begin{verbatim}
+               +-----------------------------+
+               |          MainFrame          |
+               |-----------------------------|
+               | - currentUserEmail:String   |
+               | - userRole:String           |
+               | - operationResultReturnView |
+               | + showView(name)            |
+               | + goBack()                  |
+               +-------------+---------------+
+                             |
+               +-------------+---------------+
+               |                             |
+   +-----------v-----------+     +-----------v-----------+
+   |       src/gui/*       |     |      src/model/*       |
+   |-----------------------|     |------------------------|
+   | LoginPanel            |     | ProfessorDirectory     |
+   | RegistroPanel         |     | - Map profiles         |
+   | MainPanel             |     | - ratings JSON file    |
+   | ProfesorDetalle       |     | + addRating(id, r)     |
+   | ValoracionPanel       |     | + getAverage(id)       |
+   | ReportePanel          |     +-----------+------------+
+   | ReportDetailPanel     |                 |
+   | AjustesCuentaPanel    |                 |
+   | CambiarContrasenaPanel|                 |
+   | OperacionRealizada    |                 |
+   +-----------+-----------+                 |
+               |                             |
+               | uses                        |
+               |                             |
+    +----------v----------+          +-------v----------------------------+
+    | BotonRedondeado     |          | CredentialStore                    |
+    | JPanelRedondeado    |          | - ~/.sisint_credentials.properties |
+    | MobileListRenderer  |          | + authenticate()                   |
+    +---------------------+          +------------------------------------+
+
+\end{verbatim}
+\begin{quote}
+\begin{itemize}
+    \item Los paneles de la interfaz interactúan con \texttt{MainFrame} mediante \texttt{showView}/\texttt{goBack} y obtienen los textos a través de \texttt{ResourceBundle}.
+    \item Las clases del modelo gestionan la persistencia (JSON/propiedades) y la lógica de negocio.
+\end{itemize}
+\end{quote}
+
+% Fin de secciones añadidas
+\newpage
 \subsection{Aspectos más significativos}
 
 \paragraph{Navegación con \texttt{CardLayout}.} La aplicación se ha organizado como un conjunto de pantallas independientes gestionadas por \texttt{MainFrame}. Cada vista se carga como una tarjeta distinta y la navegación se resuelve mediante llamadas a \texttt{showView}. Esto permite construir un flujo claro y fácil de mantener.
@@ -188,21 +265,6 @@ La arquitectura se apoya en una clase contenedora principal y en una serie de pa
 \paragraph{Diferencias respecto al prototipo.} La interfaz final no es una réplica exacta del prototipo, sino una evolución funcional. Las diferencias más relevantes, como los filtros por curso, el buscador, la pantalla de cambio de contraseña y la pantalla de ajustes de cuenta, se han introducido para dar respuesta a la interacción real del usuario y se consideran justificadas por la mejora de usabilidad.
 
 \subsection{Capturas y pantallas}
-
-En esta práctica se deben incluir capturas de todas las vistas principales. A modo de guía, conviene insertar al menos las siguientes:
-
-\begin{itemize}
-    \item Pantalla de login.
-    \item Pantalla principal con asignaturas y filtros por curso.
-    \item Listado de profesores por asignatura.
-    \item Detalle completo del profesor.
-    \item Pantalla de valoración.
-    \item Pantalla de configuración.
-    \item Pantalla de ajustes de la cuenta.
-    \item Pantalla de cambio de contraseña.
-    \item Pantallas de moderación y detalle del reporte.
-    \item Pantalla de registro.
-\end{itemize}
 
 \begin{figure}[H]
     \centering
@@ -334,6 +396,11 @@ En local, el script compila el código Java y abre la interfaz gráfica directam
     \item \textbf{Asignaturas}: lista los profesores vinculados a una asignatura.
     \item \textbf{Detalle del profesor}: enseña datos completos, valoración y consideraciones.
     \item \textbf{Valoración}: permite puntuar y seleccionar aspectos destacados.
+    \item \textbf{Registro}: formulario para crear una cuenta de usuario.
+    \item \textbf{Reporte}: formulario para reportar incidencias desde la aplicación.
+    \item \textbf{Detalle del reporte}: vista para revisar la información completa de un reporte.
+    \item \textbf{Error en login}: pantalla de error cuando las credenciales son incorrectas.
+    \item \textbf{Operación realizada / Confirmación}: pantallas de confirmación tras acciones (registro, envío de reporte, valoración).
     \item \textbf{Configuración}: acceso a idioma, caché, cuenta, contraseña y moderación.
     \item \textbf{Ajustes de la cuenta}: muestra la sesión actual y accesos rápidos a la gestión de la cuenta.
     \item \textbf{Cambio de contraseña}: formulario específico para actualizar la contraseña.
