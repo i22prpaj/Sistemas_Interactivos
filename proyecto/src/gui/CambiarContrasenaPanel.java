@@ -125,7 +125,6 @@ public class CambiarContrasenaPanel extends JPanel {
 
         BotonRedondeado backBtn = new BotonRedondeado(textos.getString("config.back"));
         backBtn.setPreferredSize(new Dimension(120, 36));
-        backBtn.setBackground(new Color(175, 255, 100));
         backBtn.setForeground(Color.BLACK);
         backBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         backBtn.addActionListener(e -> {
