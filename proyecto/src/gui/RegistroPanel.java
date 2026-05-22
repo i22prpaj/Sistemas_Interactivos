@@ -12,6 +12,8 @@ import model.BotonRedondeado;
 public class RegistroPanel extends JPanel {
 
     private MainFrame mainFrame;
+    private JLabel registroMessageLabel;
+    private Timer registroMessageTimer;
 
     public RegistroPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -86,7 +88,7 @@ public class RegistroPanel extends JPanel {
 
         add(centerPanel, BorderLayout.CENTER);
 
-        // --- PANEL INFERIOR (Botón Atrás) ---
+        // --- PANEL INFERIOR (Mensaje + Botón Atrás) ---
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         bottomPanel.setOpaque(false);
         BotonRedondeado btnAtras = new BotonRedondeado("⬅");
@@ -96,19 +98,67 @@ public class RegistroPanel extends JPanel {
         btnAtras.setForeground(Color.BLACK);
         btnAtras.setCursor(new Cursor(Cursor.HAND_CURSOR));
         bottomPanel.add(btnAtras);
-        add(bottomPanel, BorderLayout.SOUTH);
+
+        JPanel bottomWrapper = new JPanel(new BorderLayout());
+        bottomWrapper.setOpaque(false);
+
+        JPanel messageBar = new JPanel(new BorderLayout());
+        messageBar.setOpaque(false);
+        messageBar.setBorder(BorderFactory.createEmptyBorder(0, 20, 8, 20));
+
+        registroMessageLabel = new JLabel(textos.getString("registro.terms_required"), SwingConstants.CENTER);
+        registroMessageLabel.setOpaque(true);
+        registroMessageLabel.setBackground(Color.BLACK);
+        registroMessageLabel.setForeground(Color.WHITE);
+        registroMessageLabel.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
+        registroMessageLabel.setVisible(false);
+        registroMessageLabel.setFont(new Font("Arial", Font.BOLD, 13));
+
+        messageBar.add(registroMessageLabel, BorderLayout.CENTER);
+        bottomWrapper.add(messageBar, BorderLayout.NORTH);
+        bottomWrapper.add(bottomPanel, BorderLayout.SOUTH);
+
+        add(bottomWrapper, BorderLayout.SOUTH);
 
         // --- LÓGICA ---
         btnAtras.addActionListener(e -> mainFrame.showView("LOGIN"));
         
         btnRegistrar.addActionListener(e -> {
             if(checkTerminos.isSelected()) {
+                hideRegistroMessage();
                 System.out.println("Registro completado. Navegando a pantalla principal...");
                 mainFrame.showView("MAIN_ESTUDIANTE"); 
             } else {
-                JOptionPane.showMessageDialog(this, "Debe aceptar los términos");
+                showRegistroMessage();
             }
         });
+    }
+
+    private void showRegistroMessage() {
+        if (registroMessageLabel == null) {
+            return;
+        }
+
+        if (registroMessageTimer != null && registroMessageTimer.isRunning()) {
+            registroMessageTimer.stop();
+        }
+
+        registroMessageLabel.setVisible(true);
+        registroMessageLabel.revalidate();
+        registroMessageLabel.repaint();
+
+        registroMessageTimer = new Timer(2800, e -> hideRegistroMessage());
+        registroMessageTimer.setRepeats(false);
+        registroMessageTimer.start();
+    }
+
+    private void hideRegistroMessage() {
+        if (registroMessageLabel == null) {
+            return;
+        }
+        registroMessageLabel.setVisible(false);
+        registroMessageLabel.revalidate();
+        registroMessageLabel.repaint();
     }
 
     // Método auxiliar para crear campos con placeholder (reutilizando tu lógica)

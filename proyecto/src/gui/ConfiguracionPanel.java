@@ -16,6 +16,7 @@ public class ConfiguracionPanel extends JPanel {
 
     private final MainFrame mainFrame;
     private Timer cacheMessageTimer;
+    private JLabel cacheMessageLabel;
 
     public ConfiguracionPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -220,7 +221,7 @@ public class ConfiguracionPanel extends JPanel {
         messageBar.setOpaque(false);
         messageBar.setBorder(BorderFactory.createEmptyBorder(0, 20, 8, 20));
 
-        JLabel cacheMessageLabel = new JLabel("Se han liberado 2.37MB", SwingConstants.CENTER);
+        cacheMessageLabel = new JLabel(bundle.getString("config.clear_cache_done"), SwingConstants.CENTER);
         cacheMessageLabel.setOpaque(true);
         cacheMessageLabel.setBackground(Color.BLACK);
         cacheMessageLabel.setForeground(Color.WHITE);
@@ -236,12 +237,6 @@ public class ConfiguracionPanel extends JPanel {
     }
 
     private void showCacheMessage() {
-        Container south = getComponentCount() > 0 ? getComponent(1) instanceof Container ? (Container) getComponent(1) : null : null;
-        if (south == null) {
-            return;
-        }
-
-        JLabel cacheMessageLabel = findCacheMessageLabel(south);
         if (cacheMessageLabel == null) {
             return;
         }
@@ -263,21 +258,6 @@ public class ConfiguracionPanel extends JPanel {
         });
         cacheMessageTimer.setRepeats(false);
         cacheMessageTimer.start();
-    }
-
-    private JLabel findCacheMessageLabel(Container container) {
-        for (Component child : container.getComponents()) {
-            if (child instanceof JLabel label && "Se han liberado 2.37MB".equals(label.getText())) {
-                return label;
-            }
-            if (child instanceof Container nested) {
-                JLabel found = findCacheMessageLabel(nested);
-                if (found != null) {
-                    return found;
-                }
-            }
-        }
-        return null;
     }
 
     private JLabel createLabel(String text, int x, int y, boolean bold) {
