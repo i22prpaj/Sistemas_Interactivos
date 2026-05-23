@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import main.MainFrame;
+import model.BotonRedondeado;
 
 public class LoginErrorPanel extends JPanel {
 
@@ -70,12 +71,12 @@ public class LoginErrorPanel extends JPanel {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         bottomPanel.setOpaque(false);
 
-        JButton btnVolver = new JButton("⬅"); 
+        BotonRedondeado btnVolver = new BotonRedondeado("⬅");
         btnVolver.setFont(new Font("Arial", Font.BOLD, 18));
-        btnVolver.setBackground(new Color(160, 255, 90)); 
         btnVolver.setForeground(Color.BLACK);
         btnVolver.setFocusPainted(false);
-        btnVolver.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+        btnVolver.setPreferredSize(new Dimension(48, 36));
+        btnVolver.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
         btnVolver.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         bottomPanel.add(btnVolver);

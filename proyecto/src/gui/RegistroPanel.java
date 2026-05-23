@@ -94,7 +94,6 @@ public class RegistroPanel extends JPanel {
         BotonRedondeado btnAtras = new BotonRedondeado("⬅");
         btnAtras.setFont(new Font("Arial", Font.BOLD, 18));
         btnAtras.setPreferredSize(new Dimension(48, 36));
-        btnAtras.setBackground(new Color(160, 255, 90));
         btnAtras.setForeground(Color.BLACK);
         btnAtras.setCursor(new Cursor(Cursor.HAND_CURSOR));
         bottomPanel.add(btnAtras);
