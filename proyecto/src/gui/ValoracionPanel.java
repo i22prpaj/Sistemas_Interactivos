@@ -14,6 +14,9 @@ import model.ProfessorProfile;
 
 public class ValoracionPanel extends JPanel {
 
+    // Clase auxiliar simple que representa una opción de aspecto
+    // key: identificador persistente que se guarda en ProfessorDirectory
+    // label: texto mostrado al usuario (localizado vía ResourceBundle)
     private static final class AspectOption {
         private final String key;
         private final String label;
@@ -25,12 +28,14 @@ public class ValoracionPanel extends JPanel {
     }
 
     private MainFrame mainFrame;
+    // Colores usados en la UI (constantes para coherencia)
     private final Color VERDE_FONDO = new Color(180, 255, 104);
     private final Color GRIS_CLARITO = new Color(220, 220, 220);
     private final Color AZUL_OSCURO = new Color(30, 30, 80);
     private final Color AMARILLO_ESTRELLA = new Color(255, 200, 0);
     private final Color GRIS_ESTRELLA = new Color(190, 190, 190);
 
+    // Constructor: monta la interfaz para valorar al profesor seleccionado
     public ValoracionPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         ResourceBundle textos = mainFrame.getBundle();
@@ -76,6 +81,9 @@ public class ValoracionPanel extends JPanel {
         contentPanel.add(combo, gbc);
 
         // --- 3. ESTRELLAS ---
+        // Creamos 5 botones con aspecto de estrella (JToggleButton). Cada uno escribe
+        // su valor en el array `rating` cuando se pulsa. Usamos un array de 1
+        // elemento como contenedor mutable accesible desde el ActionListener.
         JLabel lblPregunta = new JLabel(textos.getString("valoracion.pregunta"), SwingConstants.CENTER);
         lblPregunta.setFont(new Font("SansSerif", Font.BOLD, 13));
         
@@ -106,6 +114,8 @@ public class ValoracionPanel extends JPanel {
         contentPanel.add(estrellasIconos, gbc);
 
         // --- 4. ASPECTOS DESTACADOS (Cuadro Blanco) ---
+        // Lista de aspectos que el usuario puede marcar; cada checkbox lleva
+        // asociado en sus propiedades el `aspectKey` que se usará para persistir.
         JLabel lblAspectos = new JLabel(textos.getString("valoracion.aspectos"));
         lblAspectos.setFont(new Font("SansSerif", Font.BOLD, 13));
         gbc.gridy = 4;
@@ -127,6 +137,7 @@ public class ValoracionPanel extends JPanel {
             new AspectOption("valoracion.aspecto_buen_material", textos.getString("valoracion.aspecto_buen_material"))
         };
         
+        // Guardamos las referencias a los checkboxes para leerlos al enviar
         java.util.List<JCheckBox> checkboxes = new java.util.ArrayList<>();
         for (AspectOption asp : aspectos) {
             JCheckBox cb = new JCheckBox(asp.label);
@@ -142,6 +153,8 @@ public class ValoracionPanel extends JPanel {
         contentPanel.add(cuadroBlanco, gbc);
 
         // --- 5. COMENTARIOS (Cuadro Gris) ---
+        // Texto multi-línea con placeholder; al ganar foco borramos el placeholder,
+        // y al perder foco lo restauramos si el usuario no escribe nada.
         String comentarioPlaceholder = textos.getString("valoracion.comentario_placeholder");
         JTextArea txtComentario = new JTextArea(comentarioPlaceholder);
         txtComentario.setFont(new Font("SansSerif", Font.ITALIC, 12));
@@ -178,6 +191,8 @@ public class ValoracionPanel extends JPanel {
         contentPanel.add(wrapComentario, gbc);
 
         // --- 6. BOTÓN ENVIAR ---
+        // Al pulsar, si hay rating, se persiste la puntuación y los aspectos marcados.
+        // Luego se muestra la pantalla de operación realizada.
         JLabel lblAnonimo = new JLabel(textos.getString("valoracion.anonimo"), SwingConstants.CENTER);
         lblAnonimo.setFont(new Font("SansSerif", Font.BOLD, 12));
         gbc.gridy = 7;
@@ -193,10 +208,10 @@ public class ValoracionPanel extends JPanel {
         btnEnviar.addActionListener(e -> {
             String professorId = mainFrame.getSelectedProfessorId();
             if (professorId != null && rating[0] > 0) {
-                // Agregar el rating de forma persistente (se acumula, no reemplaza)
+                // Persistir rating (se suma/acomula en ProfessorDirectory)
                 ProfessorDirectory.addRating(professorId, (double) rating[0]);
-                
-                // Guardar los aspectos marcados
+
+                // Recolectar las claves de aspectos seleccionados y guardarlas
                 java.util.List<String> marcados = new java.util.ArrayList<>();
                 for (JCheckBox cb : checkboxes) {
                     if (cb.isSelected()) {

@@ -10,36 +10,44 @@ import java.awt.*;
 
 public class ReportDetailPanel extends JPanel {
 
-    // Colores extraídos de la imagen
-    private static final Color BG = new Color(199, 255, 126); 
+    // Panel que muestra el detalle de un reporte de moderación.
+    // Se organiza como varias "tarjetas" (cards) apiladas verticalmente,
+    // cada una construida por un helper `createXxx()` para mantener el código claro.
+
+    // -------------------- Constantes visuales --------------------
+    // Colores para mantener consistencia con el diseño original
+    private static final Color BG = new Color(199, 255, 126);
     private static final Color CARD_WHITE = Color.WHITE;
     private static final Color TEXT_GRAY = new Color(120, 120, 120);
     private static final Color TEXT_DARK = new Color(40, 40, 40);
-    
-    private static final Color RED_ACCENT = new Color(235, 77, 75);
-    private static final Color GREEN_ACTION = new Color(18, 184, 134);
-    private static final Color RED_ACTION = new Color(245, 75, 75);
-    
-    private static final Color WARNING_BG = new Color(255, 243, 205);
+
+    private static final Color RED_ACCENT = new Color(235, 77, 75);     // para etiquetas de peligro
+    private static final Color GREEN_ACTION = new Color(18, 184, 134);  // botón aprobar
+    private static final Color RED_ACTION = new Color(245, 75, 75);     // botón eliminar
+
+    private static final Color WARNING_BG = new Color(255, 243, 205);   // fondo para advertencias
     private static final Color WARNING_TEXT = new Color(145, 100, 10);
 
     private final MainFrame mainFrame;
     private final java.util.ResourceBundle bundle;
 
+    // -------------------- Constructor --------------------
+    // Monta toda la estructura: header, badge, tarjetas con info y botones de acción.
     public ReportDetailPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+        // Obtener el bundle desde el mainFrame si existe, sino usar el por defecto
         this.bundle = mainFrame != null ? mainFrame.getBundle() : java.util.ResourceBundle.getBundle("bundle.Bundle", java.util.Locale.getDefault());
 
         setLayout(new BorderLayout());
         setBackground(BG);
 
-        // Panel desplazable que no permite crecer hacia la derecha
+        // Root vertical scrollable: empaqueta todas las tarjetas en una columna
         ScrollablePanel root = new ScrollablePanel();
         root.setOpaque(false);
         root.setLayout(new BoxLayout(root, BoxLayout.Y_AXIS));
         root.setBorder(new EmptyBorder(30, 25, 30, 25));
 
-        // Ensamblado de componentes
+        // Ensamblado de las secciones en orden visual
         root.add(createHeader());
         root.add(Box.createVerticalStrut(20));
         root.add(createTagBadge());
@@ -54,16 +62,18 @@ public class ReportDetailPanel extends JPanel {
         root.add(Box.createVerticalStrut(30));
         root.add(createActionButtons());
 
+        // JScrollPane que envuelve el root. En Codespaces o entornos no móviles se
+        // permite scroll vertical según el entorno; por defecto no hay scroll horizontal.
         JScrollPane scroll = new JScrollPane(root);
         scroll.setBorder(null);
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
-        
+
         boolean isCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
         scroll.setVerticalScrollBarPolicy(isCodespaces ? JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED : JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
-        
+
         add(scroll, BorderLayout.CENTER);
     }
 

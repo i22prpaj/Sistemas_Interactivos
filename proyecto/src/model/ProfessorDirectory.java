@@ -14,10 +14,18 @@ import java.util.ResourceBundle;
 
 public final class ProfessorDirectory {
 
+    // Directorio en memoria de perfiles registrados.
+    // - `PROFILES`: mapa de id -> ProfessorProfile (ordenado por inserción)
+    // - `BY_SUBJECT`: índice por asignatura para obtener profesores por materia
+    // - `ALL_RATINGS`: ratings acumulados por profesor (persistidos en JSON)
+    // - `SAVED_ASPECTS`: aspectos (tags) guardados por profesor
     private static final Map<String, ProfessorProfile> PROFILES = new LinkedHashMap<>();
     private static final Map<String, List<ProfessorProfile>> BY_SUBJECT = new LinkedHashMap<>();
     private static final Map<String, List<Double>> ALL_RATINGS = new LinkedHashMap<>();  // Todos los ratings
     private static final Map<String, List<String>> SAVED_ASPECTS = new LinkedHashMap<>();  // Aspectos guardados
+
+    // Ruta del fichero donde se persisten ratings y aspectos del usuario.
+    // Se almacena en el home del usuario para no requerir permisos adicionales.
     private static final String RATINGS_FILE = System.getProperty("user.home") + "/.sisint_ratings.json";
 
     static {
@@ -320,6 +328,9 @@ public final class ProfessorDirectory {
         return List.copyOf(profiles);
     }
 
+    // Devuelve la valoración promedio de un profesor.
+    // - Si hay ratings personalizados en `ALL_RATINGS`, devuelve su promedio.
+    // - Si no hay datos personalizados, devuelve un valor por defecto codificado.
     public static double getRating(String professorId) {
         // Si existen ratings personalizados, calcular promedio; si no, usar el rating por defecto
         if (ALL_RATINGS.containsKey(professorId) && !ALL_RATINGS.get(professorId).isEmpty()) {
@@ -361,6 +372,7 @@ public final class ProfessorDirectory {
         };
     }
     
+    // Añade un rating nuevo para `professorId`, normalizando a [0..5] y persistiendo.
     public static void addRating(String professorId, double rating) {
         if (rating < 0.0) rating = 0.0;
         if (rating > 5.0) rating = 5.0;
@@ -368,6 +380,8 @@ public final class ProfessorDirectory {
         saveRatingsToFile();
     }
     
+    // Guarda una lista de aspectos (tags) seleccionados por el usuario para un profesor.
+    // Evita duplicados y persiste el resultado.
     public static void setSavedAspects(String professorId, List<String> aspects) {
         if (aspects != null) {
             List<String> currentAspects = SAVED_ASPECTS.computeIfAbsent(professorId, key -> new ArrayList<>());
@@ -380,11 +394,13 @@ public final class ProfessorDirectory {
         }
     }
     
+    // Devuelve una copia mutable de los aspectos guardados para `professorId`.
     public static List<String> getSavedAspects(String professorId) {
         List<String> aspects = SAVED_ASPECTS.getOrDefault(professorId, new ArrayList<>());
         return new ArrayList<>(aspects);
     }
 
+    // Traduce una consideración/aspecto usando: tabla interna -> clave canónica -> ResourceBundle.
     public static String localizeConsideration(String value, ResourceBundle bundle) {
         String translatedNote = localizedNoteForValue(value, bundle);
         if (translatedNote != null) {
@@ -398,11 +414,13 @@ public final class ProfessorDirectory {
         return value;
     }
 
+    // Devuelve la clave canónica para una consideración, o el valor original si no hay clave.
     public static String considerationIdentity(String value) {
         String key = considerationKeyForValue(value);
         return key != null ? key : value;
     }
 
+    // Traduce una lista de consideraciones aplicando `localizeConsideration` a cada elemento.
     public static List<String> localizeConsiderations(List<String> values, ResourceBundle bundle) {
         List<String> localized = new ArrayList<>();
         for (String value : values) {
@@ -411,6 +429,8 @@ public final class ProfessorDirectory {
         return localized;
     }
 
+    // Normaliza variantes textuales a claves de ResourceBundle conocidas.
+    // Permite aceptar entradas en español, inglés o claves ya formateadas.
     private static String considerationKeyForValue(String value) {
         return switch (value == null ? "" : value.trim()) {
             case "profesor.considera_pasa_lista", "Pasa Lista", "Takes attendance" -> "profesor.considera_pasa_lista";
@@ -427,6 +447,8 @@ public final class ProfessorDirectory {
         };
     }
 
+    // Traducciones directas de notas en español al inglés si el bundle es inglés.
+    // Esto cubre casos donde el texto de la nota se almacena literalmente.
     private static String localizedNoteForValue(String value, ResourceBundle bundle) {
         if (!isEnglishBundle(bundle) || value == null) {
             return null;
@@ -491,6 +513,7 @@ public final class ProfessorDirectory {
         return bundle != null && "en".equalsIgnoreCase(bundle.getLocale().getLanguage());
     }
     
+    // Carga desde disco el fichero JSON de ratings y aspectos y actualiza las estructuras en memoria.
     private static void loadRatingsFromFile() {
         try {
             if (Files.exists(Paths.get(RATINGS_FILE))) {
@@ -502,6 +525,8 @@ public final class ProfessorDirectory {
         }
     }
     
+    // Serializa `ALL_RATINGS` y `SAVED_ASPECTS` a un JSON simple y lo escribe en disco.
+    // Implementación manual (sin librería JSON) para mantener el demo ligero.
     private static void saveRatingsToFile() {
         try {
             StringBuilder json = new StringBuilder("{");
@@ -542,10 +567,12 @@ public final class ProfessorDirectory {
         }
     }
     
+    // Escapa comillas y saltos de línea para incrustar en JSON simple.
     private static String escapeJson(String str) {
         return str.replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r");
     }
     
+    // Parse a mano un JSON sencillo con la estructura esperada y rellena ALL_RATINGS y SAVED_ASPECTS.
     private static void parseRatingsJson(String json) {
         // Parse JSON structure: {"prof1":{"ratings":[4.5,4.2],"aspects":["a","b"]},...}
         try {
@@ -576,6 +603,7 @@ public final class ProfessorDirectory {
         }
     }
     
+    // Parsea una entrada del JSON con la forma "profId":{...} y extrae ratings/aspects.
     private static void parseProfessorEntry(String entry) {
         int colonIdx = entry.indexOf(":");
         if (colonIdx <= 0) return;
@@ -627,6 +655,7 @@ public final class ProfessorDirectory {
         }
     }
 
+    // Registra un nuevo `ProfessorProfile` en los mapas en memoria y actualiza el índice por asignatura.
     private static void register(ProfessorProfile profile) {
         PROFILES.put(profile.getId(), profile);
         for (String subjectKey : profile.getSubjectKeys()) {
@@ -634,6 +663,7 @@ public final class ProfessorDirectory {
         }
     }
 
+    // Helpers de construcción: devuelven listas inmutables a partir de varargs.
     private static List<String> subjects(String... keys) {
         return List.of(keys);
     }

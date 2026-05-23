@@ -14,9 +14,16 @@ import model.CredentialStore;
 
 public class ConfiguracionPanel extends JPanel {
 
+    // Panel de configuración de la aplicación. Contiene opciones como:
+    // - Ajustes de cuenta (navega a `AJUSTES_CUENTA`)
+    // - Selección de idioma (toggle)
+    // - Notificaciones (switch)
+    // - Cambio de contraseña
+    // - Borrar caché (muestra un mensaje temporal)
+    // También incluye botones de navegación en el footer.
     private final MainFrame mainFrame;
-    private Timer cacheMessageTimer;
-    private JLabel cacheMessageLabel;
+    private Timer cacheMessageTimer; // temporizador para ocultar el mensaje de caché
+    private JLabel cacheMessageLabel; // etiqueta que muestra "caché borrada"
 
     public ConfiguracionPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -260,6 +267,9 @@ public class ConfiguracionPanel extends JPanel {
         cacheMessageTimer.start();
     }
 
+    // showCacheMessage(): muestra una notificación tipo "toast" durante 2.8s
+    // y fuerza una llamada a GC como indicador simbólico de limpieza de recursos.
+
     private JLabel createLabel(String text, int x, int y, boolean bold) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", bold ? Font.BOLD : Font.PLAIN, 16)); // Reducido de 18 a 16
@@ -267,6 +277,8 @@ public class ConfiguracionPanel extends JPanel {
         label.setBounds(x, y, 300, 25);
         return label;
     }
+
+    // createLabel: etiqueta simple con posición absoluta usada por el layout null
 
     private JLabel createLabelCentered(String text, int x, int y, Color color) {
         JLabel label = new JLabel(text);
@@ -276,6 +288,8 @@ public class ConfiguracionPanel extends JPanel {
         label.setBounds(x, y, 300, 25);
         return label;
     }
+
+    // createLabelCentered: etiqueta centrada con color (ej. logout)
 
     private JLabel createClickableLabel(String text, int x, int y) {
         JLabel label = new JLabel(text);
@@ -300,6 +314,9 @@ public class ConfiguracionPanel extends JPanel {
 
         return label;
     }
+
+    // createClickableLabel: etiqueta que responde a hover y click, usada para
+    // navegar a vistas como AJUSTES_CUENTA o CAMBIAR_CONTRASENA.
 
     // ================== CLASES INTERNAS (Sin cambios mayores, solo ajustes de tamaño) ==================
     

@@ -13,25 +13,27 @@ public class ReportePanel extends JPanel {
 
     private MainFrame mainFrame;
 
+    // Constructor: monta la UI para que el usuario describa y envíe un reporte
     public ReportePanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         ResourceBundle textos = mainFrame.getBundle();
 
+        // Layout y color de fondo (verde lima para destacar el formulario)
         setLayout(new GridBagLayout());
-        setBackground(new Color(175, 255, 100)); // Fondo verde lima
+        setBackground(new Color(175, 255, 100));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 20, 15, 20);
+        gbc.insets = new Insets(15, 20, 15, 20); // espacio alrededor de componentes
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // 1. Título
+        // 1. TÍTULO: texto centrado y grande
         JLabel lblTitulo = new JLabel(textos.getString("common.report_problem"), SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
         gbc.gridy = 0;
         add(lblTitulo, gbc);
 
-        // 2. Desplegable de tipo de error
+        // 2. DESPLEGABLE: elegir tipo de reporte (primer elemento es prompt)
         String[] tiposError = {
             textos.getString("reporte.tipoPrompt"),
             textos.getString("reporte.tipo1"),
@@ -40,11 +42,11 @@ public class ReportePanel extends JPanel {
         };
         JComboBox<String> comboErrores = new JComboBox<>(tiposError);
         comboErrores.setPreferredSize(new Dimension(280, 40));
-        comboErrores.setBackground(new Color(230, 230, 230)); // Gris claro
+        comboErrores.setBackground(new Color(230, 230, 230)); // Gris claro para contraste
         gbc.gridy = 1;
         add(comboErrores, gbc);
 
-        // 3. Área de texto para la descripción
+        // 3. ÁREA DE TEXTO: descripción del problema con placeholder
         String placeholder = textos.getString("reporte.descPrompt");
         JTextArea txtDescripcion = new JTextArea(placeholder);
         txtDescripcion.setPreferredSize(new Dimension(280, 150));
@@ -56,7 +58,8 @@ public class ReportePanel extends JPanel {
             new EmptyBorder(10, 10, 10, 10)
         ));
 
-        // Lógica del placeholder para JTextArea
+        // Placeholder manual: al ganar foco borramos el texto si coincide con el placeholder,
+        // y al perder foco lo restauramos si el usuario no escribió nada.
         txtDescripcion.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -74,7 +77,7 @@ public class ReportePanel extends JPanel {
         gbc.gridy = 2;
         add(txtDescripcion, gbc);
 
-        // 4. Panel para los botones (Cancelar y Enviar)
+        // 4. BOTONES: Cancelar (volver) y Enviar (procesar)
         JPanel panelBotones = new JPanel(new GridLayout(1, 2, 20, 0));
         panelBotones.setOpaque(false);
 
@@ -94,16 +97,17 @@ public class ReportePanel extends JPanel {
         panelBotones.add(btnEnviar);
 
         gbc.gridy = 3;
-        gbc.insets = new Insets(30, 20, 10, 20); // Más margen por arriba
+        gbc.insets = new Insets(30, 20, 10, 20); // más espacio encima de los botones
         add(panelBotones, gbc);
 
-        // --- LÓGICA DE NAVEGACIÓN ---
-        btnCancelar.addActionListener(e -> {
-            mainFrame.showView("LOGIN_ERROR"); // Vuelve a la pantalla de error
-        });
+        // --- LÓGICA: navegación y acciones de botones ---
+        // Cancelar: regresamos a la pantalla de error/login previa
+        btnCancelar.addActionListener(e -> mainFrame.showView("LOGIN_ERROR"));
 
+        // Enviar: en la versión demo no hay backend, así que mostramos la pantalla
+        // de operación realizada; en producción aquí se podría enviar a un servicio.
         btnEnviar.addActionListener(e -> {
-            // Aquí iría la lógica para enviar el reporte (ej. guardar en BD)
+            // Ejemplo: construir objeto reporte y enviarlo a servidor / guardar
             mainFrame.showOperacionRealizada("LOGIN");
         });
     }

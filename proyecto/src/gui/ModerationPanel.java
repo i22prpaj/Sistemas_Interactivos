@@ -25,6 +25,9 @@ public class ModerationPanel extends JPanel {
     private final boolean runningInCodespaces;
 
     public ModerationPanel(MainFrame mainFrame) {
+    // Panel de moderación: muestra estadísticas, tarjetas de reportes y
+    // acciones rápidas para aprobar/eliminar contenido reportado.
+    // Está pensado para un moderador; incluye badges, pills y tarjetas.
         this.mainFrame = mainFrame;
         this.bundle = mainFrame != null ? mainFrame.getBundle() : java.util.ResourceBundle.getBundle("bundle.Bundle", java.util.Locale.getDefault());
         this.runningInCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
@@ -116,6 +119,9 @@ public class ModerationPanel extends JPanel {
         wrapper.setBackground(new Color(235, 250, 210)); // Sutil contraste
         wrapper.setLayout(new FlowLayout(FlowLayout.LEFT, 6, 0));
         wrapper.setPreferredSize(new Dimension(334, 70));
+
+    // createCardList(): construye una serie de ReportCard con datos de ejemplo.
+    // Cada tarjeta contiene información, meta (profesor + tiempo) y botones de acción.
         wrapper.setMinimumSize(new Dimension(334, 70));
         wrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 70));
 
@@ -146,6 +152,8 @@ public class ModerationPanel extends JPanel {
         b.setIcon(loadScaledIcon(iconPath, 22, 22));
         b.setText(text);
         b.setHorizontalAlignment(SwingConstants.CENTER);
+
+    // StatBubble: pequeña cápsula que muestra un número y un texto (p. ej. pendientes)
         b.setVerticalAlignment(SwingConstants.CENTER);
         b.setHorizontalTextPosition(SwingConstants.CENTER);
         b.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -261,6 +269,10 @@ public class ModerationPanel extends JPanel {
                 BorderFactory.createMatteBorder(0, 8, 0, 0, tagColor),
                 new EmptyBorder(15, 15, 15, 15) 
             ));
+
+    // createIconButton: botón circular con fondo coloreado y símbolo.
+    // Se sobrescribe paintComponent para dibujar un fondo redondeado y luego
+    // dejar que Swing pinte el texto encima.
 
             // Contenido Texto
             JPanel info = new JPanel();

@@ -12,10 +12,12 @@ public class RoundedBorder implements Border {
 
     @Override
     public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+        // Este borde es mayormente decorativo: no dibuja contorno por defecto,
+        // pero proporciona un punto central para pintar bordes redondeados si es necesario.
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setColor(Color.WHITE); // O el color de fondo si quieres contorno
-        // Si quisieras contorno:
+        g2d.setColor(Color.WHITE); // Color por defecto
+        // Si se quisiera dibujar un contorno redondeado, usar:
         // g2d.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
     }
 

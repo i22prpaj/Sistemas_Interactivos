@@ -1,116 +1,119 @@
 package gui;
 
-import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import main.MainFrame;
-import model.BotonRedondeado;
-import model.CredentialStore;
+// Importaciones necesarias para la interfaz y eventos
+import java.awt.*;                        // Clases AWT (Color, Dimension, Cursor...)
+import java.awt.event.FocusAdapter;       // Adaptador para eventos de foco
+import java.awt.event.FocusEvent;         // Evento de foco
+import java.util.*;                        // ResourceBundle y utilidades varias
+import javax.swing.*;                      // Componentes Swing (JPanel, JLabel, JButton...)
+import javax.swing.border.EmptyBorder;    // Borde vacío para márgenes internos
+import main.MainFrame;                    // Frame principal que controla la navegación
+import model.BotonRedondeado;             // Botón personalizado con estilo redondeado
+import model.CredentialStore;             // Gestor simple de credenciales (autenticación)
 
+// Panel de login: maneja la interfaz y la lógica básica de autenticación (simulada)
 public class LoginPanel extends JPanel {
 
+    // Bandera de desarrollo para mostrar botones auxiliares; mantener false en producción
     private static final boolean DEV_MODE = false;
-    private MainFrame mainFrame; // Referencia al contenedor principal para cambiar de pantalla
+    // Referencia al MainFrame para cambiar vistas y ajustar estado global (rol, email)
+    private MainFrame mainFrame;
 
+    // Constructor: inicializa la interfaz y enlaza acciones de botones
     public LoginPanel(MainFrame mainFrame) {
-        this.mainFrame = mainFrame;
-        ResourceBundle textos = mainFrame.getBundle();
+        this.mainFrame = mainFrame; // guardar referencia al frame principal
+        ResourceBundle textos = mainFrame.getBundle(); // obtener bundle de textos para i18n
         
-        // 1. Configuración del fondo (Verde lima según tu diseño)
-        setBackground(new Color(175, 255, 100)); 
-        setLayout(new BorderLayout());
+        // 1. Configuración del fondo y layout principal
+        setBackground(new Color(175, 255, 100)); // color de fondo (verde lima)
+        setLayout(new BorderLayout()); // layout principal
         
-        // Panel contenedor con GridBagLayout
+        // Panel central que contendrá logo, campos y botones
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(new Color(175, 255, 100));
-        contentPanel.setBorder(new EmptyBorder(10, 50, 10, 50)); // Márgenes a los lados
+        contentPanel.setBorder(new EmptyBorder(10, 50, 10, 50)); // padding lateral
         
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Márgenes entre elementos
+        gbc.insets = new Insets(10, 10, 10, 10); // separación entre elementos
         gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL; // los componentes se estiran horizontalmente
 
-        // 2. Logo UCO
+        // 2. Logo UCO (intento de cargar recurso, si falla se muestra texto alternativo)
         JLabel logoLabel = new JLabel();
         try {
-            // Cargar la imagen y redimensionar manteniendo proporción
             ImageIcon logoIcon = new ImageIcon(getClass().getResource("/resources/uco_logo.png"));
             Image originalImage = logoIcon.getImage();
-            
-            // Obtener dimensiones originales
+            // Calcular proporciones para escalar a un ancho máximo
             int originalWidth = originalImage.getWidth(null);
             int originalHeight = originalImage.getHeight(null);
-            
-            // Escalar manteniendo proporción (más pequeño)
             int maxWidth = 110;
             double ratio = (double) originalHeight / originalWidth;
             int newWidth = maxWidth;
             int newHeight = (int) (maxWidth * ratio);
-            
             Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
             logoLabel.setIcon(new ImageIcon(scaledImage));
             logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         } catch (Exception e) {
+            // Si no se carga la imagen, mostrar un placeholder textual para el logo
             logoLabel.setText("[ Imagen Logo UCO ]");
             logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         }
-        gbc.gridy = 0;
-        contentPanel.add(logoLabel, gbc);
+        gbc.gridy = 0; // fila 0
+        contentPanel.add(logoLabel, gbc); // añadir logo al panel central
 
-        // 3. Título
+        // 3. Título localizado
         JLabel titulo = new JLabel(textos.getString("login.titulo"), SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 14));
-        gbc.gridy = 1;
+        gbc.gridy = 1; // fila 1
         contentPanel.add(titulo, gbc);
 
-        // 4. Campo de Correo (con "placeholder" simulado)
+        // 4. Campo de correo con placeholder simulado (se configura con configurarCampoTexto)
         String placeholderCorreo = textos.getString("login.correo");
         JTextField txtCorreo = new JTextField();
-        txtCorreo.setToolTipText(placeholderCorreo);
+        txtCorreo.setToolTipText(placeholderCorreo); // tooltip con el texto por defecto
         configurarCampoTexto(txtCorreo, placeholderCorreo);
-        gbc.gridy = 2;
+        gbc.gridy = 2; // fila 2
         contentPanel.add(wrapCentered(txtCorreo, 35), gbc);
 
-        // 5. Campo de Contraseña (JPasswordField para ocultar caracteres)
+        // 5. Campo de contraseña (JPasswordField) con placeholder
         String placeholderPass = textos.getString("login.password");
         JPasswordField txtPassword = new JPasswordField(placeholderPass);
         configurarCampoTexto(txtPassword, placeholderPass);        
-        gbc.gridy = 3;
+        gbc.gridy = 3; // fila 3
         contentPanel.add(wrapCentered(txtPassword, 35), gbc);
 
-        // 6. Sección de "¿Aún no tienes acceso? Registro"
+        // 6. Sección de registro (texto y botón enlazable)
         JLabel lblPregunta = new JLabel(textos.getString("login.pregunta"));
         JButton btnRegistro = new JButton(textos.getString("login.registro"));
 
         JPanel panelRegistro = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
-        panelRegistro.setOpaque(false); // Para que se vea el fondo verde
+        panelRegistro.setOpaque(false); // fondo transparente para respetar el color del panel padre
         
         lblPregunta.setFont(new Font("Arial", Font.PLAIN, 12));
         
+        // Estilizar el botón de registro para que parezca enlace
         btnRegistro.setForeground(Color.BLUE);
         btnRegistro.setBorderPainted(false);
         btnRegistro.setContentAreaFilled(false);
         btnRegistro.setFocusPainted(false);
         btnRegistro.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        panelRegistro.add(lblPregunta);
-        panelRegistro.add(btnRegistro);
-        gbc.gridy = 4;
+        panelRegistro.add(lblPregunta); // texto "¿Aún no tienes acceso?"
+        panelRegistro.add(btnRegistro); // botón que actúa como enlace al registro
+        gbc.gridy = 4; // fila 4
         contentPanel.add(panelRegistro, gbc);
 
-        // 7. Botón de Iniciar Sesión (Color granate/magenta)
+        // 7. Botón de iniciar sesión principal (estilizado con BotonRedondeado)
         BotonRedondeado btnIniciar = new BotonRedondeado(textos.getString("login.boton"));
-        btnIniciar.setBackground(new Color(194, 24, 91)); // Color rosa/granate de tu diseño
+        btnIniciar.setBackground(new Color(194, 24, 91)); // color principal del botón
         btnIniciar.setForeground(Color.WHITE);
         btnIniciar.setFont(new Font("Arial", Font.BOLD, 14));
         btnIniciar.setPreferredSize(new Dimension(150, 35));
-        gbc.gridy = 5;
-        gbc.insets = new Insets(20, 10, 10, 10); // Margen externo mínimo; el padding lo pone el wrapper
+        gbc.gridy = 5; // fila 5
+        gbc.insets = new Insets(20, 10, 10, 10); // margen alrededor del botón
         contentPanel.add(wrapCentered(btnIniciar, 50), gbc);
 
+        // Modo de desarrollo: botones extra para navegar rápido (solo si DEV_MODE == true)
         if (DEV_MODE) {
             JPanel devPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 0));
             devPanel.setOpaque(false);
@@ -121,12 +124,13 @@ public class LoginPanel extends JPanel {
             JButton btnDevPrincipal = new JButton("Principal");
             JButton btnDevPrincipalModerador = new JButton("Moderador");
             
+            // Atajos para pruebas: establecer rol y email y navegar al main
             btnDevPrincipal.addActionListener(e -> {
                 mainFrame.setUserRole("ESTUDIANTE");
                 mainFrame.setCurrentUserEmail("elena.ruiz@uco.es");
                 mainFrame.showView("MAIN_ESTUDIANTE");
             });
-            // Acceso directo al MainPanel con rol moderador
+            // Acceso directo como moderador
             btnDevPrincipalModerador.addActionListener(e -> {
                 mainFrame.setUserRole("MODERADOR");
                 mainFrame.setCurrentUserEmail("moderador@uco.es");
@@ -142,57 +146,58 @@ public class LoginPanel extends JPanel {
             contentPanel.add(devPanel, gbc);
         }
         
+        // Añadir el panel central al centro del panel principal
         add(contentPanel, BorderLayout.CENTER);
 
         // --- ACCIONES Y NAVEGACIÓN ---
 
-        // Navegación 4: Ir a Registro
+        // Botón de registro: cambiar a la vista de registro
         btnRegistro.addActionListener(e -> {
-            mainFrame.showView("REGISTRO"); // Llamamos a la vista de registro (que crearemos luego)
+            mainFrame.showView("REGISTRO");
         });
 
-        // Lógica simulada de Iniciar Sesión (Navegación 1, 2 y 3)
+        // Botón iniciar: lógica de autenticación (simulada con CredentialStore)
         btnIniciar.addActionListener(e -> {
             String correo = txtCorreo.getText();
             String password = new String(txtPassword.getPassword());
 
+            // Autenticación y diferenciación de roles por email (ejemplo simplificado)
             if (CredentialStore.authenticate(correo, password) && correo.equalsIgnoreCase("moderador@uco.es")) {
-                // Caso 2: Cuenta de moderador
-                // Aquí en un futuro le pasaríamos un parámetro al MainFrame indicando el rol
+                // Cuenta de moderador
                 System.out.println("Acceso concedido: Moderador");
                 mainFrame.setUserRole("MODERADOR");
                 mainFrame.setCurrentUserEmail(correo);
                 mainFrame.showView("MAIN_ESTUDIANTE");
             } else if (CredentialStore.authenticate(correo, password) && correo.equalsIgnoreCase("elena.ruiz@uco.es")) {
-                // Caso 1: Cuenta general
+                // Cuenta de estudiante
                 System.out.println("Acceso concedido: Estudiante");
                 mainFrame.setUserRole("ESTUDIANTE");
                 mainFrame.setCurrentUserEmail(correo);
                 mainFrame.showView("MAIN_ESTUDIANTE");
             } else {
-                // Caso 3: Credenciales inválidas
+                // Credenciales inválidas: mostrar vista de error
                 System.out.println("Error de credenciales");
-                mainFrame.showView("LOGIN_ERROR"); // Vista de error (que crearemos luego)
+                mainFrame.showView("LOGIN_ERROR");
             }
         });
     }
 
-    // Método auxiliar para simular el comportamiento de "Placeholder" y dar estilo a los campos
+    // Método auxiliar: aplica estilo y comportamiento de "placeholder" a un campo de texto
     private void configurarCampoTexto(JTextField campo, String textoPorDefecto) {
         campo.setPreferredSize(new Dimension(220, 40));
         campo.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY), 
-                new EmptyBorder(5, 10, 10, 10) // Padding interno
+                new EmptyBorder(5, 10, 10, 10) // padding interno
         ));
         
-        // Simular Placeholder: Se borra al hacer clic, vuelve si está vacío
+        // Simular placeholder: borrar al entrar y restaurar al perder foco si está vacío
         campo.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 if (campo.getText().equals(textoPorDefecto)) {
                     campo.setText("");
                     if (campo instanceof JPasswordField) {
-                        ((JPasswordField) campo).setEchoChar('•'); // Ocultar al escribir
+                        ((JPasswordField) campo).setEchoChar('•'); // ocultar caracteres
                     }
                 }
             }
@@ -201,18 +206,19 @@ public class LoginPanel extends JPanel {
                 if (campo.getText().isEmpty()) {
                     campo.setText(textoPorDefecto);
                     if (campo instanceof JPasswordField) {
-                        ((JPasswordField) campo).setEchoChar((char) 0); // Mostrar el texto "Contraseña"
+                        ((JPasswordField) campo).setEchoChar((char) 0); // mostrar placeholder
                     }
                 }
             }
         });
         
-        // Si es contraseña, mostramos el texto "Contraseña" al principio sin ocultar
+        // Si es JPasswordField y contiene aún el placeholder, desactivar el echo char (mostrar texto)
         if (campo instanceof JPasswordField && campo.getText().equals(textoPorDefecto)) {
             ((JPasswordField) campo).setEchoChar((char) 0); 
         }
     }
 
+    // Wrapper reutilizable para centrar componentes y añadir padding horizontal
     private JPanel wrapCentered(JComponent component, int horizontalPadding) {
         JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         wrapper.setOpaque(false);

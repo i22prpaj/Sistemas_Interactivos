@@ -9,15 +9,20 @@ import model.BotonRedondeado;
 
 public class AjustesCuentaPanel extends JPanel {
 
+    // Panel de ajustes de cuenta: muestra email, rol y estado de sesión,
+    // además de acciones como cambiar contraseña y cerrar sesión.
+
     private final MainFrame mainFrame;
 
     public AjustesCuentaPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        ResourceBundle textos = mainFrame.getBundle();
+        ResourceBundle textos = mainFrame.getBundle(); // obtener los bundle de internacionalización
 
+        // Layout principal: centro con contenido y footer con botón volver
         setLayout(new BorderLayout());
         setBackground(new Color(212, 250, 187));
 
+        // Contenedor central con GridBag para apilar secciones con consistencia
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setOpaque(false);
         contentPanel.setBorder(new EmptyBorder(18, 18, 18, 18));
@@ -27,16 +32,19 @@ public class AjustesCuentaPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(8, 0, 8, 0);
 
+        // Título localizado de la sección
         JLabel title = new JLabel(textos.getString("config.account_title"), SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 22));
         gbc.gridy = 0;
         contentPanel.add(title, gbc);
 
+        // Tarjeta blanca con información estática (email, rol, sesión)
         JPanel card = new JPanel(new GridLayout(0, 1, 0, 8));
         card.setOpaque(true);
         card.setBackground(Color.WHITE);
         card.setBorder(new EmptyBorder(16, 16, 16, 16));
 
+        // Determinar email y rol del usuario actual mediante MainFrame
         String currentUserEmail = mainFrame.getCurrentUserEmail();
         String roleText;
         if (mainFrame.isModerator()) {
@@ -47,6 +55,7 @@ public class AjustesCuentaPanel extends JPanel {
             roleText = textos.getString("config.role_guest");
         }
 
+        // Añadir filas informativas: email, rol y estado de sesión
         card.add(createInfoRow(textos.getString("config.account_email"), currentUserEmail != null && !currentUserEmail.isBlank() ? currentUserEmail : textos.getString("config.account_no_session")));
         card.add(createInfoRow(textos.getString("config.account_role"), roleText));
         card.add(createInfoRow(textos.getString("config.account_session"), currentUserEmail != null && !currentUserEmail.isBlank() ? textos.getString("config.account_session_active") : textos.getString("config.account_no_session")));
@@ -55,6 +64,7 @@ public class AjustesCuentaPanel extends JPanel {
         gbc.insets = new Insets(12, 0, 12, 0);
         contentPanel.add(card, gbc);
 
+        // Acciones verticales: cambiar contraseña y cerrar sesión
         JPanel actions = new JPanel(new GridLayout(0, 1, 0, 12));
         actions.setOpaque(false);
 
@@ -78,6 +88,7 @@ public class AjustesCuentaPanel extends JPanel {
 
         add(contentPanel, BorderLayout.CENTER);
 
+        // Footer con botón volver
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         footer.setOpaque(false);
 
@@ -91,6 +102,8 @@ public class AjustesCuentaPanel extends JPanel {
         add(footer, BorderLayout.SOUTH);
     }
 
+    // Helper que crea una fila con etiqueta (izquierda) y valor (centro).
+    // Se usa para mostrar email, rol y estado de sesión.
     private JPanel createInfoRow(String labelText, String valueText) {
         JPanel row = new JPanel(new BorderLayout(8, 0));
         row.setOpaque(false);

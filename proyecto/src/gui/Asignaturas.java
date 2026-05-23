@@ -16,10 +16,12 @@ public class Asignaturas extends JPanel {
     private final Color VERDE_FONDO = new Color(172, 255, 100);
     private final Color VERDE_BOTON = new Color(220, 255, 180);
 
+    // Constructor: muestra la lista de profesores para la asignatura seleccionada
     public Asignaturas(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         ResourceBundle textos = mainFrame.getBundle();
         String selectedSubjectKey = mainFrame.getSelectedSubjectKey();
+        // Obtener lista de profesores filtrada por asignatura desde ProfessorDirectory
         java.util.List<ProfessorProfile> professors = ProfessorDirectory.getBySubject(selectedSubjectKey);
 
         setBackground(VERDE_FONDO);
@@ -30,21 +32,25 @@ public class Asignaturas extends JPanel {
         gbc.insets = new Insets(10, 5, 10, 25);
 
         // --- 1. TÍTULO DE LA ASIGNATURA ---
-        // En la imagen aparece centrado y arriba (debajo de la "isla" del móvil)
+        // Buscamos la clave de la asignatura en el bundle para mostrar su nombre localizado;
+        // si no existe, usamos una etiqueta genérica.
         String titleText = textos.containsKey(selectedSubjectKey) ? textos.getString(selectedSubjectKey) : textos.getString("subjects.label");
         JLabel title = new JLabel(titleText, SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 22));
         gbc.gridy = 0;
-        gbc.insets = new Insets(40, 20, 20, 20); // Más margen superior para la "isla"
+        gbc.insets = new Insets(40, 20, 20, 20); // Espacio superior para simular la "isla"
         add(title, gbc);
 
-        // --- 2. ETIQUETA "PROFESORES" Y LISTA (panel izquierdo alineado) ---
+        // --- 2. LISTA DE PROFESORES ---
+        // Convertimos la lista a array para JList y usamos un renderer personalizado
         JList<ProfessorProfile> list = new JList<>(professors.toArray(new ProfessorProfile[0]));
         // Usamos un renderizador similar al de asignaturas pero con icono de persona
         list.setCellRenderer(new ProfesorListRenderer());
         list.setBackground(VERDE_FONDO);
         list.setFixedCellHeight(55);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Al hacer click en un profesor seleccionamos su id y navegamos al detalle
         list.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -58,6 +64,7 @@ public class Asignaturas extends JPanel {
             }
         });
 
+        // Envolver la lista en un JScrollPane con comportamiento móvil (scroll opcional)
         JScrollPane scroll = new JScrollPane(list);
         scroll.setBorder(null);
         scroll.setOpaque(false);
@@ -68,7 +75,7 @@ public class Asignaturas extends JPanel {
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
 
-        // Creamos un panel vertical alineado a la izquierda que contendrá la etiqueta y la lista
+        // Panel izquierdo que contiene la etiqueta "Profesores" y la lista
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setOpaque(false);
@@ -80,7 +87,7 @@ public class Asignaturas extends JPanel {
         lblProf.setBorder(new EmptyBorder(0, 2, 8, 0));
         leftPanel.add(lblProf);
 
-        // Ajustamos el tamaño del scroll para que no añada márgenes extra
+        // Ajustar tamaño del scroll y añadir al panel
         scroll.setAlignmentX(Component.LEFT_ALIGNMENT);
         scroll.setPreferredSize(new Dimension(260, 180));
         leftPanel.add(scroll);
@@ -92,8 +99,7 @@ public class Asignaturas extends JPanel {
         gbc.anchor = GridBagConstraints.NORTHWEST;
         add(leftPanel, gbc);
 
-        // --- 4. NAVEGACIÓN INFERIOR ---
-        // FlowLayout con alineación a la derecha para que los botones queden como en la foto
+        // --- 4. NAVEGACIÓN INFERIOR: botones Home y Back ---
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 20));
         bottom.setOpaque(false);
 
@@ -102,7 +108,7 @@ public class Asignaturas extends JPanel {
         inicio.setPreferredSize(new Dimension(100, 38));
         inicio.addActionListener(e -> mainFrame.showView("MAIN_ESTUDIANTE"));
 
-        // El botón de atrás es circular en la imagen
+        // Botón atrás con forma circular
         BotonRedondeado back = new BotonRedondeado(" ← ");
         back.setBackground(VERDE_BOTON);
         back.setPreferredSize(new Dimension(55, 38));

@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public final class ProfessorProfile {
-
+    // Clase inmutable que representa la información de un profesor usada en la UI.
+    // Contiene campos de presentación y claves de localización para asignaturas y
+    // consideraciones (aspectos) que pueden ser resueltas mediante ResourceBundle.
     private final String id;
     private final String displayName;
     private final String department;
@@ -65,6 +67,8 @@ public final class ProfessorProfile {
     }
 
     public String[] getLocalizedSubjectNames(ResourceBundle bundle) {
+        // Devuelve los nombres localizados de las asignaturas asociadas usando el bundle.
+        // Si no existe la clave en el bundle, devuelve la propia clave como fallback.
         return subjectKeys.stream()
             .map(key -> bundle.containsKey(key) ? bundle.getString(key) : key)
             .toArray(String[]::new);

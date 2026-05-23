@@ -5,34 +5,35 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class MobileListRenderer extends DefaultListCellRenderer {
-    
+    // Renderer ligero pensado para listas estilo móvil: icono a la izquierda,
+    // texto central y una flecha a la derecha. Usa un panel transparente
+    // para permitir fondos personalizados en la lista.
     private ImageIcon carpetaIcon;
 
     public MobileListRenderer() {
-        // Carga aquí tu imagen de carpeta personalizada
+        // Intenta cargar un icono de carpeta desde recursos; si no existe,
+        // se usa un emoji como fallback. El tamaño buscado es 24x20.
         carpetaIcon = loadIcon("/resources/folder.PNG", 24, 20); 
     }
 
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        // Construimos un panel por celda con layout simple: icono | texto | flecha
         JPanel p = new JPanel(new BorderLayout(15, 0));
         p.setOpaque(false);
-        // Margen lateral interno para que no se pegue al borde del scroll
+        // Margen interior para separar del borde del scroll
         p.setBorder(new EmptyBorder(5, 15, 5, 15)); 
 
-        // Icono (Carpeta)
+        // Icono (Carpeta) o fallback
         JLabel iconLabel = new JLabel(carpetaIcon != null ? carpetaIcon : new JLabel("📁").getIcon());
         
-        // Texto
+        // Texto del elemento: estilo y color. Si está seleccionado se muestra en negrita.
         JLabel text = new JLabel(value.toString());
         text.setFont(new Font("SansSerif", isSelected ? Font.BOLD : Font.PLAIN, 15));
         text.setForeground(new Color(50, 50, 50));
         
-        // --- EL SECRETO PARA LOS PUNTOS SUSPENSIVOS ---
-        // Forzamos un ancho máximo para que no empuje la pantalla hacia la derecha
         text.setPreferredSize(new Dimension(170, 30));
 
-        // Flecha Derecha
         JLabel arrow = new JLabel("›");
         arrow.setForeground(new Color(100, 100, 100));
         arrow.setFont(new Font("Monospaced", Font.BOLD, 22));
@@ -41,6 +42,8 @@ public class MobileListRenderer extends DefaultListCellRenderer {
         p.add(text, BorderLayout.CENTER);
         p.add(arrow, BorderLayout.EAST);
 
+        // Si la celda está seleccionada, coloreamos el fondo con una capa translúcida
+        // para mantener el aspecto 'tarjeta' sin perder la sensación de profundidad.
         if (isSelected) {
             p.setOpaque(true);
             p.setBackground(new Color(255, 255, 255, 120)); // Fondo blanco translúcido
