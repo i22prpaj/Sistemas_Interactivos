@@ -123,9 +123,9 @@
 
 La segunda parte de la práctica se ha desarrollado como una interfaz gráfica incremental a partir del prototipo de la primera entrega. El objetivo principal ha sido transformar el flujo conceptual en una aplicación funcional, manteniendo la coherencia visual del prototipo pero añadiendo navegación real, persistencia de estado y localización de textos.
 
-\subsection{Organización del código}
+\subsection{Organización y estructura del código}
 
-El proyecto se ha estructurado en paquetes para separar responsabilidades y facilitar el mantenimiento:
+El proyecto se ha estructurado en paquetes para separar responsabilidades y facilitar el mantenimiento. La distribución principal es la siguiente:
 
 \begin{itemize}
     \item \texttt{src/main}: contiene la clase principal \texttt{MainFrame}, responsable de la navegación mediante \texttt{CardLayout}, del estado global y del cambio de idioma.
@@ -133,22 +133,10 @@ El proyecto se ha estructurado en paquetes para separar responsabilidades y faci
     \item \texttt{src/model}: incluye componentes reutilizables y clases de apoyo, como paneles redondeados, bordes, renderers de listas y los directorios de datos de profesores, credenciales y valoraciones.
     \item \texttt{src/bundle}: almacena los ficheros de internacionalización \texttt{Bundle\_es\_ES.properties} y \texttt{Bundle\_en.properties} para español e inglés.
     \item \texttt{src/resources}: contiene los iconos e imágenes usados por la interfaz.
+    \item \texttt{run-gui.sh}, \texttt{stop-gui.sh}: scripts de arranque y parada.
 \end{itemize}
 
-\subsection{Estructura del proyecto}
-
-Aquí nos limitamos a enumerar las carpetas principales y su propósito:
-
-\begin{itemize}
-    \item \texttt{src/main}: lógica principal y navegación (MainFrame)
-    \item \texttt{src/gui}: pantallas Swing (Login, Registro, Valoración, etc.)
-    \item \texttt{src/model}: componentes reutilizables y modelos (ProfessorDirectory, perfiles, persistencia)
-    \item \texttt{src/bundle}: ficheros de internacionalización (\texttt{Bundle\_es\_ES.properties}, \texttt{Bundle\_en.properties})
-    \item \texttt{src/resources}: imágenes e iconos usados por la interfaz
-    \item \texttt{run-gui.sh}, \texttt{stop-gui.sh}: scripts de arranque y parada
-\end{itemize}
-
-Luego, en la sección "Diagrama de la estructura de directorios (detallado)" se incluirá un esquema más detallado que muestra la relación entre las clases y paquetes.
+Más abajo se añade un diagrama más detallado de la estructura de directorios y de la relación entre clases y paquetes
 
 \subsection{Diagrama de clases}
 
@@ -355,7 +343,7 @@ En lugar del recuadro simple, a\ continuaci\'on se incluye un \texttt{tree}-like
 
 \subsection{Compilación y ejecución}
 
-Para ejecutar la aplicación, basta con situarse en la carpeta \texttt{proyecto} y lanzar el script de arranque:
+Para ejecutar la aplicación, basta con situarse en la carpeta del proyecto y lanzar el script de arranque:
 
 \begin{verbatim}
 cd /ruta/al/proyecto

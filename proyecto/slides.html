@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Presentación UCOpiniones / UCO Reviews</title>
+  <style>
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    .deck{height:100%;display:flex;align-items:center;justify-content:center;background:#0f1724;color:#e6eef8}
+    .slide{width:100%;max-width:960px;padding:48px;box-sizing:border-box;text-align:left}
+    h1{font-size:2.2rem;margin:0 0 .4rem}
+    h2{font-size:1.25rem;margin:.25rem 0 1rem;color:#cfe5ff}
+    p{line-height:1.4;color:#dbe9ff}
+    .controls{position:fixed;left:16px;bottom:16px}
+    button{background:#1f6feb;border:none;color:white;padding:10px 14px;border-radius:8px;margin-right:8px;cursor:pointer}
+    .footer{position:fixed;right:16px;bottom:18px;color:#9fb7db;font-size:0.9rem}
+    .imgwrap{margin-top:12px;border-radius:6px;overflow:hidden;background:#fff;padding:4px}
+    img.diagram{max-width:100%;height:auto;display:block}
+    ul{color:#dbe9ff}
+    .notes{margin-top:20px;background:rgba(255,255,255,0.03);padding:12px;border-radius:6px;color:#cfe5ff}
+  </style>
+</head>
+<body>
+  <div id="deck" class="deck">
+    <section id="s0" class="slide" data-index="0">
+      <h1>UCOpiniones — UCO Reviews</h1>
+      <h2>Presentación breve y demo</h2>
+      <p>La app nace para centralizar información docente, facilitar la consulta de profesores y hacer más cómodo el flujo de valoración y reporte desde una interfaz pensada para móvil.</p>
+      <div class="notes">Pulsa ← → o usa los botones.</div>
+    </section>
+
+    <section id="s1" class="slide" data-index="1">
+      <h1>Antecedentes y objetivo</h1>
+      <h2>De qué partimos</h2>
+      <ul>
+        <li>Partimos del prototipo de la primera entrega, que definía el flujo general y la estructura visual.</li>
+        <li>En esta segunda parte lo convertimos en una interfaz funcional con navegación real, persistencia e internacionalización.</li>
+        <li>Las diferencias con el prototipo se justifican por usabilidad, coherencia visual y adaptación al uso real.</li>
+      </ul>
+      <div class="notes">La demostración se apoya en el prototipo previo, pero la interfaz final evoluciona para ser usable de verdad.</div>
+    </section>
+
+    <section id="s2" class="slide" data-index="2">
+      <h1>Arquitectura clave</h1>
+      <h2>Componentes relevantes</h2>
+      <ul>
+        <li>`ProfessorDirectory` — gestión de perfiles y persistencia en <code>~/.sisint_ratings.json</code></li>
+        <li>`CambiarContrasenaPanel` — flujo de cambio de contraseña y `CredentialStore`</li>
+        <li>UI Swing con componentes personalizados (`BotonRedondeado`, `JPanelRedondeado`)</li>
+      </ul>
+      <div class="imgwrap">
+        <img class="diagram" src="imagenes/diagrama_clases.png" alt="Diagrama de clases" onerror="this.style.display='none'">
+      </div>
+      </section>
+
+    <section id="s3" class="slide" data-index="3">
+      <h1>Demo y mensajes clave</h1>
+      <h2>Pasos a seguir en la demo</h2>
+      <ol>
+        <li>Login con credenciales de prueba</li>
+        <li>Abrir perfil de un profesor y valorar</li>
+        <li>Marcar aspectos y comprobar `~/.sisint_ratings.json`</li>
+        <li>Cambiar contraseña y mostrar feedback inline</li>
+      </ol>
+      <div class="notes">Resaltar diseño: mensajes inline (no JOptionPane) y botones redondeados.</div>
+    </section>
+  </div>
+
+  <div class="controls">
+    <button id="prev">← Anterior</button>
+    <button id="next">Siguiente →</button>
+    <button id="start">Ir a inicio</button>
+  </div>
+  <div class="footer">Slide <span id="index">1</span> / <span id="total">4</span></div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let idx = 0;
+    const total = slides.length;
+    document.getElementById('total').textContent = total;
+    function show(i){
+      idx = (i + total) % total;
+      const deck = document.getElementById('deck');
+      const el = slides[idx];
+      document.getElementById('index').textContent = idx+1;
+      // replace deck content with current slide for accessibility/resizing
+      deck.innerHTML = '';
+      deck.appendChild(el);
+    }
+    document.getElementById('prev').addEventListener('click', ()=> show(idx-1));
+    document.getElementById('next').addEventListener('click', ()=> show(idx+1));
+    document.getElementById('start').addEventListener('click', ()=> show(0));
+    document.addEventListener('keydown', (e)=>{
+      if(e.key==='ArrowRight') show(idx+1);
+      if(e.key==='ArrowLeft') show(idx-1);
+    });
+    // initialize
+    // re-query slides because we moved them into deck; recreate array
+    (function init(){
+      const s = document.querySelectorAll('.slide');
+      // initially show first slide by rendering all then replacing
+      const deck = document.getElementById('deck');
+      deck.innerHTML = '';
+      slides.forEach(sl=>deck.appendChild(sl));
+      show(0);
+    })();
+  </script>
+</body>
+</html>
