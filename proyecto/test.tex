@@ -137,27 +137,18 @@ El proyecto se ha estructurado en paquetes para separar responsabilidades y faci
 
 \subsection{Estructura del proyecto}
 
-La siguiente figura resume la estructura principal del proyecto. Si se dispone de un diagrama más detallado, se puede sustituir el recuadro por una captura o una imagen exportada del árbol de directorios.
+Aquí nos limitamos a enumerar las carpetas principales y su propósito:
 
-\begin{figure}[H]
-    \centering
-    \fbox{\parbox{0.9\textwidth}{
-    \vspace{0.4cm}
-    \textbf{Estructura de directorios del proyecto}\\
-    \vspace{0.2cm}
+\begin{itemize}
+    \item \texttt{src/main}: lógica principal y navegación (MainFrame)
+    \item \texttt{src/gui}: pantallas Swing (Login, Registro, Valoración, etc.)
+    \item \texttt{src/model}: componentes reutilizables y modelos (ProfessorDirectory, perfiles, persistencia)
+    \item \texttt{src/bundle}: ficheros de internacionalización (\texttt{Bundle\_es\_ES.properties}, \texttt{Bundle\_en.properties})
+    \item \texttt{src/resources}: imágenes e iconos usados por la interfaz
+    \item \texttt{run-gui.sh}, \texttt{stop-gui.sh}: scripts de arranque y parada
+\end{itemize}
 
-    \texttt{proyecto/}\\
-    \quad \texttt{src/main} -- lógica principal y navegación\\
-    \quad \texttt{src/gui} -- pantallas Swing\\
-    \quad \texttt{src/model} -- componentes y modelos reutilizables\\
-    \quad \texttt{src/bundle} -- textos traducidos\\
-    \quad \texttt{src/resources} -- imágenes e iconos\\
-    \quad \texttt{run-gui.sh} -- arranque de la aplicación\\
-    \quad \texttt{stop-gui.sh} -- detención de la aplicación\\
-    \vspace{0.4cm}
-    }}
-    \caption{Estructura general del proyecto.}
-\end{figure}
+Luego, en la sección "Diagrama de la estructura de directorios (detallado)" se incluirá un esquema más detallado que muestra la relación entre las clases y paquetes.
 
 \subsection{Diagrama de clases}
 
@@ -166,7 +157,7 @@ La arquitectura se apoya en una clase contenedora principal y en una serie de pa
 % Diagrama de clases añadido con TikZ
 \begin{figure}[H]
     \centering
-        \includegraphics[width=0.85\linewidth]{imagenes/diagrama_clases.png}
+        \includegraphics[width=0.85\linewidth]{diagrama_clases.png}
         \caption{Diagrama de clases}
     \end{figure}
 
@@ -192,10 +183,10 @@ Aunque la implementaci\'on parte del prototipo entregado previamente, se introdu
 \begin{itemize}
     \item \textbf{Filtros por curso y buscador:} se a\~nadieron filtros por a\~no y una barra de b\'usqueda para mejorar la usabilidad y facilitar el acceso directo a asignaturas, justificando la mejora de eficiencia en navegaci\'on.
     \item \textbf{Pantalla dedicada de cambio de contrase\~na:} se opt\'o por una vista propia en lugar de un di\'alogo modal para facilitar la interacci\'on en dispositivos con pantallas peque\~nas y permitir feedback integrado.
-    \item \textbf{Ajustes de cuenta:} se incluyeron ajustes propios (ver/ cerrar sesi\'on, cambiar contrase\~na) para centralizar la gesti\'on del usuario y evitar men\'us dispersos.
+    \item \textbf{Ajustes de cuenta:} se incluyeron ajustes propios (cerrar sesi\'on, cambiar contrase\~na) para centralizar la gesti\'on del usuario y evitar men\'us dispersos.
     \item \textbf{Persistencia de valoraciones:} las valoraciones y aspectos marcados se guardan en un fichero JSON, permitiendo medias reales y persistencia entre sesiones en lugar de datos ef\'imeros del prototipo.
     \item \textbf{Estilo visual:} se emplearon botones y paneles redondeados y se unificaron tamaños y paddings para coherencia; estos cambios son puramente de UI y se justifican por legibilidad y adaptaci\'on m\'ovil.
-    \item \textbf{Mensajes y flujo de \"operaci\'on realizada\":} se unific\'o la pantalla de confirmaci\'on para reutilizarla en distintos flujos y permitir regresar a vistas concretas seg\'un el contexto (login vs main), reduciendo c\'odigo duplicado.
+    \item \textbf{Mensajes y flujo de ``operaci\'on realizada":} se unific\'o la pantalla de confirmaci\'on para reutilizarla en distintos flujos y permitir regresar a vistas concretas seg\'un el contexto (login vs main), reduciendo c\'odigo duplicado.
 \end{itemize}
 
 % TODO: Si hay diferencias adicionales detectadas en revisiones posteriores, incluirlas aqu\'i con su justificaci\'on.
@@ -257,10 +248,6 @@ En lugar del recuadro simple, a\ continuaci\'on se incluye un \texttt{tree}-like
 \paragraph{Navegación con \texttt{CardLayout}.} La aplicación se ha organizado como un conjunto de pantallas independientes gestionadas por \texttt{MainFrame}. Cada vista se carga como una tarjeta distinta y la navegación se resuelve mediante llamadas a \texttt{showView}. Esto permite construir un flujo claro y fácil de mantener.
 
 \paragraph{Internacionalización.} Todos los textos visibles se obtienen desde \texttt{Bundle\_es\_ES.properties} y \texttt{Bundle\_en.properties}. El cambio de idioma no solo afecta a botones o etiquetas, sino también a asignaturas, valores de detalle y mensajes auxiliares.
-
-\paragraph{Persistencia ligera.} Para que la interacción fuera real, se han guardado en ficheros locales aspectos de valoración, ratings promedio y credenciales de acceso. Esto permite que los cambios realizados desde la interfaz se mantengan entre ejecuciones.
-
-\paragraph{Reutilización de componentes Swing.} Se han creado paneles y componentes auxiliares para evitar repetir lógica de estilo: bordes redondeados, botones personalizados, renderers de listas y campos con placeholder.
 
 \paragraph{Diferencias respecto al prototipo.} La interfaz final no es una réplica exacta del prototipo, sino una evolución funcional. Las diferencias más relevantes, como los filtros por curso, el buscador, la pantalla de cambio de contraseña y la pantalla de ajustes de cuenta, se han introducido para dar respuesta a la interacción real del usuario y se consideran justificadas por la mejora de usabilidad.
 
@@ -380,7 +367,7 @@ En local, el script compila el código Java y abre la interfaz gráfica directam
 \subsection{Uso básico}
 
 \begin{enumerate}
-    \item Inicia sesión con una cuenta válida.
+    \item Inicia sesión con una cuenta válida. Para entrar como alumno: elena.ruiz@uco.es; mientras que para entrar como moderador: moderador@uco.es. En ambos casos la contraseña es 1234.
     \item Desde la pantalla principal, utiliza los filtros por curso o la barra de búsqueda para localizar una asignatura.
     \item Selecciona una asignatura para ver el listado de profesores asociados.
     \item Abre el detalle del profesor para consultar toda la información disponible.
