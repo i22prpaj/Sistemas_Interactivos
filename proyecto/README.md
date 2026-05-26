@@ -25,19 +25,20 @@ Forma rápida (sin Maven/Gradle):
 
 ```bash
 cd /ruta/a/proyecto
-mkdir -p bin
-javac -d bin $(find src -name "*.java")
+bash build.sh
 ```
 
-Crear un JAR ejecutable (si el proyecto tiene `Main-Class` en el manifest):
+Si prefieres hacerlo manualmente:
 
 ```bash
-cd proyecto
-jar --create --file sisint.jar -C bin .
-# Si tienes un Main-Class, puedes ejecutar: java -jar sisint.jar
+mkdir -p bin
+javac -d bin $(find src -name "*.java")
+cp -R src/bundle bin/
+cp -R src/resources bin/
+jar cfe sisint.jar main.MainFrame -C bin .
 ```
 
-Si prefieres usar Maven/Gradle añade un `pom.xml`/`build.gradle` y usa `mvn package` o `gradle build`.
+El script `build.sh` deja el JAR listo para ejecutar y copia también los bundles de idioma y los recursos gráficos.
 
 ## Ejecutar
 
@@ -97,3 +98,4 @@ pdflatex -interaction=nonstopmode test.tex
 - "No se encuentra java": instala `openjdk-17-jdk` y verifica `java -version`.
 - Errores al compilar: asegúrate de lanzar `javac` desde la carpeta `proyecto` y que la ruta `src` exista.
 - Si `run-gui.sh` no arranca: revisa permisos (`chmod +x run-gui.sh`) y dependencias del entorno gráfico.
+- Si el JAR falla con textos en otro idioma, recompila con `bash build.sh` para regenerar `sisint.jar` con los bundles actualizados.
