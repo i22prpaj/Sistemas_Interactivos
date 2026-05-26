@@ -78,7 +78,7 @@ public class ProfesorDetalle extends JPanel {
         header.add(textHeader, hGbc);
 
         gbc.gridy = 0; // fila 0 del contentPanel
-        gbc.insets = new Insets(20, 15, 15, 15); // márgenes alrededor del header
+        gbc.insets = new Insets(20, 22, 15, 22); // márgenes alrededor del header
         contentPanel.add(header, gbc);
 
         // --- 2. VALORACIÓN: tarjeta blanca con nota y estrellas ---
@@ -111,16 +111,16 @@ public class ProfesorDetalle extends JPanel {
         JPanelRedondeado datos = new JPanelRedondeado(15);
         datos.setBackground(GRIS_TARJETA);
         datos.setLayout(new GridLayout(4, 1, 0, 12));
-        datos.setBorder(new EmptyBorder(15, 15, 15, 15));
+        datos.setBorder(new EmptyBorder(18, 20, 18, 20));
 
         // Agregar filas con icono y texto usando createContactRow
         datos.add(createContactRow("⌂", textos.getString("profesor.despacho") + ": " + (profile != null ? profile.getOffice() : "")));
         datos.add(createContactRow("✉", textos.getString("common.email") + ": " + (profile != null ? profile.getEmail() : "")));
         datos.add(createContactRow("✆", textos.getString("profesor.telefono") + ": " + (profile != null ? profile.getPhone() : "")));
-        datos.add(createContactRow("◷", textos.getString("profesor.tutorias") + ": " + (profile != null ? profile.getOfficeHours() : "")));
+        datos.add(createContactRow("◷", textos.getString("profesor.tutorias") + ": " + ProfessorDirectory.localizeOfficeHours(profile != null ? profile.getOfficeHours() : "", textos)));
 
         gbc.gridy = 2;
-        gbc.insets = new Insets(0, 15, 15, 15);
+        gbc.insets = new Insets(0, 22, 15, 22);
         contentPanel.add(datos, gbc);
 
         // --- 4. ASIGNATURAS IMPARTIDAS: tarjeta con lista de asignaturas localizadas ---
@@ -232,7 +232,12 @@ public class ProfesorDetalle extends JPanel {
         iconLabel.setFont(new Font("SansSerif", Font.PLAIN, 18)); // icono ligeramente grande
         iconLabel.setPreferredSize(new Dimension(25, 25)); // tamaño fijo para alinear
 
-        JLabel textLabel = new JLabel("<html>" + text + "</html>");
+        String safeText = text == null ? "" : text
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\n", "<br>");
+        JLabel textLabel = new JLabel("<html><div style='width: 205px; padding: 0 4px;'>" + safeText + "</div></html>");
         textLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
         textLabel.setForeground(Color.DARK_GRAY);
 

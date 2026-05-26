@@ -197,16 +197,16 @@ public class ReportDetailPanel extends JPanel {
         JPanelRedondeado card = buildBaseCard(25);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
-        // "Reportado por:" — `MessageFormat` permite insertar valores
-        // en la cadena obtenida del bundle, manteniendo la localización.
-        card.add(createRichLabel(java.text.MessageFormat.format(bundle.getString("reportdetail.reported_by"), "1 usuario"), ""));
+        // "Reportado por:" — el valor mostrado también sale del bundle para
+        // no dejar textos fijos en español dentro del panel.
+        card.add(createRichLabel(java.text.MessageFormat.format(bundle.getString("reportdetail.reported_by"), bundle.getString("reportdetail.reported_by_value")), ""));
         card.add(Box.createVerticalStrut(4));
 
-        card.add(createRichLabel(java.text.MessageFormat.format(bundle.getString("reportdetail.published"), "Hace 2 horas"), ""));
+        card.add(createRichLabel(java.text.MessageFormat.format(bundle.getString("reportdetail.published"), bundle.getString("reportdetail.published_value")), ""));
         card.add(Box.createVerticalStrut(4));
 
         // autor del comentario y nota sobre su historial.
-        card.add(createRichLabel(bundle.getString("reportdetail.user_author"), "fran.perez (sin historial previo)"));
+        card.add(createRichLabel(bundle.getString("reportdetail.user_author"), bundle.getString("reportdetail.user_author_value")));
         return card;
     }
 

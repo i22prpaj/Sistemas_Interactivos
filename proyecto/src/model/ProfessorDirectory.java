@@ -458,17 +458,70 @@ public final class ProfessorDirectory {
     }
 
     // Traduce una consideración/aspecto usando: tabla interna -> clave canónica -> ResourceBundle.
+    // Además, para la presentación, si la consideración resulta ser muy larga
+    // insertamos un salto de línea tras la primera " y " (conjunción en español)
+    // para que las tarjetas no se estiren excesivamente en horizontal.
+    // Devuelve texto plain o HTML (comienza con "<html>") listo para usar en JLabel.
     public static String localizeConsideration(String value, ResourceBundle bundle) {
-        String translatedNote = localizedNoteForValue(value, bundle); //fx def en este archivo
+        String translatedNote = localizedNoteForValue(value, bundle);
+        String result;
         if (translatedNote != null) {
-            return translatedNote;
+            result = translatedNote;
+        } else {
+            String key = considerationKeyForValue(value);
+            if (key != null && bundle != null && bundle.containsKey(key)) {
+                result = bundle.getString(key);
+            } else {
+                result = value == null ? "" : value;
+            }
         }
 
-        String key = considerationKeyForValue(value);
-        if (key != null && bundle != null && bundle.containsKey(key)) {
-            return bundle.getString(key);
+        // Formateo adicional para presentación: si es español y la cadena
+        // sobrepasa un umbral razonable, insertar un salto de línea tras
+        // la primera " y " para mejorar lectura. Envolvemos en HTML y
+        // escapamos caracteres especiales.
+        return formatConsiderationForDisplay(result, bundle);
+    }
+
+    // Formatea una consideración para mostrar en UI.
+    private static String formatConsiderationForDisplay(String text, ResourceBundle bundle) {
+        if (text == null) return "";
+
+        // Umbral a partir del cual intentamos partir la frase (caracteres).
+        final int WRAP_THRESHOLD = 48;
+
+        String safe = text.trim();
+
+        // Solo aplicamos la regla específica de " y " para bundles en español
+        // (o cuando no hay bundle explícito, asumimos español por defecto).
+        boolean isEnglish = isEnglishBundle(bundle);
+
+        if (!isEnglish && safe.length() > WRAP_THRESHOLD && safe.contains(" y ")) {
+            // Para evitar que el tag <br> sea escapado y mostrado como texto,
+            // dividimos en dos partes alrededor de la primera ' y ', escapamos
+            // cada parte por separado y luego ensamblamos con un <br> real.
+            int idx = safe.indexOf(" y ");
+            String left = safe.substring(0, idx);
+            String right = safe.substring(idx + 3); // saltamos " y "
+            String leftEsc = escapeHtml(left.trim());
+            String rightEsc = escapeHtml(right.trim());
+            return "<html><div style='width: 205px; padding: 0 4px;'>" + leftEsc + " y<br>" + rightEsc + "</div></html>";
         }
-        return value;
+
+        // Escapar HTML básico y envolver en un ancho fijo para que JLabel
+        // haga el wrapping correcto cuando se presente como HTML.
+        String escaped = escapeHtml(safe);
+        return "<html><div style='width: 205px; padding: 0 4px;'>" + escaped + "</div></html>";
+    }
+
+    // Escapa los caracteres HTML básicos para evitar HTML injection en los labels.
+    private static String escapeHtml(String s) {
+        if (s == null) return null;
+        return s.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
 
     // Devuelve la clave canónica para una consideración, o el valor original si no hay clave.
@@ -564,6 +617,53 @@ public final class ProfessorDirectory {
             case "Da importancia a la precisión en las respuestas." -> "Gives importance to precision in answers.";
             default -> null;
         };
+    }
+
+    // Traduce el texto de tutorías/horario de consulta al idioma activo.
+    // El dato base se conserva en el modelo, y la localización se aplica solo
+    // en la presentación. En español, además, insertamos un salto de línea tras
+    // la primera "y" para evitar que la fila se estire demasiado horizontalmente.
+    public static String localizeOfficeHours(String value, ResourceBundle bundle) {
+        if (value == null) {
+            return null;
+        }
+
+        if (isEnglishBundle(bundle)) {
+            return switch (value.trim()) {
+                case "martes y jueves de 10:00 a 12:30" -> "Tuesday and Thursday\n10:00-12:30";
+                case "lunes y miércoles de 12:00 a 14:00" -> "Monday and Wednesday\n12:00-14:00";
+                case "lunes de 16:00 a 18:00 y miércoles de 9:00 a 11:00" -> "Monday 16:00-18:00\nand Wednesday 9:00-11:00";
+                case "martes de 9:30 a 11:30 y jueves de 12:00 a 14:00" -> "Tuesday 9:30-11:30\nand Thursday 12:00-14:00";
+                case "martes y jueves de 11:00 a 13:00" -> "Tuesday and Thursday\n11:00-13:00";
+                case "lunes y miércoles de 10:00 a 12:00" -> "Monday and Wednesday\n10:00-12:00";
+                case "martes de 16:00 a 18:00 y viernes de 10:00 a 12:00" -> "Tuesday 16:00-18:00\nand Friday 10:00-12:00";
+                case "lunes de 11:00 a 13:00 y jueves de 16:00 a 18:00" -> "Monday 11:00-13:00\nand Thursday 16:00-18:00";
+                case "miércoles de 12:00 a 14:00 y viernes de 9:00 a 11:00" -> "Wednesday 12:00-14:00\nand Friday 9:00-11:00";
+                case "lunes y jueves de 8:30 a 10:30" -> "Monday and Thursday\n8:30-10:30";
+                case "martes de 9:00 a 11:00 y jueves de 12:00 a 14:00" -> "Tuesday 9:00-11:00\nand Thursday 12:00-14:00";
+                case "lunes y miércoles de 17:00 a 19:00" -> "Monday and Wednesday\n17:00-19:00";
+                case "martes y viernes de 10:00 a 12:00" -> "Tuesday and Friday\n10:00-12:00";
+                case "miércoles de 9:30 a 11:30 y viernes de 12:00 a 14:00" -> "Wednesday 9:30-11:30\nand Friday 12:00-14:00";
+                case "lunes de 12:00 a 14:00 y jueves de 9:00 a 11:00" -> "Monday 12:00-14:00\nand Thursday 9:00-11:00";
+                case "martes y jueves de 8:30 a 10:30" -> "Tuesday and Thursday\n8:30-10:30";
+                case "lunes de 10:00 a 12:00 y miércoles de 16:00 a 18:00" -> "Monday 10:00-12:00\nand Wednesday 16:00-18:00";
+                case "martes de 15:30 a 17:30 y jueves de 9:00 a 11:00" -> "Tuesday 15:30-17:30\nand Thursday 9:00-11:00";
+                case "lunes y jueves de 12:00 a 14:00" -> "Monday and Thursday\n12:00-14:00";
+                case "miércoles de 11:00 a 13:00 y viernes de 9:00 a 11:00" -> "Wednesday 11:00-13:00\nand Friday 9:00-11:00";
+                case "martes y viernes de 12:00 a 14:00" -> "Tuesday and Friday\n12:00-14:00";
+                case "lunes y miércoles de 9:00 a 11:00" -> "Monday and Wednesday\n9:00-11:00";
+                case "martes de 16:00 a 18:00 y jueves de 10:00 a 12:00" -> "Tuesday 16:00-18:00\nand Thursday 10:00-12:00";
+                case "lunes y jueves de 11:00 a 13:00" -> "Monday and Thursday\n11:00-13:00";
+                case "martes y viernes de 9:00 a 11:00" -> "Tuesday and Friday\n9:00-11:00";
+                default -> value;
+            };
+        }
+
+        if (value.contains(" y ")) {
+            return value.replaceFirst(" y ", " y\n");
+        }
+
+        return value;
     }
 
     private static boolean isEnglishBundle(ResourceBundle bundle) {
