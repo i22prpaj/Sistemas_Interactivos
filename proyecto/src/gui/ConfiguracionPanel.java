@@ -266,7 +266,6 @@ public class ConfiguracionPanel extends JPanel {
         cacheMessageTimer.setRepeats(false);
         cacheMessageTimer.start();
     }
-
     // showCacheMessage(): muestra una notificación tipo "toast" durante 2.8s
     // y fuerza una llamada a GC como indicador simbólico de limpieza de recursos.
 
@@ -277,7 +276,6 @@ public class ConfiguracionPanel extends JPanel {
         label.setBounds(x, y, 300, 25);
         return label;
     }
-
     // createLabel: etiqueta simple con posición absoluta usada por el layout null
 
     private JLabel createLabelCentered(String text, int x, int y, Color color) {
@@ -288,7 +286,6 @@ public class ConfiguracionPanel extends JPanel {
         label.setBounds(x, y, 300, 25);
         return label;
     }
-
     // createLabelCentered: etiqueta centrada con color (ej. logout)
 
     private JLabel createClickableLabel(String text, int x, int y) {
@@ -314,15 +311,21 @@ public class ConfiguracionPanel extends JPanel {
 
         return label;
     }
-
     // createClickableLabel: etiqueta que responde a hover y click, usada para
     // navegar a vistas como AJUSTES_CUENTA o CAMBIAR_CONTRASENA.
 
+
     // ================== CLASES INTERNAS (Sin cambios mayores, solo ajustes de tamaño) ==================
     
+    // Toggle visual para seleccionar el idioma. Muestra dos etiquetas (Español / English)
+    // y un indicador desplazable que cambia de lado cuando se pulsa.
+    // - `left` indica si el indicador está en la posición izquierda (Español).
+    // - Al hacer click intercambia `left`, repinta y lanza un `Timer` corto que llama
+    //   a `mainFrame.changeLanguage(...)` para aplicar la localización sin bloquear.
     class TogglePill extends JComponent {
         boolean left;
         public TogglePill(int x, int y) {
+            // Posición inicial basada en la configuración regional del sistema
             left = Locale.getDefault().getLanguage().equals("es");
             setBounds(x, y, 160, 45);
             addMouseListener(new java.awt.event.MouseAdapter() {
@@ -330,6 +333,7 @@ public class ConfiguracionPanel extends JPanel {
                     left = !left;
                     repaint();
 
+                    // Cambiar idioma tras una pequeña pausa (mejora UX visual)
                     Locale selectedLocale = left ? new Locale("es", "ES") : Locale.ENGLISH;
                     Timer timer = new Timer(130, ev -> mainFrame.changeLanguage(selectedLocale, "CONFIGURACION"));
                     timer.setRepeats(false);
@@ -338,13 +342,17 @@ public class ConfiguracionPanel extends JPanel {
             });
         }
         protected void paintComponent(Graphics g) {
+            // Pintado manual: fondo redondeado, y disco indicador en izquierda/derecha.
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // Fondo del pill
             g2.setColor(new Color(110, 125, 95));
             g2.fillRoundRect(0, 0, 150, 40, 40, 40);
+            // Indicador interno (posición depende de `left`)
             g2.setColor(new Color(135, 150, 120));
             if (left) g2.fillRoundRect(3, 3, 72, 34, 34, 34);
             else g2.fillRoundRect(75, 3, 72, 34, 34, 34);
+            // Etiquetas de texto
             g2.setColor(Color.WHITE);
             g2.setFont(new Font("Arial", Font.PLAIN, 12));
             g2.drawString("Español", 18, 25);
@@ -352,6 +360,9 @@ public class ConfiguracionPanel extends JPanel {
         }
     }
 
+    // Interruptor simple para activar/desactivar opciones (p.ej. notificaciones).
+    // - `on` controla la apariencia y posición del círculo.
+    // - Al hacer click cambia `on` y repinta inmediatamente.
     class ToggleSwitch extends JComponent {
         boolean on = true;
         public ToggleSwitch(int x, int y) {
@@ -363,6 +374,7 @@ public class ConfiguracionPanel extends JPanel {
             });
         }
         protected void paintComponent(Graphics g) {
+            // Dibujado: fondo redondeado + círculo que se desplaza según `on`.
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(on ? new Color(45, 35, 99) : Color.GRAY);
@@ -373,15 +385,18 @@ public class ConfiguracionPanel extends JPanel {
         }
     }
 
+    // Botón con fondo redondeado dibujado manualmente.
+    // Se usa en el footer para mantener el estilo visual consistente.
     class RoundButton extends JButton {
         public RoundButton(String text, int width, int height) {
             super(text);
             setPreferredSize(new Dimension(width, height));
             setFocusPainted(false);
             setBorderPainted(false);
-            setContentAreaFilled(false);
+            setContentAreaFilled(false); // Deshabilitamos el pintado por defecto
         }
         protected void paintComponent(Graphics g) {
+            // Dibujar un rectángulo redondeado y centrar el texto manualmente.
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(new Color(185, 250, 130));

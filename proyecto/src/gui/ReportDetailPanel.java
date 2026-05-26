@@ -77,6 +77,10 @@ public class ReportDetailPanel extends JPanel {
         add(scroll, BorderLayout.CENTER);
     }
 
+    // Panel especializado que implementa la interfaz Scrollable para comportarse
+    // como una columna apilable que no crece horizontalmente (evita desbordes).
+    // - `getScrollableTracksViewportWidth() == true` fuerza que el ancho del panel
+    //   siga siempre el ancho del viewport, evitando scroll horizontal.
     class ScrollablePanel extends JPanel implements Scrollable {
         @Override
         public Dimension getPreferredScrollableViewportSize() { return super.getPreferredSize(); }
@@ -90,6 +94,8 @@ public class ReportDetailPanel extends JPanel {
         public boolean getScrollableTracksViewportHeight() { return false; }
     }
 
+    // Cabecera del panel: botón "Atrás" y título.
+    // El botón no pinta borde ni fondo y usa un cursor de mano para indicar que es interactivo.
     private JComponent createHeader() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         p.setOpaque(false);
@@ -110,6 +116,8 @@ public class ReportDetailPanel extends JPanel {
         return p;
     }
 
+    // Badge / etiqueta que muestra la categoría del reporte (p.ej. "Lenguaje ofensivo").
+    // Tiene fondo suavemente coloreado y un icono a la izquierda para reforzar el significado.
     private JComponent createTagBadge() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         p.setOpaque(false);
@@ -127,6 +135,8 @@ public class ReportDetailPanel extends JPanel {
         return p;
     }
 
+    // Tarjeta que muestra la información del profesor involucrado en el reporte.
+    // Usa `buildBaseCard` para mantener el mismo estilo visual de las demás tarjetas.
     private JComponent createProfessorCard() {
         JPanelRedondeado card = buildBaseCard(25);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
@@ -181,24 +191,37 @@ public class ReportDetailPanel extends JPanel {
     }
 
     private JComponent createInfoCard() {
+        // Construye una tarjeta sencilla con información adicional sobre el reporte.
+        // Se usan etiquetas enriquecidas (`createRichLabel`) para mostrar pares
+        // de texto gris + negrita (p.ej. "Reportado por:" + "1 usuario").
         JPanelRedondeado card = buildBaseCard(25);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
+        // "Reportado por:" — `MessageFormat` permite insertar valores
+        // en la cadena obtenida del bundle, manteniendo la localización.
         card.add(createRichLabel(java.text.MessageFormat.format(bundle.getString("reportdetail.reported_by"), "1 usuario"), ""));
         card.add(Box.createVerticalStrut(4));
+
         card.add(createRichLabel(java.text.MessageFormat.format(bundle.getString("reportdetail.published"), "Hace 2 horas"), ""));
         card.add(Box.createVerticalStrut(4));
+
+        // autor del comentario y nota sobre su historial.
         card.add(createRichLabel(bundle.getString("reportdetail.user_author"), "fran.perez (sin historial previo)"));
         return card;
     }
 
     private JComponent createReasonCard() {
+        // Tarjeta que muestra el motivo del reporte.
+        // Presenta un título atenuado y a continuación el motivo destacado en negrita.
         JPanelRedondeado card = buildBaseCard(25);
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
+        // Título (p.ej. "Motivo") con estilo atenuado.
         card.add(createMutedLabel(bundle.getString("reportdetail.reason_title")));
         card.add(Box.createVerticalStrut(8));
         
+        // Elemento que describe el motivo concreto. Se fuerza una fuente en negrita
+        // para darle más peso visual dentro de la tarjeta.
         JLabel item = new JLabel(bundle.getString("reportdetail.reason_item"));
         item.setFont(new Font("SansSerif", Font.BOLD, 14));
         card.add(item);
@@ -239,6 +262,9 @@ public class ReportDetailPanel extends JPanel {
     // --- Helpers Estéticos ---
 
     private JPanelRedondeado buildBaseCard(int radius) {
+        // Crea una tarjeta base con esquinas redondeadas y padding uniforme.
+        // Este helper centraliza el estilo usado por todas las "cards" del panel,
+        // de modo que cambiar el aspecto global sea sencillo.
         JPanelRedondeado card = new JPanelRedondeado(radius);
         card.setBackground(CARD_WHITE);
         card.setBorder(new EmptyBorder(15, 20, 15, 20));
@@ -247,6 +273,8 @@ public class ReportDetailPanel extends JPanel {
     }
 
     private JLabel createMutedLabel(String text) {
+        // Etiqueta con estilo 'muted' para subtítulos o textos menos destacados.
+        // Usa un gris suave y una fuente en negrita para mantener legibilidad.
         JLabel l = new JLabel(text);
         l.setForeground(TEXT_GRAY);
         l.setFont(new Font("SansSerif", Font.BOLD, 13));
@@ -254,6 +282,8 @@ public class ReportDetailPanel extends JPanel {
     }
 
     private JLabel createBoldLabel(String text, int size) {
+        // Etiqueta prominente en color oscuro y tamaño personalizado.
+        // Se usa para títulos o nombres donde queremos máxima prioridad visual.
         JLabel l = new JLabel(text);
         l.setForeground(TEXT_DARK);
         l.setFont(new Font("SansSerif", Font.BOLD, size));
@@ -261,6 +291,8 @@ public class ReportDetailPanel extends JPanel {
     }
 
     private JLabel createRichLabel(String gray, String bold) {
+        // Etiqueta compuesta (texto gris + texto en negrita) usando HTML simple.
+        // Ideal para pares de información del tipo "etiqueta: valor" con jerarquía.
         JLabel l = new JLabel("<html><font color='#787878'><b>" + gray + "</b></font> " +
                              "<font color='#282828'><b>" + bold + "</b></font></html>");
         l.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -268,6 +300,9 @@ public class ReportDetailPanel extends JPanel {
     }
 
     private ImageIcon loadScaledIcon(String resourcePath, int width, int height) {
+        // Carga un recurso de imagen embebido y lo escala suavemente al tamaño
+        // solicitado. Devuelve `null` si el recurso no existe — los llamadores
+        // deben tolerar iconos nulos para evitar excepciones en tiempo de ejecución.
         java.net.URL url = getClass().getResource(resourcePath);
         if (url == null) {
             return null;

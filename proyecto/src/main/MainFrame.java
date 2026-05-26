@@ -91,24 +91,39 @@ public class MainFrame extends JFrame {
     }
 
     public void showView(String viewName, boolean addToHistory) {
+        // Si `addToHistory` es true guardamos la vista actual en la pila de
+        // historial para poder volver atrás (LIFO). Evitamos guardar si
+        // `currentView` es null o coincide con la vista destino.
         if (addToHistory && currentView != null && !currentView.equals(viewName)) {
             history.push(currentView);
         }
+
+        // Algunas vistas deben reconstruirse (recrear componentes) cuando se
+        // muestran porque su contenido depende del estado actual (p.ej. lista
+        // de asignaturas, detalle de profesor, etc.). `buildViews()` recrea
+        // todas las pantallas y asegura que las vistas dependientes estén actualizadas.
         if ("ASIGNATURAS".equals(viewName) || "PROFESOR_DETALLE".equals(viewName) || "VALORACION".equals(viewName) || "CAMBIAR_CONTRASENA".equals(viewName) || "AJUSTES_CUENTA".equals(viewName)) {
             buildViews();
         }
         cardLayout.show(mainPanel, viewName);
-        currentView = viewName;
+        currentView = viewName; //registrar la vista actual para futuras navegaciones.
     }
 
     public void showOperacionRealizada(String returnView) {
+        // Guardamos la vista a la que debemos volver después de mostrar la
+        // pantalla de "operación realizada", y mostramos dicha vista sin
+        // añadir la propia pantalla de resultado al historial.
         setOperationResultReturnView(returnView);
         showView("OPERACION_REALIZADA");
     }
 
     public void goBack() {
+        // Volver a la vista anterior usando la pila de historial (LIFO).
+        // Si el historial está vacío no hacemos nada.
         if (history.isEmpty()) return;
         String previous = history.pop();
+        // Al mostrar la vista anterior no queremos volver a apilar la vista
+        // actual en el historial, por eso pasamos `false` en addToHistory.
         showView(previous, false);
     }
 
@@ -133,18 +148,28 @@ public class MainFrame extends JFrame {
     }
 
     public void setSelectedSubjectKey(String selectedSubjectKey) {
+        // Establece la clave de la asignatura seleccionada.
+        // Si se pasa `null` aplicamos una asignatura por defecto para evitar
+        // valores nulos en el flujo de la UI.
         this.selectedSubjectKey = selectedSubjectKey == null ? "subjects.intro_programacion" : selectedSubjectKey;
     }
 
     public String getSelectedSubjectKey() {
+        // Devuelve la clave (resource key) de la asignatura actualmente seleccionada.
+        // Esta clave se usa para recuperar el texto localizado en el bundle.
         return selectedSubjectKey;
     }
 
     public void setSelectedProfessorKey(String selectedProfessorKey) {
+        // Setter que acepta una "clave" de profesor (compatibilidad con llamadas
+        // previas en el código). Internamente se guarda en el campo `selectedProfessorId`.
         this.selectedProfessorId = selectedProfessorKey;
     }
 
     public String getSelectedProfessorKey() {
+        // Devuelve el identificador interno del profesor seleccionado.
+        // Nótese que el nombre del método mantiene la terminología "Key" por
+        // compatibilidad histórica; el valor devuelto es el mismo que `getSelectedProfessorId()`.
         return selectedProfessorId;
     }
 
@@ -157,6 +182,9 @@ public class MainFrame extends JFrame {
     }
 
     public void setSelectedProfessorName(String selectedProfessorName) {
+        // Guarda el nombre para mostrar del profesor seleccionado. Este campo
+        // se usa para mostrar títulos o encabezados en las vistas sin necesitar
+        // acceder al `ProfessorDirectory` cada vez.
         this.selectedProfessorName = selectedProfessorName;
     }
 
@@ -188,6 +216,10 @@ public class MainFrame extends JFrame {
     }
 
     public void setOperationResultReturnView(String operationResultReturnView) {
+        // Establece la vista a la que debe volver la aplicación después de
+        // mostrar la pantalla de "operación realizada". Validamos que la
+        // cadena no sea nula ni vacía para evitar sobrescribir el valor por
+        // defecto con un valor inválido.
         if (operationResultReturnView != null && !operationResultReturnView.isBlank()) {
             this.operationResultReturnView = operationResultReturnView;
         }

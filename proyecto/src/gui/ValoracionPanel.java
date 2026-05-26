@@ -104,9 +104,9 @@ public class ValoracionPanel extends JPanel {
             estrella.setOpaque(false);
             estrella.setForeground(GRIS_ESTRELLA);
             estrella.addActionListener(e -> {
-                rating[0] = starValue;
+                rating[0] = starValue; //actualiza el rating según nº estrellas
                 updateStars(starGroup, estrellasIconos, rating[0]);
-            });
+            }); // llama la fx def en este archivo
             starGroup.add(estrella);
             estrellasIconos.add(estrella);
         }
@@ -161,11 +161,19 @@ public class ValoracionPanel extends JPanel {
         txtComentario.setForeground(Color.GRAY);
         txtComentario.setBackground(GRIS_CLARITO);
         txtComentario.setBorder(new EmptyBorder(10, 10, 5, 10));
-        txtComentario.setLineWrap(true);
-        txtComentario.setWrapStyleWord(true);
+        txtComentario.setLineWrap(true); // Permitir salto de línea automático cuando el texto supera el ancho del área
+        txtComentario.setWrapStyleWord(true); // Evitar cortar palabras al hacer el wrap o envoltorio
+
+        // Placeholder manual: simulamos un placeholder mostrando texto en
+        // itálica y gris. Al ganar foco, si el texto sigue siendo el placeholder
+        // lo borramos y cambiamos el color a negro para permitir la edición.
+        // Al perder foco, si el usuario no escribió nada, restauramos el
+        // placeholder y el color gris para indicar el estado vacío.
         txtComentario.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
+                // Si el contenido actual coincide con el placeholder, limpiarlo
+                // para que el usuario comience a escribir sin tener que borrarlo.
                 if (txtComentario.getText().equals(comentarioPlaceholder)) {
                     txtComentario.setText("");
                     txtComentario.setForeground(Color.BLACK);
@@ -174,6 +182,8 @@ public class ValoracionPanel extends JPanel {
 
             @Override
             public void focusLost(FocusEvent e) {
+                // Si el usuario no dejó texto útil (espacios o vacío),
+                // restaurar el placeholder para mantener la UI consistente.
                 if (txtComentario.getText().trim().isEmpty()) {
                     txtComentario.setText(comentarioPlaceholder);
                     txtComentario.setForeground(Color.GRAY);
@@ -255,19 +265,38 @@ public class ValoracionPanel extends JPanel {
         gbc.insets = new Insets(10, 0, 8, 0);
         contentPanel.add(bottom, gbc);
 
+        // JScrollPane que envuelve todo el contenido y controla el desplazamiento.
+        // Se elimina el borde para integrar visualmente la "isla" con el fondo.
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);
+
+        // Hacemos el scroll y su viewport transparentes para que se vea el
+        // fondo del panel (coherente con el estilo del resto de vistas).
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         
+        // En entornos como Codespaces el espacio vertical es limitado; por eso
+        // activamos la barra vertical sólo cuando la variable CODESPACES está a "true".
         boolean isCodespaces = "true".equalsIgnoreCase(System.getenv("CODESPACES"));
         scrollPane.setVerticalScrollBarPolicy(isCodespaces ? ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED : ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        // El contenido está diseñado para ajustarse al ancho; nunca permitir scroll horizontal.
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        // Barra vertical estrecha para aspecto más discreto.
         scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
         add(scrollPane, BorderLayout.CENTER);
     }
 
     private void updateStars(ButtonGroup starGroup, JPanel estrellasIconos, int rating) {
+        // Actualiza la representación visual de las estrellas según la puntuación.
+        // - `starGroup`: grupo que contiene los JToggleButton en orden de izq→der.
+        // - `estrellasIconos`: panel que agrupa los botones (se repinta al final).
+        // - `rating`: número de estrellas seleccionadas (0..5).
+        // Recorremos los botones del grupo manteniendo un índice 1-based para
+        // comparar con `rating`. Si el índice es menor o igual que `rating`
+        // mostramos la estrella llena (★) y la marcamos seleccionada; en caso
+        // contrario mostramos la estrella vacía (☆) y la deseleccionamos.
         int index = 1;
         for (java.util.Enumeration<AbstractButton> buttons = starGroup.getElements(); buttons.hasMoreElements(); index++) {
             AbstractButton button = buttons.nextElement();
@@ -281,6 +310,10 @@ public class ValoracionPanel extends JPanel {
                 button.setSelected(false);
             }
         }
+
+        // Forzamos re-layout y repintado para asegurar que los cambios se
+        // reflejen inmediatamente en la UI (especialmente tras cambios por
+        // eventos de usuario o updates programáticos).
         estrellasIconos.revalidate();
         estrellasIconos.repaint();
     }
