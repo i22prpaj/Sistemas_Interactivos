@@ -316,10 +316,30 @@ public final class ProfessorDirectory {
     }
 
     public static ProfessorProfile getDefaultProfile() {
+        // Devuelve el primer perfil registrado en `PROFILES`, o `null` si no
+        // hay ninguno. Usamos `values().stream().findFirst()` porque
+        // `PROFILES` es un LinkedHashMap y preserva el orden de inserción,
+        // por lo que este método devuelve de forma estable el "primer"
+        // perfil añadido al directorio. Retornar `null` permite al caller
+        // comprobar la ausencia de datos y aplicar un comportamiento por defecto.
         return PROFILES.values().stream().findFirst().orElse(null);
     }
 
     public static List<ProfessorProfile> getBySubject(String subjectKey) {
+        // Recupera la lista de profesores para `subjectKey`.
+        // - Si no hay entrada en `BY_SUBJECT` o la lista está vacía, se
+        //   devuelve una lista de fallback que contiene el perfil por
+        //   defecto (si existe) o una lista vacía.
+        // - Si existe una lista de perfiles, devolvemos `List.copyOf(profiles)`,
+        //   que crea una copia inmodificable del contenido actual. Esto es
+        //   una práctica defensiva: evita que los llamadores modifiquen la
+        //   lista interna almacenada en `BY_SUBJECT`.
+        //
+        // Notas:
+        // - `List.copyOf(...)` devuelve una lista inmutable (UnsupportedOperationException
+        //   si se intenta modificar) y está disponible desde Java 10.
+        // - El fallback `List.of(fallback)` también produce una lista inmodificable
+        //   con un único elemento.
         List<ProfessorProfile> profiles = BY_SUBJECT.get(subjectKey);
         if (profiles == null || profiles.isEmpty()) {
             ProfessorProfile fallback = getDefaultProfile();
@@ -333,8 +353,14 @@ public final class ProfessorDirectory {
     // - Si no hay datos personalizados, devuelve un valor por defecto codificado.
     public static double getRating(String professorId) {
         // Si existen ratings personalizados, calcular promedio; si no, usar el rating por defecto
+        
+        // Si existen ratings almacenados para `professorId` y la lista no está vacía,
+        // los tomamos para calcular el promedio. Observación: el código usa
+        // `containsKey()` seguido de `get()` — eso provoca dos búsquedas en el mapa;
+        // alternativamente se podría usar `List<Double> ratings = ALL_RATINGS.get(professorId);
+        // if (ratings != null && !ratings.isEmpty())` para evitar la doble consulta.
         if (ALL_RATINGS.containsKey(professorId) && !ALL_RATINGS.get(professorId).isEmpty()) {
-            List<Double> ratings = ALL_RATINGS.get(professorId);
+            List<Double> ratings = ALL_RATINGS.get(professorId); // Recuperamos la lista de ratings (ya sabemos que existe y no está vacía).
             double sum = 0;
             for (Double r : ratings) {
                 sum += r;
@@ -376,6 +402,15 @@ public final class ProfessorDirectory {
     public static void addRating(String professorId, double rating) {
         if (rating < 0.0) rating = 0.0;
         if (rating > 5.0) rating = 5.0;
+        // `computeIfAbsent` busca la entrada `professorId` en el mapa `ALL_RATINGS`.
+        // - Si existe, devuelve la lista asociada.
+        // - Si no existe, crea una nueva `ArrayList<>`, la inserta en el mapa y la devuelve.
+        // El resultado es la lista (existente o recién creada) sobre la que
+        // llamamos `.add(rating)` para añadir la puntuación.
+        //
+        // Nota: esta operación NO es atómica respecto a hilos concurrentes; en
+        // entornos multihilo podría requerirse sincronización externa si varias
+        // hebras pueden llamar a `addRating` simultáneamente para el mismo id.
         ALL_RATINGS.computeIfAbsent(professorId, k -> new ArrayList<>()).add(rating);
         saveRatingsToFile();
     }
@@ -384,7 +419,20 @@ public final class ProfessorDirectory {
     // Evita duplicados y persiste el resultado.
     public static void setSavedAspects(String professorId, List<String> aspects) {
         if (aspects != null) {
+            // Obtener (o crear si no existe) la lista de aspectos guardados
+            // para `professorId`. `computeIfAbsent` devuelve la lista existente
+            // o inserta y devuelve una nueva `ArrayList<>` si la clave no existe.
+            // De este modo evitamos la comprobación manual de existencia.
             List<String> currentAspects = SAVED_ASPECTS.computeIfAbsent(professorId, key -> new ArrayList<>());
+
+            // Para cada aspecto propuesto comprobamos varias condiciones antes
+            // de añadirlo:
+            // - `aspect != null`: evitar NPEs y entradas nulas.
+            // - `!aspect.isBlank()`: evitar entradas vacías o solo espacios.
+            // - `!currentAspects.contains(aspect)`: evitar duplicados en la lista.
+            // Nota: `contains` hace una búsqueda lineal O(n); si se prevén muchas
+            // entradas o comprobaciones frecuentes, podría usarse un Set auxiliar
+            // para acelerar la detección de duplicados.
             for (String aspect : aspects) {
                 if (aspect != null && !aspect.isBlank() && !currentAspects.contains(aspect)) {
                     currentAspects.add(aspect);
@@ -396,13 +444,22 @@ public final class ProfessorDirectory {
     
     // Devuelve una copia mutable de los aspectos guardados para `professorId`.
     public static List<String> getSavedAspects(String professorId) {
+        // Obtener la lista interna de aspectos para `professorId`, o una lista
+        // vacía si no existe entrada en el mapa. `getOrDefault` garantiza que
+        // `aspects` nunca sea null aquí.
         List<String> aspects = SAVED_ASPECTS.getOrDefault(professorId, new ArrayList<>());
+
+        // Devolvemos una copia mutable (`new ArrayList<>(aspects)`) en lugar de
+        // devolver la referencia directa a la lista almacenada en `SAVED_ASPECTS`.
+        // Esto protege el estado interno del repositorio: el caller puede
+        // modificar la lista retornada sin afectar los datos guardados en memoria
+        // (para persistir cambios debe usarse `setSavedAspects`).
         return new ArrayList<>(aspects);
     }
 
     // Traduce una consideración/aspecto usando: tabla interna -> clave canónica -> ResourceBundle.
     public static String localizeConsideration(String value, ResourceBundle bundle) {
-        String translatedNote = localizedNoteForValue(value, bundle);
+        String translatedNote = localizedNoteForValue(value, bundle); //fx def en este archivo
         if (translatedNote != null) {
             return translatedNote;
         }
@@ -510,6 +567,12 @@ public final class ProfessorDirectory {
     }
 
     private static boolean isEnglishBundle(ResourceBundle bundle) {
+        // Comprueba si el ResourceBundle representa el idioma inglés.
+        // - Primero verificamos que `bundle` no sea null para evitar NPE.
+        // - `bundle.getLocale().getLanguage()` devuelve el código de idioma
+        //   en minúsculas (por ejemplo "en", "es"). Usamos
+        //   `equalsIgnoreCase` por si acaso el código viene con distinto case.
+        // - Devolver `true` solo cuando el código de idioma sea "en".
         return bundle != null && "en".equalsIgnoreCase(bundle.getLocale().getLanguage());
     }
     
@@ -518,7 +581,7 @@ public final class ProfessorDirectory {
         try {
             if (Files.exists(Paths.get(RATINGS_FILE))) {
                 String content = Files.readString(Paths.get(RATINGS_FILE));
-                parseRatingsJson(content);
+                parseRatingsJson(content); //fx def en este archivo
             }
         } catch (Exception e) {
             // Silenciar errores de carga, usar ratings por defecto
@@ -568,6 +631,14 @@ public final class ProfessorDirectory {
     }
     
     // Escapa comillas y saltos de línea para incrustar en JSON simple.
+    // Cada llamada a `replace(a, b)` reemplaza las ocurrencias de `a` por `b`.
+    // Por ejemplo: la comilla doble `"` se convierte en `\"` y el carácter
+    // de nueva línea '\n' se convierte en la secuencia de escape `\n`.
+    // Atención: en los literales Java vemos `\\n` (dos barras) porque en
+    // el código fuente la barra invertida está escapada; el resultado final
+    // en el JSON contendrá la secuencia `\n`.
+    // Nota: este método no comprueba `null`; si `str` pudiera ser null,
+    // conviene verificarlo antes de llamar para evitar NullPointerException.
     private static String escapeJson(String str) {
         return str.replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r");
     }
@@ -657,7 +728,21 @@ public final class ProfessorDirectory {
 
     // Registra un nuevo `ProfessorProfile` en los mapas en memoria y actualiza el índice por asignatura.
     private static void register(ProfessorProfile profile) {
+        // Insertar el perfil en el mapa principal `PROFILES` usando su id como clave.
+        // - `profile.getId()` devuelve el identificador único del profesor (p.ej. "profesor_antonio_lopez").
+        // - `PROFILES` es un LinkedHashMap, por lo que preserva el orden de inserción
+        //   (útil para presentar una lista estable de profesores).
         PROFILES.put(profile.getId(), profile);
+
+        // Para cada asignatura asociada al perfil, añadimos el perfil al índice
+        // `BY_SUBJECT`, que es un mapa subjectKey -> List<ProfessorProfile>.
+        // `computeIfAbsent(subjectKey, key -> new ArrayList<>())` hace dos cosas:
+        // 1) Si ya existe una lista para `subjectKey` la devuelve.
+        // 2) Si no existe, crea una nueva `ArrayList<>`, la inserta en el mapa y la devuelve.
+        // Esto evita tener que comprobar manualmente si la clave existe y simplifica
+        // la inicialización perezosa del listado por asignatura.
+        // Finalmente llamamos `.add(profile)` sobre la lista para registrar el perfil
+        // en esa asignatura.
         for (String subjectKey : profile.getSubjectKeys()) {
             BY_SUBJECT.computeIfAbsent(subjectKey, key -> new ArrayList<>()).add(profile);
         }
@@ -665,6 +750,22 @@ public final class ProfessorDirectory {
 
     // Helpers de construcción: devuelven listas inmutables a partir de varargs.
     private static List<String> subjects(String... keys) {
+        // `String... keys` -> sintaxis de varargs en Java: el llamador puede
+        // pasar cero o más `String` separados por comas, p.ej.
+        //   subjects("common.linear_algebra", "common.calculus")
+        // y dentro del método `keys` se ve como un `String[]` (un array).
+        //
+        // `List.of(keys)` crea una lista inmutable (no se puede modificar) con
+        // los elementos proporcionados. Es equivalente a `List.of()` con los
+        // elementos de `keys` como argumentos y fue introducido en Java 9.
+        // Advertencias importantes:
+        // - La lista devuelta es inmodificable: operaciones como add/remove lanzarán
+        //   UnsupportedOperationException.
+        // - No permite elementos nulos: si alguna entrada es null, se lanzará
+        //   NullPointerException al construir la lista.
+        // - Si se llama explícitamente con `subjects((String[]) null)` `keys` será
+        //   null y List.of(keys) lanzará NullPointerException; llamar sin argumentos
+        //   produce un array vacío y devuelve una lista vacía.
         return List.of(keys);
     }
 
